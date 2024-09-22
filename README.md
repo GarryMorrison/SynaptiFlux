@@ -112,3 +112,71 @@ Module: print alphabet module
     outputs:
 
 ```
+
+---
+
+## Neuron example
+Here is the output from two sample neurons:
+```
+Neuron: first neuron
+    pooling: <function pooling_or at 0x7f16e175b6a8>
+    params: {}
+    patterns: 3
+        0    trigger: <function trigger_dot_product_threshold at 0x7f16e175b620>
+        0    params: {'threshold': 1}
+        0    [0, 1, 2]
+        0    ['alpha 0', 'beta 0', 'gamma 0']
+
+        1    trigger: <function trigger_dot_product_threshold at 0x7f16e175b620>
+        1    params: {'threshold': 1}
+        1    [7, 7, 7]
+        1    ['X', 'Y', 'Z']
+
+        2    trigger: <function trigger_dot_product_threshold at 0x7f16e175b620>
+        2    params: {'threshold': 1}
+        2    [3, 5, 2]
+        2    ['u', 'v', 'w']
+
+    axon: [0, 1]
+
+Neuron: second neuron
+    pooling: <function pooling_or at 0x7f16e175b6a8>
+    params: {}
+    patterns: 1
+        0    trigger: <function trigger_dot_product_threshold at 0x7f16e175b620>
+        0    params: {'threshold': 1}
+        0    [1, 1, 1, 1, 1]
+        0    ['a', 'b', 'c', 'd', 'e']
+
+    axon: [1, 1, 0, 1, 0]
+```
+
+---
+
+## Synapse example
+Here is the output from three sample synapses:
+```
+Synapse: alpha 0
+    source axon: alpha
+    type: <function synapse_identity at 0x7f3992cb0e18>
+    params: {'sign': 1}
+    action: <function action_null at 0x7f3992cb8400>
+    action params: {}
+    spike history: [0, 5, 8, 3, 0, 1]
+
+Synapse: beta 0
+    source axon: beta
+    type: <function synapse_delayed_identity at 0x7f3992cb0ea0>
+    params: {'sign': 1, 'delay': 3}
+    action: <function action_println at 0x7f3992cb8488>
+    action params: {'s': 'beta activated!'}
+    spike history: [0, 0, 0]
+
+Synapse: gamma 0
+    source axon: gamma
+    type: <function synapse_delayed_identity at 0x7f3992cb0ea0>
+    params: {'sign': -1, 'delay': 2}
+    action: <function action_null at 0x7f3992cb8400>
+    action params: {}
+    spike history: [0, 0, 0]
+```
