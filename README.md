@@ -180,3 +180,98 @@ Synapse: gamma 0
     action params: {}
     spike history: [0, 0, 0]
 ```
+
+---
+## Prime spike history
+Here is the output from our prime spike history using sources neural module:
+```
+$ python3 testing_prime_spike_history_using_sources.py
+Testing prime spike history using sources:
+not prime
+not prime
+prime
+prime
+not prime
+prime
+not prime
+prime
+not prime
+not prime
+not prime
+prime
+not prime
+prime
+not prime
+not prime
+not prime
+prime
+not prime
+prime
+not prime
+not prime
+not prime
+prime
+not prime
+Neural Module: Prime numbers less than 25
+-----------------------------------------
+
+Default functions and parameters:
+    trigger: None
+    params: {}
+
+    pooling: None
+    params: {}
+
+    synapse: None
+    params: {}
+
+    action: None
+    params: {}
+
+Sources:
+    #INIT#: 0 <generator object source_init at 0x7f8c65e327d8>
+    #INIT-1#: 0 <generator object source_init_N at 0x7f8c65e32830>
+    #INIT-2#: 0 <generator object source_init_N at 0x7f8c65e32888>
+    #INIT-3#: 0 <generator object source_init_N at 0x7f8c65e328e0>
+    #INIT-5#: 0 <generator object source_init_N at 0x7f8c65e32938>
+    #ALT-2#: 0 <generator object source_alt_N at 0x7f8c65e32990>
+    #ALT-3#: 0 <generator object source_alt_N at 0x7f8c65e329e8>
+    #ALT-5#: 1 <generator object source_alt_N at 0x7f8c65e32a40>
+
+Neurons:
+    poked neurons: set()
+
+Neuron: not prime
+    pooling: <function pooling_or at 0x7f8c65e386a8>
+    params: {}
+    patterns: 1
+        0    trigger: <function trigger_dot_product_threshold at 0x7f8c65e38620>
+        0    params: {'threshold': 1}
+        0    [-10, -10, -10, 1, 1, 1, 1]
+        0    ['#INIT-2#', '#INIT-3#', '#INIT-5#', '#INIT-1#', '#ALT-2#', '#ALT-3#', '#ALT-5#']
+
+    axon: [1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1]
+
+Synapses:
+Synapse: not prime S0
+    source axon: not prime
+    type: <function synapse_delayed_identity at 0x7f8c65e2fea0>
+    params: {'sign': 1, 'delay': 0}
+    action: <function action_println at 0x7f8c65e38488>
+    action params: {'s': 'not prime'}
+    spike history: [1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1]
+
+Synapse: not prime S0 not
+    source axon: not prime
+    type: <function synapse_delayed_not at 0x7f8c65e2ff28>
+    params: {'sign': 1, 'delay': 0}
+    action: <function action_println at 0x7f8c65e38488>
+    action params: {'s': 'prime'}
+    spike history: [0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0]
+
+
+Neurons: ['not prime']
+
+Synapses: ['not prime S0', 'not prime S0 not']
+```
+
