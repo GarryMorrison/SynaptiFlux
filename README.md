@@ -72,7 +72,7 @@ Each neuron has a string label, here `first neuron` and `second neuron`, a pooli
 * **stored pattern** is a list of float values with the same length as the `synapse list`.
 * **trigger function** applies a specified function to the `neural input pattern` and the `stored pattern`, and computes a float output. Currently we only have the `dot_product` function.
 * **pooling list** is a list of float values, with length equal to the number of patterns. These values are the outputs from the `trigger functions`.
-* **pooling function** maps the `pooling list` to a single binary value. For example, `or`, `xor` or `sum_mod_2`.
+* **pooling function** maps the `pooling list` to a single binary value. For example, `or`, `xor` or `sum_mod_2`. The purpose of the pooling feature is so that more than one incoming pattern can influence the firing of a given neuron.
 * **axon** at each time step the result of the `pooling function` is appended to the axon history
 
 
