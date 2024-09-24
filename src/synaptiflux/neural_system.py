@@ -1,7 +1,7 @@
 """Implement a neural system, which is a collection of neural modules."""
 # Author: Garry Morrison
 # Created: 2024-9-19
-# Updated: 2024-9-20
+# Updated: 2024-9-24
 
 from .neural_module import NeuralModule
 
@@ -154,9 +154,9 @@ class NeuralSystem:
              s += f"    inputs:\n"
              for input, neuron in self.module_inputs[name]:
                  # s += f"        {input} -> {neuron}   history: {self.module_inputs_history[name][neuron]}\n"
-                 s += f"        {input} -> {neuron}   history: {self.variables_history[input]}\n"
+                 s += f"        {input} -> \"{neuron}\"   history: {self.variables_history[input]}\n"
              s += f"\n    outputs:\n"
              for synapse, output in self.module_outputs[name]:
-                 s += f"        {synapse} -> {output}    history: {self.module_outputs_history[name][output]}\n"
+                 s += f"        \"{synapse}\" -> {output}    history: {self.module_outputs_history[name][output]}\n"
              s += "\n"
         return s
