@@ -16,7 +16,7 @@ if __name__ == '__main__':
     NM.add_source('#ALT-3#', sf.source_alt_N(3))
     NM.add_source('#ALT-4#', sf.source_alt_N(4))
     NM.add_source('#ALT-5#', sf.source_alt_N(5))
-    NM.add_neuron('first neuron', [1,-10], ['#ON#', 'bogus S0'], sf.trigger_dot_product_threshold, {'threshold':1}, sf.pooling_or, {})
+    NM.add_neuron('first neuron', 0, [1,-10], ['#ON#', 'bogus S0'], sf.trigger_dot_product_threshold, {'threshold':1}, sf.pooling_or, {})
     NM.add_synapse("first neuron S0", "first neuron", sf.synapse_delayed_identity, {'sign': 1, 'delay': 0}, sf.action_null, {})
     NM.update_system(6)
     print(NM)

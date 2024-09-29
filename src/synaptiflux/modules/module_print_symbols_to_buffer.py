@@ -49,13 +49,13 @@ def module_print_symbols_to_buffer(name, symbols, append_newline):
     NM.set_default_action(action_null, {})
 
     # define our 'use capitals' neuron and synapses:
-    NM.add_default_neuron('use capitals', [1], ['#INIT#'])
+    NM.add_default_neuron('use capitals', 0, [1], ['#INIT#'])
     NM.add_default_synapse('use capitals S0', 'use capitals')
     NM.add_default_synapse('use capitals S0 not', 'use capitals')
     NM.update_synapse_fn('use capitals S0 not', synapse_delayed_not, {'sign': 1, 'delay': 0})
 
     # define our 'flush buffer' neuron and synapse:
-    NM.add_default_neuron('flush buffer', [1], ['#OFF#'])
+    NM.add_default_neuron('flush buffer', 0, [1], ['#OFF#'])
     NM.add_default_synapse('flush buffer S0', 'flush buffer')
     NM.update_synapse_action('flush buffer S0', action_flush_fn, {'buffer': buffer, 's': ''})
 
@@ -78,14 +78,14 @@ def module_print_symbols_to_buffer(name, symbols, append_newline):
         print_lower_synapse = f"print lower {escaped_symbol} S0"
 
         # define our neurons and synapses:
-        NM.add_default_neuron(print_neuron, [1], ['#OFF#'])
+        NM.add_default_neuron(print_neuron, 0, [1], ['#OFF#'])
         NM.add_default_synapse(print_synapse, print_neuron)
 
-        NM.add_default_neuron(print_capital_neuron, [1,1], [print_synapse, 'use capitals S0'])
+        NM.add_default_neuron(print_capital_neuron, 1, [1,1], [print_synapse, 'use capitals S0'])
         NM.add_default_synapse(print_capital_synapse, print_capital_neuron)
         NM.update_synapse_action(print_capital_synapse, action_fn, {'buffer': buffer, 's': symbol.upper()})
 
-        NM.add_default_neuron(print_lower_neuron, [1,1], [print_synapse, 'use capitals S0 not'])
+        NM.add_default_neuron(print_lower_neuron, 1, [1,1], [print_synapse, 'use capitals S0 not'])
         NM.add_default_synapse(print_lower_synapse, print_lower_neuron)
         NM.update_synapse_action(print_lower_synapse, action_fn, {'buffer': buffer, 's': symbol})
 

@@ -1,7 +1,7 @@
 """A quick test of counting digits using default functions."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-9-18
+# Updated: 2024-9-29
 
 import synaptiflux as sf
 
@@ -24,32 +24,32 @@ if __name__ == '__main__':
     NM.set_default_action(sf.action_null, {})
 
     # define our init and carry neuron:
-    NM.add_neuron('init flag', [1], ['#OFF#'], sf.trigger_dot_product_threshold, {'threshold': 1}, sf.pooling_or, {})
-    NM.add_neuron('carry flag', [1], ['#OFF#'], sf.trigger_dot_product_threshold, {'threshold': 1}, sf.pooling_or, {})
-    NM.add_neuron('off flag', [1], ['#OFF#'], sf.trigger_dot_product_threshold, {'threshold': 1}, sf.pooling_or, {})
+    NM.add_neuron('init flag', 0, [1], ['#OFF#'], sf.trigger_dot_product_threshold, {'threshold': 1}, sf.pooling_or, {})
+    NM.add_neuron('carry flag', 0, [1], ['#OFF#'], sf.trigger_dot_product_threshold, {'threshold': 1}, sf.pooling_or, {})
+    NM.add_neuron('off flag', 0, [1], ['#OFF#'], sf.trigger_dot_product_threshold, {'threshold': 1}, sf.pooling_or, {})
     # NM.add_neuron('carry or off flag', [1,1], ['carry flag S0', 'off flag S0'], sf.trigger_dot_product_threshold, {'threshold': 1}, sf.pooling_or, {})
 
     # define our starting digit:
     # NM.add_neuron('0 neuron', [1,1], ['#INIT#', '0 neuron S0'], sf.trigger_dot_product_threshold, {'threshold': 1}, sf.pooling_xor, {})
     # NM.append_neuron_pattern('0 neuron', [1,1], ['0 neuron S0', 'carry flag S0'], sf.trigger_dot_product_threshold, {'threshold': 2})
-    NM.add_neuron('0 neuron', [1,1], ['init flag S0', '0 neuron S0'], sf.trigger_dot_product_threshold, {'threshold': 1}, sf.pooling_sum_mod2, {})
+    NM.add_neuron('0 neuron', 1, [1,1], ['init flag S0', '0 neuron S0'], sf.trigger_dot_product_threshold, {'threshold': 1}, sf.pooling_sum_mod2, {})
     NM.append_default_neuron_pattern('0 neuron', [1,1], ['0 neuron S0', 'carry flag S0'])
     NM.append_default_neuron_pattern('0 neuron', [1,1], ['0 neuron S0', 'off flag S0'])
 
     # define the rest of our digit neurons:
-    NM.add_default_neuron('1 neuron', [2,1,1], ['1 neuron S0','0 neuron S0','carry flag S0'])
+    NM.add_default_neuron('1 neuron', 1, [2,1,1], ['1 neuron S0','0 neuron S0','carry flag S0'])
     NM.append_default_neuron_pattern('1 neuron', [1,1], ['1 neuron S0', 'carry flag S0'])
     NM.append_default_neuron_pattern('1 neuron', [1,1], ['1 neuron S0', 'off flag S0'])
 
-    NM.add_default_neuron('2 neuron', [2,1,1], ['2 neuron S0','1 neuron S0','carry flag S0'])
+    NM.add_default_neuron('2 neuron', 1, [2,1,1], ['2 neuron S0','1 neuron S0','carry flag S0'])
     NM.append_default_neuron_pattern('2 neuron', [1,1], ['2 neuron S0', 'carry flag S0'])
     NM.append_default_neuron_pattern('2 neuron', [1,1], ['2 neuron S0', 'off flag S0'])
 
-    NM.add_default_neuron('3 neuron', [2,1,1], ['3 neuron S0','2 neuron S0','carry flag S0'])
+    NM.add_default_neuron('3 neuron', 1, [2,1,1], ['3 neuron S0','2 neuron S0','carry flag S0'])
     NM.append_default_neuron_pattern('3 neuron', [1,1], ['3 neuron S0', 'carry flag S0'])
     NM.append_default_neuron_pattern('3 neuron', [1,1], ['3 neuron S0', 'off flag S0'])
 
-    NM.add_default_neuron('4 neuron', [2,1,1], ['4 neuron S0','3 neuron S0','carry flag S0'])
+    NM.add_default_neuron('4 neuron', 1, [2,1,1], ['4 neuron S0','3 neuron S0','carry flag S0'])
     NM.append_default_neuron_pattern('4 neuron', [1,1], ['4 neuron S0', 'carry flag S0'])
     NM.append_default_neuron_pattern('4 neuron', [1,1], ['4 neuron S0', 'off flag S0'])
 

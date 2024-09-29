@@ -1,7 +1,7 @@
 """A quick test of printing the start of the alphabet using default functions."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-9-18
+# Updated: 2024-9-29
 
 import synaptiflux as sf
 
@@ -23,16 +23,16 @@ if __name__ == '__main__':
     NM.set_default_action(sf.action_null, {})
 
     # define our 'use capitals' neuron and synapses:
-    NM.add_default_neuron('use capitals', [1], ['#INIT#'])
+    NM.add_default_neuron('use capitals', 0, [1], ['#INIT#'])
     NM.add_default_synapse('use capitals S0', 'use capitals')
     NM.add_default_synapse('use capitals S0 not', 'use capitals')
     NM.update_synapse_fn('use capitals S0 not', sf.synapse_delayed_not, {'sign': 1, 'delay': 0})
 
     # define our input print neurons:
-    NM.add_default_neuron('print A', [1], ['#OFF#'])
-    NM.add_default_neuron('print B', [1], ['#OFF#'])
-    NM.add_default_neuron('print C', [1], ['#OFF#'])
-    NM.add_default_neuron('print D', [1], ['#OFF#'])
+    NM.add_default_neuron('print A', 0, [1], ['#OFF#'])
+    NM.add_default_neuron('print B', 0, [1], ['#OFF#'])
+    NM.add_default_neuron('print C', 0, [1], ['#OFF#'])
+    NM.add_default_neuron('print D', 0, [1], ['#OFF#'])
 
     # define our input print synapses:
     NM.add_default_synapse('print A S0', 'print A')
@@ -44,15 +44,15 @@ if __name__ == '__main__':
     NM.set_default_trigger(sf.trigger_dot_product_threshold, {'threshold': 2})
 
     # now the print neurons:
-    NM.add_default_neuron('print capital A', [1,1], ['print A S0', 'use capitals S0'])
-    NM.add_default_neuron('print capital B', [1,1], ['print B S0', 'use capitals S0'])
-    NM.add_default_neuron('print capital C', [1,1], ['print C S0', 'use capitals S0'])
-    NM.add_default_neuron('print capital D', [1,1], ['print D S0', 'use capitals S0'])
+    NM.add_default_neuron('print capital A', 1, [1,1], ['print A S0', 'use capitals S0'])
+    NM.add_default_neuron('print capital B', 1, [1,1], ['print B S0', 'use capitals S0'])
+    NM.add_default_neuron('print capital C', 1, [1,1], ['print C S0', 'use capitals S0'])
+    NM.add_default_neuron('print capital D', 1, [1,1], ['print D S0', 'use capitals S0'])
 
-    NM.add_default_neuron('print lower A', [1,1], ['print A S0', 'use capitals S0 not'])
-    NM.add_default_neuron('print lower B', [1,1], ['print B S0', 'use capitals S0 not'])
-    NM.add_default_neuron('print lower C', [1,1], ['print C S0', 'use capitals S0 not'])
-    NM.add_default_neuron('print lower D', [1,1], ['print D S0', 'use capitals S0 not'])
+    NM.add_default_neuron('print lower A', 1, [1,1], ['print A S0', 'use capitals S0 not'])
+    NM.add_default_neuron('print lower B', 1, [1,1], ['print B S0', 'use capitals S0 not'])
+    NM.add_default_neuron('print lower C', 1, [1,1], ['print C S0', 'use capitals S0 not'])
+    NM.add_default_neuron('print lower D', 1, [1,1], ['print D S0', 'use capitals S0 not'])
 
     # now the print synapses:
     NM.add_default_synapse('print capital A S0', 'print capital A')

@@ -1,7 +1,7 @@
 """A quick test of neural module default settings and updating them."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-9-18
+# Updated: 2024-9-29
 
 import synaptiflux as sf
 
@@ -13,8 +13,8 @@ if __name__ == '__main__':
     NM.set_default_pooling(sf.pooling_or, {})
     NM.set_default_synapse(sf.synapse_delayed_identity, {'sign': 1, 'delay': 0})
     NM.set_default_action(sf.action_null, {})
-    NM.add_default_neuron('first neuron', [1,2,3], ['alpha', 'beta', 'gamma'])
-    NM.append_default_neuron_pattern('first neuron', [1,1], ['X', 'Y'])
+    NM.add_default_neuron('first neuron', 0, [1,2,3], ['alpha S0', 'beta S0', 'gamma S0'])
+    NM.append_default_neuron_pattern('first neuron', [1,1], ['X S0', 'Y S0'])
     print(NM)
 
     print('\n-------------------------')

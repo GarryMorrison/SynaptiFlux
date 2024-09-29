@@ -1,17 +1,18 @@
 """Implement a single reductionist neuron."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-9-18
+# Updated: 2024-9-29
 
 class Neuron:
     """Implements a single reductionist neuron."""
-    def __init__(self, name, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params):
+    def __init__(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params):
         if len(seed_pattern) != len(synapse_labels):
             print(f"Unable to create the neuron \"{name}\".")
             print(f"Patterns and labels must be the same length. {len(seed_pattern)} != {len(synapse_labels)}")
             self.valid = False
             return
         self.name = name
+        self.layer = layer
         self.pattern_count = 0
         self.pattern = {}
         self.pattern_labels = {}
@@ -26,6 +27,14 @@ class Neuron:
         self.trigger_params[self.pattern_count] = trigger_params
         self.pattern_count += 1
         self.valid = True
+
+    def set_layer(self, n):
+        """Set the neuron's layer."""
+        self.layer = n
+
+    def get_layer(self):
+        """Get the neuron's layer."""
+        return self.layer
 
     def append_pattern(self, seed_pattern, synapse_labels, trigger_fn, trigger_params):
         """Adds another pattern to a neuron."""
@@ -121,6 +130,7 @@ class Neuron:
             print("Invalid neuron")
             return ""
         s = f"Neuron: {self.name}\n"
+        s += f"    layer: {self.layer}\n"
         s += f"    pooling: {self.pooling_fn}\n"
         s += f"    params: {self.pooling_params}\n"
         s += f"    patterns: {self.pattern_count}\n"

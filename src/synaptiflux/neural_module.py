@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-9-18
+# Updated: 2024-9-29
 
 from .neuron import Neuron
 from .synapse import Synapse
@@ -23,6 +23,19 @@ class NeuralModule:
         self.default_synapse_params = {}
         self.default_action_fn = None
         self.default_action_params = {}
+
+    def set_neuron_layer(self, name, n): # not sure how useful this method is, since we set the neuron layer on construction.
+        """Set the named neuron's layer."""
+        if name in self.neurons:
+            self.neurons[name].set_layer(n)
+
+    def get_neuron_layer(self, name):
+        """Get the named neuron's layer."""
+        if name in self.neurons:
+            return self.neurons[name].get_layer()
+        return -1 # maybe change this later?
+
+    # Do we want default layers too?
 
     def set_default_trigger(self, fn, params):
         """Set the default trigger."""
@@ -49,9 +62,9 @@ class NeuralModule:
         self.sources[name] = source_fn
         self.current_sources_state[name] = next(self.sources[name])
 
-    def add_neuron(self, name, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params):
+    def add_neuron(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params):
         """Add a neuron to our system."""
-        neuron = Neuron(name, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
+        neuron = Neuron(name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
         self.neurons[name] = neuron
 
     # append_pattern(self, seed_pattern, synapse_labels, trigger_fn, trigger_params)
@@ -61,9 +74,9 @@ class NeuralModule:
             return
         self.neurons[name].append_pattern(seed_pattern, synapse_labels, trigger_fn, trigger_params)
 
-    def add_default_neuron(self, name, seed_pattern, synapse_labels):
+    def add_default_neuron(self, name, layer, seed_pattern, synapse_labels):
         """Add a default neuron to our system."""
-        neuron = Neuron(name, seed_pattern, synapse_labels, self.default_trigger_fn, self.default_trigger_params, self.default_pooling_fn, self.default_pooling_params)
+        neuron = Neuron(name, layer, seed_pattern, synapse_labels, self.default_trigger_fn, self.default_trigger_params, self.default_pooling_fn, self.default_pooling_params)
         self.neurons[name] = neuron
 
     def append_default_neuron_pattern(self, name, seed_pattern, synapse_labels):
