@@ -100,11 +100,17 @@ class NeuralModule:
     def add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params):
         """Add a synapse to our system."""
         synapse = Synapse(name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)
+        if axon_name in self.neurons:
+           layer = self.neurons[axon_name].get_layer()
+           synapse.set_layer(layer)
         self.synapses[name] = synapse
 
     def add_default_synapse(self, name, axon_name):
         """Add a default synapse to our system."""
         synapse = Synapse(name, axon_name, self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
+        if axon_name in self.neurons:
+           layer = self.neurons[axon_name].get_layer()
+           synapse.set_layer(layer)
         self.synapses[name] = synapse
 
     def update_synapse_fn(self, name, synapse_fn, synapse_params):

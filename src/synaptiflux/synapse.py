@@ -1,7 +1,7 @@
 """Implement a single synapse."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-9-18
+# Updated: 2024-9-29
 
 class Synapse:
     """Implements a single reductionist synapse."""
@@ -10,11 +10,24 @@ class Synapse:
             raise TypeError('axon_name must be type string')
         self.name = name
         self.axon_name = axon_name
+        self.layer = -1
         self.synapse_fn = synapse_fn_type
         self.params = params # rename this to self.synapse_params?
         self.spike_history = []
         self.action_fn = synapse_action_type
         self.action_params = action_params
+
+    def get_parent_axon_name(self):
+        """Return the name of the parent axon/neuron."""
+        return self.axon_name
+
+    def get_layer(self):
+        """Return the synapse layer number."""
+        return self.layer
+
+    def set_layer(self, n):
+        """Set the synapse layer number."""
+        self.layer = n
 
     def read_synapse(self):
         """Read and return the current value of the synapse."""
@@ -51,6 +64,7 @@ class Synapse:
     def __str__(self):
         s = f"Synapse: {self.name}\n"
         s += f"    source axon: {self.axon_name}\n"
+        s += f"    source layer: {self.layer}\n"
         s += f"    type: {self.synapse_fn}\n"
         s += f"    params: {self.params}\n"
         s += f"    action: {self.action_fn}\n"
