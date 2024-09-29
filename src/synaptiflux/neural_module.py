@@ -220,6 +220,32 @@ class NeuralModule:
             s += f"{synapse}\n"
         return s
 
+    def str_neuron_layers(self):
+        """Return neuron's layers."""
+        layer_neuron_dict = {}
+        for label, neuron in self.neurons.items():
+            layer = neuron.get_layer()
+            if layer not in layer_neuron_dict: # use default dict instead?
+                layer_neuron_dict[layer] = set()
+            layer_neuron_dict[layer].add(label)
+        s = "\nNeurons:\n"
+        for layer in sorted(layer_neuron_dict.keys()):
+            s += f"    layer: {layer}    {sorted(layer_neuron_dict[layer])}\n"
+        return s
+
+    def str_synapse_layers(self):
+        """Return synapse's layers."""
+        layer_synapse_dict = {}
+        for label, synapse in self.synapses.items():
+            layer = synapse.get_layer()
+            if layer not in layer_synapse_dict: # use default dict instead?
+                layer_synapse_dict[layer] = set()
+            layer_synapse_dict[layer].add(label)
+        s = "\nSynapses:\n"
+        for layer in sorted(layer_synapse_dict.keys()):
+            s += f"    layer: {layer}    {sorted(layer_synapse_dict[layer])}\n"
+        return s
+
     def __str__(self):
         s = f"Neural Module: {self.name}\n"
         header_len = len(s) - 1
@@ -230,8 +256,10 @@ class NeuralModule:
         s += self.str_sources()
         s += self.str_neurons()
         s += self.str_synapses()
-        s += f"\nNeurons: {sorted(self.neurons.keys())}\n"
-        s += f"\nSynapses: {sorted(self.synapses.keys())}\n"
+        s += self.str_neuron_layers()
+        s += self.str_synapse_layers()
+        # s += f"\nNeurons: {sorted(self.neurons.keys())}\n"
+        # s += f"\nSynapses: {sorted(self.synapses.keys())}\n"
         return s
 
 
