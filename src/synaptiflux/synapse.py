@@ -1,7 +1,7 @@
 """Implement a single synapse."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-9-29
+# Updated: 2024-9-30
 
 class Synapse:
     """Implements a single reductionist synapse."""
@@ -55,11 +55,11 @@ class Synapse:
         """
         if self.axon_name not in neurons:
             self.spike_history.append(0)
-            self.action_fn(0, **self.action_params) # do we want this, or comment it out?
+            self.action_fn(self, 0, **self.action_params) # do we want this, or comment it out?
             return
         value = self.synapse_fn(neurons[self.axon_name].axon, **self.params)
         self.spike_history.append(value)
-        self.action_fn(value, **self.action_params)
+        self.action_fn(self, value, **self.action_params)
 
     def __str__(self):
         s = f"Synapse: {self.name}\n"
