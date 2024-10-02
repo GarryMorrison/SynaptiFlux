@@ -1,7 +1,7 @@
 """Implement a single reductionist neuron."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-9-29
+# Updated: 2024-10-2
 
 class Neuron:
     """Implements a single reductionist neuron."""
@@ -13,6 +13,7 @@ class Neuron:
             return
         self.name = name
         self.layer = layer
+        self.activation_count = 0
         self.pattern_count = 0
         self.pattern = {}
         self.pattern_labels = {}
@@ -35,6 +36,18 @@ class Neuron:
     def get_layer(self):
         """Get the neuron's layer."""
         return self.layer
+
+    def increment_activation_count(self):
+        """Increase the activation count by 1."""
+        self.activation_count += 1
+
+    def set_activation_count(self, n):
+        """Set the activation count to n."""
+        self.activation_count = n
+
+    def get_activation_count(self):
+        """Get the activation count."""
+        return self.activation_count
 
     def append_pattern(self, seed_pattern, synapse_labels, trigger_fn, trigger_params):
         """Adds another pattern to a neuron."""
@@ -92,6 +105,7 @@ class Neuron:
             return
         if poked:
             self.axon.append(1)
+            self.activation_count += 1
             return
         pooling_list = []
         for k in range(self.pattern_count):
@@ -112,6 +126,8 @@ class Neuron:
         # print(f"{self.name} pooling: {pooling_list}")
         axon_value = self.pooling_fn(pooling_list)
         self.axon.append(axon_value)
+        if axon_value != 0: # != 0, vs > 0?
+            self.activation_count += 1
 
     def update_pooling(self, pooling_fn, pooling_params):
         """Update the neuron's pooling function and parameters."""
@@ -131,6 +147,7 @@ class Neuron:
             return ""
         s = f"Neuron: {self.name}\n"
         s += f"    layer: {self.layer}\n"
+        s += f"    activation count: {self.activation_count}\n"
         s += f"    pooling: {self.pooling_fn}\n"
         s += f"    params: {self.pooling_params}\n"
         s += f"    patterns: {self.pattern_count}\n"
