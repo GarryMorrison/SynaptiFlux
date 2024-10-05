@@ -6,6 +6,41 @@
 from .neuron import Neuron
 from .synapse import Synapse
 
+def process_layers(synapses, layers):
+    """Given a synapses dict, and layers, return valid layers.
+
+    layers:
+        None -> off
+        '*' -> all
+        int -> given layer
+        list[int] -> given layers
+
+    returns: list[int] of sorted layers
+    """
+    if layers is None:
+        return []
+    if isinstance(layers, str):
+        if layers == '*':
+            layers_list = set()
+            for label, synapse in synapses.items():
+                layers_list.add(synapse.get_layer())
+            return sorted(layers_list)
+        return []
+    elif isinstance(layers, int):
+        return [layers]
+    elif isinstance(layers, list):
+        return sorted(layers)
+    return []
+
+
+def display_layer_synapse_dict(layer_synapse_dict):
+    """Maps a layers_synapse dictionary to a string for display."""
+    s = ""
+    for layer in sorted(layer_synapse_dict.keys()):
+        s += f"    layer: {layer}    {sorted(layer_synapse_dict[layer])}\n"
+    return s
+
+
 class NeuralModule:
     """Implement a neuron and synapse module."""
     def __init__(self, name):
@@ -193,6 +228,30 @@ class NeuralModule:
         else:
             return self.synapses[name].read_synapse(0) # Is this correct for when have explicit synapse with delay? Test it!
 
+    def get_active_synapses(self, layers, delays):
+        """Return the layers_synapse_dict of relevant current active synapses."""
+        layer_synapse_dict = {}
+        layers = set(process_layers(self.synapses, layers))
+        if isinstance(delays, int):
+            delays = set(delays)
+        elif isinstance(delays, list):
+            delays = set(delays)
+        else:
+            delays = set()
+        # print('layers', layers) # comment out later
+        # print('delays', delays) # comment out later
+        for label, synapse in self.synapses.items():
+            layer = synapse.get_layer()
+            if layer in layers:
+                if layer not in layer_synapse_dict: # use defaultdict(set)?
+                    layer_synapse_dict[layer] = set()
+                for delay in delays:
+                    value = self.synapses[label].read_synapse(delay)
+                    if value != 0:
+                        s = f"{label} D{delay}"
+                        layer_synapse_dict[layer].add(s)
+        return layer_synapse_dict
+
     def update_system(self, steps):
         """Update our system."""
         for _ in range(steps):
@@ -244,8 +303,9 @@ class NeuralModule:
                 layer_neuron_dict[layer] = set()
             layer_neuron_dict[layer].add(label)
         s = "\nNeurons:\n"
-        for layer in sorted(layer_neuron_dict.keys()):
-            s += f"    layer: {layer}    {sorted(layer_neuron_dict[layer])}\n"
+        s += display_layer_synapse_dict(layer_neuron_dict)
+        # for layer in sorted(layer_neuron_dict.keys()):
+        #     s += f"    layer: {layer}    {sorted(layer_neuron_dict[layer])}\n"
         return s
 
     def str_synapse_layers(self):
@@ -257,8 +317,9 @@ class NeuralModule:
                 layer_synapse_dict[layer] = set()
             layer_synapse_dict[layer].add(label)
         s = "\nSynapses:\n"
-        for layer in sorted(layer_synapse_dict.keys()):
-            s += f"    layer: {layer}    {sorted(layer_synapse_dict[layer])}\n"
+        s += display_layer_synapse_dict(layer_synapse_dict)
+        # for layer in sorted(layer_synapse_dict.keys()):
+        #     s += f"    layer: {layer}    {sorted(layer_synapse_dict[layer])}\n"
         return s
 
     def __str__(self):

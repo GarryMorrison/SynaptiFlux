@@ -26,3 +26,7 @@ if __name__ == '__main__':
     NM.update_system(25)
     print(NM)
 
+    print('\nActive synapses:')
+    layers = '*'
+    delays = [0,1,2,3,4]
+    print(sf.display_layer_synapse_dict(NM.get_active_synapses(layers, delays)))
