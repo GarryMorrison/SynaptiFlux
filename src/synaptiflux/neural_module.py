@@ -33,11 +33,11 @@ def process_layers(synapses, layers):
     return []
 
 
-def display_layer_synapse_dict(layer_synapse_dict):
+def display_layer_synapse_dict(layer_synapse_dict, prefix="    "):
     """Maps a layers_synapse dictionary to a string for display."""
     s = ""
     for layer in sorted(layer_synapse_dict.keys()):
-        s += f"    layer: {layer}    {sorted(layer_synapse_dict[layer])}\n"
+        s += f"{prefix}layer: {layer}    {sorted(layer_synapse_dict[layer])}\n"
     return s
 
 
@@ -233,7 +233,7 @@ class NeuralModule:
         layer_synapse_dict = {}
         layers = set(process_layers(self.synapses, layers))
         if isinstance(delays, int):
-            delays = set(delays)
+            delays = {delays}
         elif isinstance(delays, list):
             delays = set(delays)
         else:

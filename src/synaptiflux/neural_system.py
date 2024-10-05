@@ -1,9 +1,9 @@
 """Implement a neural system, which is a collection of neural modules."""
 # Author: Garry Morrison
 # Created: 2024-9-19
-# Updated: 2024-9-24
+# Updated: 2024-10-5
 
-from .neural_module import NeuralModule
+from .neural_module import NeuralModule, display_layer_synapse_dict
 
 class NeuralSystem:
     """Implement a collection of neural modules."""
@@ -21,6 +21,39 @@ class NeuralSystem:
         self.module_outputs = {}
         self.module_inputs_history = {}   # comment out?
         self.module_outputs_history = {}
+        self.show_active_synapses = True
+        self.active_synapses_layers = '*'
+        self.active_synapses_delays = 0
+        self.active_synapses_prefix = "        "
+        self.active_synapses_strings = {}
+
+    def enable_active_synapses(self, value):
+        """Enable or disable active synapses in the neural module display."""
+        self.show_active_synapses = value
+
+    def set_active_synapses_layers(self, layers):
+        """Set the active synapses layers parameter."""
+        self.active_synapses_layers = layers
+
+    def set_active_synapses_delays(self, delays):
+        """Set the active synapses delays parameter."""
+        self.active_synapses_delays = delays
+
+    def set_active_synapses_prefix(self, prefix):
+        """Set the active synapses print prefix."""
+        self.active_synapses_prefix = prefix
+
+    def get_active_synapses_layers(self, layers):
+        """Get the active synapses layers parameter."""
+        return self.active_synapses_layers
+
+    def get_active_synapses_delays(self, delays):
+        """Get the active synapses delays parameter."""
+        return self.active_synapses_delays
+
+    def get_active_synapses_prefix(self, prefix):
+        """Get the active synapses print prefix."""
+        return self.active_synapses_prefix
 
     def add_source(self, name, source_fn):
         """Add a source to our system."""
@@ -39,6 +72,8 @@ class NeuralSystem:
         self.module_outputs[name] = []
         self.module_inputs_history[name] = {}
         self.module_outputs_history[name] = {}
+        if self.show_active_synapses:
+            self.active_synapses_strings[name] = ""
 
     def register_module_input(self, name, input, neuron):
         """Register a new input for a given module in our system."""
@@ -126,6 +161,18 @@ class NeuralSystem:
         for label, source in self.sources.items():
             self.current_sources_state[label] = next(self.sources[label])
 
+    def update_active_synapses(self):
+        """Update our active synapses string."""
+        if not self.show_active_synapses:
+            return
+        layers = self.active_synapses_layers
+        delays = self.active_synapses_delays
+        prefix = self.active_synapses_prefix
+        for name, module in self.modules.items():
+            layer_synapse_dict = module.get_active_synapses(layers, delays)
+            s = display_layer_synapse_dict(layer_synapse_dict, prefix)
+            self.active_synapses_strings[name] += s + "\n"
+
     def update_system(self, steps):
         """Update the system for steps."""
         for _ in range(steps):
@@ -133,6 +180,7 @@ class NeuralSystem:
             self.update_modules()
             self.update_outputs()
             self.update_sources()
+            self.update_active_synapses()
 
     def str_sources(self):
         """Return sources as a string."""
@@ -146,7 +194,8 @@ class NeuralSystem:
         header_len = len(s) - 1
         s += "-" * header_len + "\n"
         s += self.str_sources()
-        s += f"\nVariables: {sorted(self.variables)}\n"
+        # s += f"\nVariables: {sorted(self.variables)}\n"
+        s += f"\nChannels: {sorted(self.variables)}\n"
         s += "\nModules:\n"
         # for name, module in self.modules.items():
         for name in self.modules.keys():
@@ -159,4 +208,7 @@ class NeuralSystem:
              for synapse, output in self.module_outputs[name]:
                  s += f"        \"{synapse}\" -> {output}    history: {self.module_outputs_history[name][output]}\n"
              s += "\n"
+             if self.show_active_synapses:
+                 s += f"    active synapses:\n"
+                 s += f"{self.active_synapses_strings[name]}\n"
         return s
