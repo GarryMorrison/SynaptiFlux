@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-9-29
+# Updated: 2024-10-5
 
 from .neuron import Neuron
 from .synapse import Synapse
@@ -172,11 +172,26 @@ class NeuralModule:
         for name in names:
             self.current_poked_neurons.add(name)
 
+#     def read_synapse(self, name):
+#         """Read a single synapse."""
+#         if name not in self.synapses:
+#             return 0
+#         return self.synapses[name].read_synapse()
+
     def read_synapse(self, name):
-        """Read a single synapse."""
+        """Extract delay, and then read a single synapse."""
         if name not in self.synapses:
-            return 0
-        return self.synapses[name].read_synapse()
+            try:
+                label, delay_str = name.rsplit(" D", 1)
+                delay = int(delay_str)
+            except ValueError:
+                label = name
+                delay = 0
+            if label not in self.synapses: # do we want silent fail when referenced synapse is not defined?
+                return 0
+            return self.synapses[label].read_synapse(delay)
+        else:
+            return self.synapses[name].read_synapse(0) # Is this correct for when have explicit synapse with delay? Test it!
 
     def update_system(self, steps):
         """Update our system."""

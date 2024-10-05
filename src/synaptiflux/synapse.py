@@ -1,7 +1,7 @@
 """Implement a single synapse."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-9-30
+# Updated: 2024-10-5
 
 class Synapse:
     """Implements a single reductionist synapse."""
@@ -29,11 +29,13 @@ class Synapse:
         """Set the synapse layer number."""
         self.layer = n
 
-    def read_synapse(self):
-        """Read and return the current value of the synapse."""
-        if len(self.spike_history) == 0:
+    def read_synapse(self, delay):
+        """Read and return the current value of the synapse, with the current delay."""
+        if delay < 0: # we can't see into the future!
             return 0
-        return self.spike_history[-1]
+        if len(self.spike_history) <= delay:
+            return 0
+        return self.spike_history[- 1 - delay]
 
     def update_fn(self, synapse_fn, synapse_params):
         """Update the synapse function."""
