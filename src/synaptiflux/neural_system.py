@@ -23,7 +23,9 @@ class NeuralSystem:
         self.module_outputs_history = {}
         self.show_active_synapses = True
         self.active_synapses_layers = '*'
+        # self.active_synapses_layers = 1
         self.active_synapses_delays = 0
+        # self.active_synapses_delays = [0,1,2,3,4]
         self.active_synapses_prefix = "        "
         self.active_synapses_strings = {}
 
@@ -72,8 +74,9 @@ class NeuralSystem:
         self.module_outputs[name] = []
         self.module_inputs_history[name] = {}
         self.module_outputs_history[name] = {}
-        if self.show_active_synapses:
-            self.active_synapses_strings[name] = ""
+        # if self.show_active_synapses:
+        #     self.active_synapses_strings[name] = ""
+        self.active_synapses_strings[name] = ""
 
     def register_module_input(self, name, input, neuron):
         """Register a new input for a given module in our system."""

@@ -57,6 +57,8 @@ if __name__ == '__main__':
                               ['!seq-11!', 'print !'],
                               ['!seq-12!', 'print \\n']])
 
+    NS.set_active_synapses_layers(1)
+    NS.set_active_synapses_delays(list(range(5)))
     NS.update_system(20)
     print(NS)
 
