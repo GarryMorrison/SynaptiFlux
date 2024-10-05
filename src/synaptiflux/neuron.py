@@ -1,7 +1,7 @@
 """Implement a single reductionist neuron."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-2
+# Updated: 2024-10-5
 
 class Neuron:
     """Implements a single reductionist neuron."""
@@ -110,14 +110,23 @@ class Neuron:
         pooling_list = []
         for k in range(self.pattern_count):
             input_pattern = []
-            # value = 0 # Nope, buggy!
             for label in self.pattern_labels[k]:
                 value = 0
                 if label in current_sources:
                     value = current_sources[label]
-                elif label in synapses:
-                    if len(synapses[label].spike_history) > 0: # replace with synapse.read_synapse()?
-                        value = synapses[label].spike_history[-1]
+                # elif label in synapses:
+                #     if len(synapses[label].spike_history) > 0: # replace with synapse.read_synapse()?
+                #         value = synapses[label].spike_history[-1]
+                else:
+                    delay = 0
+                    if label not in synapses:
+                        try:
+                            label, delay_str = label.rsplit(" D", 1)
+                            delay = int(delay_str)
+                        except ValueError:
+                            delay = 0
+                    if label in synapses:
+                        value = synapses[label].read_synapse(delay)
                 input_pattern.append(value)
             fn = self.trigger_fn[k]
             # print(f"{self.name} pattern: {input_pattern}")
