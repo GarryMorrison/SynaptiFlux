@@ -153,10 +153,8 @@ class Neuron:
     def test_pattern(self, synapses, pattern):
         """Feed a pattern into a neuron, and test if it triggers or not, using the trigger function."""
         for k in range(self.pattern_count):
-            if len(pattern) != len(self.pattern[k]):
-                continue
             input_pattern = []
-            for label in pattern:
+            for label in self.pattern_labels[k]:
                 value = 0
                 delay = 0
                 if label not in synapses:
@@ -166,7 +164,9 @@ class Neuron:
                     except ValueError:
                         delay = 0
                 if label in synapses:
-                    value = synapses[label].read_synapse(delay)
+                    # value = synapses[label].read_synapse(delay)
+                    if label in pattern:
+                        value = 1
                 input_pattern.append(value)
             fn = self.trigger_fn[k]
             result = fn(self.pattern[k], input_pattern, **self.trigger_params[k])
