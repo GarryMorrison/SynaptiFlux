@@ -1,7 +1,7 @@
 """Implement a single reductionist neuron."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-5
+# Updated: 2024-10-6
 
 class Neuron:
     """Implements a single reductionist neuron."""
@@ -149,6 +149,30 @@ class Neuron:
             return
         self.trigger_fn[pattern_no] = trigger_fn
         self.trigger_params[pattern_no] = trigger_params
+
+    def test_pattern(self, synapses, pattern):
+        """Feed a pattern into a neuron, and test if it triggers or not, using the trigger function."""
+        for k in range(self.pattern_count):
+            if len(pattern) != len(self.pattern[k]):
+                continue
+            input_pattern = []
+            for label in pattern:
+                value = 0
+                delay = 0
+                if label not in synapses:
+                    try:
+                        label, delay_str = label.rsplit(" D", 1)
+                        delay = int(delay_str)
+                    except ValueError:
+                        delay = 0
+                if label in synapses:
+                    value = synapses[label].read_synapse(delay)
+                input_pattern.append(value)
+            fn = self.trigger_fn[k]
+            result = fn(self.pattern[k], input_pattern, **self.trigger_params[k])
+            if result != 0:
+                return True
+        return False
 
     def __str__(self):
         if not self.valid:

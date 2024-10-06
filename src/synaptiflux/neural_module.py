@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-5
+# Updated: 2024-10-6
 
 from .neuron import Neuron
 from .synapse import Synapse
@@ -258,6 +258,15 @@ class NeuralModule:
             self.update_neurons()
             self.update_synapses()
             self.update_sources()
+
+    def get_test_neurons(self, pattern):
+        """Given a pattern, return a sorted list of neuron names that are triggered by that pattern."""
+        neurons = set()
+        for name, neuron in self.neurons.items():
+            value = neuron.test_pattern(self.synapses, pattern)
+            if value:
+                neurons.add(name)
+        return sorted(neurons)
 
     def str_default_fns(self):
         """Return default functions as a string."""
