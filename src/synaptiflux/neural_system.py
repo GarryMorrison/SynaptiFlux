@@ -1,7 +1,7 @@
 """Implement a neural system, which is a collection of neural modules."""
 # Author: Garry Morrison
 # Created: 2024-9-19
-# Updated: 2024-10-5
+# Updated: 2024-10-8
 
 from .neural_module import NeuralModule, display_layer_synapse_dict
 
@@ -203,6 +203,7 @@ class NeuralSystem:
         # for name, module in self.modules.items():
         for name in self.modules.keys():
              s += f"Module: {name}\n"
+             s += f"    delay counter: {self.modules[name].get_delay_counter()}\n\n"
              s += f"    inputs:\n"
              for input, neuron in self.module_inputs[name]:
                  # s += f"        {input} -> {neuron}   history: {self.module_inputs_history[name][neuron]}\n"
