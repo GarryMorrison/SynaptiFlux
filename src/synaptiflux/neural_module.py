@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-6
+# Updated: 2024-10-8
 
 from .neuron import Neuron
 from .synapse import Synapse
@@ -45,6 +45,7 @@ class NeuralModule:
     """Implement a neuron and synapse module."""
     def __init__(self, name):
         self.name = name
+        self.delay_counter = 0
         self.sources = {}
         self.current_sources_state = {}
         self.neurons = {}
@@ -71,6 +72,22 @@ class NeuralModule:
         return -1 # maybe change this later?
 
     # Do we want default layers too?
+
+    def set_delay_counter(self, n):
+        """Set our delay counter."""
+        self.delay_counter = n
+
+    def get_delay_counter(self):
+        """Get the delay counter."""
+        return self.delay_counter
+
+    def increment_delay_counter(self):
+        """Increment the delay counter by 1."""
+        self.delay_counter += 1
+
+    def reset_delay_counter(self):
+        """Reset the delay counter to 0."""
+        self.delay_counter = 0
 
     def set_default_trigger(self, fn, params):
         """Set the default trigger."""
@@ -258,6 +275,7 @@ class NeuralModule:
             self.update_neurons()
             self.update_synapses()
             self.update_sources()
+            self.increment_delay_counter() # here or at the start of this sequence of methods?
 
     def get_test_neurons(self, pattern):
         """Given a pattern, return a sorted list of neuron names that are triggered by that pattern."""
@@ -337,6 +355,7 @@ class NeuralModule:
         s += "-" * header_len + "\n"
         # s += f"Neurons: {set(self.neurons.keys())}\n"
         # s += f"Synapses: {set(self.synapses.keys())}\n"
+        s += f"\nDelay counter: {self.delay_counter}\n"
         s += self.str_default_fns()
         s += self.str_sources()
         s += self.str_neurons()
