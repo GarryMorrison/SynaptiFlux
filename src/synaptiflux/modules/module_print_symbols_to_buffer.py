@@ -1,7 +1,7 @@
 """Implement a general print symbols module that prints to a buffer."""
 # Author: Garry Morrison
 # Created: 2024-9-29
-# Updated: 2024-9-29
+# Updated: 2024-10-8
 
 from ..neural_module import NeuralModule
 from ..source_fn import *
@@ -16,8 +16,13 @@ def escape_symbol(s):
     s = s.replace('\n', '\\n') # more later!
     return s
 
-def module_print_symbols_to_buffer(name, symbols, append_newline):
+def module_print_symbols_to_buffer(name, symbols, infix_str):
     """Implement a general print symbols module that prints to a buffer."""
+    # check infix_str is a string:
+    if not isinstance(infix_str, str):
+        raise TypeError(f"Expected a string, but got {type(infix_str).__name__}")
+
+    # initialize our module:
     NM = NeuralModule(name)
 
     # Define our buffer:
@@ -31,6 +36,7 @@ def module_print_symbols_to_buffer(name, symbols, append_newline):
     action_flush_fn = action_print_to_buffer_flush
 
     # comment out for now:
+    # set infix_str to "\n" if desire println property.
     # set our action function:
     # if append_newline:
     #     action_fn = action_println
@@ -83,10 +89,10 @@ def module_print_symbols_to_buffer(name, symbols, append_newline):
 
         NM.add_default_neuron(print_capital_neuron, 1, [1,1], [print_synapse, 'use capitals S0'])
         NM.add_default_synapse(print_capital_synapse, print_capital_neuron)
-        NM.update_synapse_action(print_capital_synapse, action_fn, {'buffer': buffer, 's': symbol.upper()})
+        NM.update_synapse_action(print_capital_synapse, action_fn, {'buffer': buffer, 's': symbol.upper() + infix_str})
 
         NM.add_default_neuron(print_lower_neuron, 1, [1,1], [print_synapse, 'use capitals S0 not'])
         NM.add_default_synapse(print_lower_synapse, print_lower_neuron)
-        NM.update_synapse_action(print_lower_synapse, action_fn, {'buffer': buffer, 's': symbol})
+        NM.update_synapse_action(print_lower_synapse, action_fn, {'buffer': buffer, 's': symbol + infix_str})
 
     return NM

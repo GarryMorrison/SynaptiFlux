@@ -1,7 +1,7 @@
 """Using a neural system to print 'Hello World!'."""
 # Author: Garry Morrison
 # Created: 2024-9-29
-# Updated: 2024-9-29
+# Updated: 2024-10-8
 
 import synaptiflux as sf
 import synaptiflux.modules.module_sequence
@@ -39,7 +39,7 @@ if __name__ == '__main__':
                                ['12 neuron S0 delta', '!seq-12!'],
                                ['13 neuron S0 delta', '!seq-13!']])
 
-    NM_print_sequence = sf.modules.module_print_symbols_to_buffer.module_print_symbols_to_buffer('print alphabet module', 'dehlorw !\n', append_newline=False)
+    NM_print_sequence = sf.modules.module_print_symbols_to_buffer.module_print_symbols_to_buffer('print alphabet module', 'dehlorw !\n', infix_str = "")
     NS.register_module('print alphabet module', NM_print_sequence)
     NS.register_module_inputs('print alphabet module',
                               # [['#OFF#', 'use capitals'],
