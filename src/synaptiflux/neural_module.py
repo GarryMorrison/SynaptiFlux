@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-8
+# Updated: 2024-10-9
 
 from .neuron import Neuron
 from .synapse import Synapse
@@ -285,6 +285,22 @@ class NeuralModule:
             if value:
                 neurons.add(name)
         return sorted(neurons)
+
+    def activation_report(self, activation_threshold):
+        """Return an activation report as a string."""
+        # Build the dictionary
+        activation_neuron_dict = {} # maybe defaultdict instead?
+        for name, neuron in self.neurons.items():
+            activation = neuron.get_activation_count()
+            if activation >= activation_threshold:
+                if activation not in activation_neuron_dict:
+                    activation_neuron_dict[activation] = []
+                activation_neuron_dict[activation].append(name)
+        # Convert to a string:
+        s = "Activation report:\n"
+        for activation in sorted(activation_neuron_dict.keys(), reverse=True):
+            s += f"    {activation}    {sorted(activation_neuron_dict[activation])}\n"
+        return s
 
     def str_default_fns(self):
         """Return default functions as a string."""
