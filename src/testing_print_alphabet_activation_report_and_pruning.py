@@ -91,3 +91,4 @@ if __name__ == '__main__':
     print(NM.activation_report(0))
     NM.prune(1)
     print(NM.activation_report(0))
+    # print(NM)
