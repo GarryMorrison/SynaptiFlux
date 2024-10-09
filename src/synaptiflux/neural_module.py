@@ -3,6 +3,7 @@
 # Created: 2024-9-18
 # Updated: 2024-10-9
 
+from collections import defaultdict
 from .neuron import Neuron
 from .synapse import Synapse
 
@@ -289,18 +290,44 @@ class NeuralModule:
     def activation_report(self, activation_threshold):
         """Return an activation report as a string."""
         # Build the dictionary
-        activation_neuron_dict = {} # maybe defaultdict instead?
+        # activation_neuron_dict = {} # maybe defaultdict instead?
+        activation_neuron_dict = defaultdict(list)
         for name, neuron in self.neurons.items():
             activation = neuron.get_activation_count()
             if activation >= activation_threshold:
-                if activation not in activation_neuron_dict:
-                    activation_neuron_dict[activation] = []
+                # if activation not in activation_neuron_dict:
+                #     activation_neuron_dict[activation] = []
                 activation_neuron_dict[activation].append(name)
         # Convert to a string:
         s = "Activation report:\n"
         for activation in sorted(activation_neuron_dict.keys(), reverse=True):
             s += f"    {activation}    {sorted(activation_neuron_dict[activation])}\n"
         return s
+
+    def prune(self, activation_threshold):
+        """Prune all neurons with activation less than the given threshold, and corresponding synapses."""
+        prune_neuron_set = set()
+        for name, neuron in self.neurons.items():
+            if neuron.get_activation_count() < activation_threshold:
+                prune_neuron_set.add(name)
+        for name in prune_neuron_set:
+                self.erase_neuron(name)
+        prune_synapse_set = set()
+        for label, synapse in self.synapses.items():
+            if synapse.axon_name in prune_neuron_set:
+                prune_synapse_set.add(label)
+        for label in prune_synapse_set:
+            self.erase_synapse(label)
+
+    def erase_neuron(self, name):
+        """Erase the neuron from the module with the given name."""
+        # print(f"Erasing neuron {name}")
+        del self.neurons[name] # Is this sufficient, or do we need to tweak other dictionaries too?
+
+    def erase_synapse(self, name):
+        """Erase the synapse from the module with the given name."""
+        # print(f"Erasing synapse {name}")
+        del self.synapses[name] # Is this sufficient, or do we need to tweak other dictionaries too?
 
     def str_default_fns(self):
         """Return default functions as a string."""

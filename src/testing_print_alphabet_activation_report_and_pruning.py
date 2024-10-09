@@ -89,5 +89,5 @@ if __name__ == '__main__':
     print(NM)
 
     print(NM.activation_report(0))
-    # NM.prune(1)
-    # print(NM.activation_report(0))
+    NM.prune(1)
+    print(NM.activation_report(0))
