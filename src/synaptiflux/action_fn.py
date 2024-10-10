@@ -50,16 +50,23 @@ def action_store_buffer(synapse, value, NM, buffer):
     """Store the current active synapses as input to a neuron, with output str(buffer)."""
     if value > 0:
         name = NM.get_neuron_name()
-        # layers = '*'
-        layers = 1 # hardwire in for now
+        layers = '*'
+        # layers = 1 # hardwire in for now
         delay = NM.get_delay_counter()
         # delay = NM.get_delay_counter() - 1 # for testing purposes
         layer_synapse_dict = NM.get_active_synapses(layers, list(range(delay)))
+        layer = sorted(layer_synapse_dict.keys())[-1] # errors out if layers_synapse_dict is empty!
+        pattern = sorted(layer_synapse_dict[layer])
+        neurons = NM.get_test_neurons(pattern)
+        if len(neurons) == 0:
+            print("Will store a neuron and synapse!")
         s = "To store:\n"
         s += f"    name: {name}\n"
         s += f"    delay: {delay}\n"
-        for layer in sorted(layer_synapse_dict.keys()):
-            s += f"    layer: {layer}    {sorted(layer_synapse_dict[layer])}\n"
+        # for layer in sorted(layer_synapse_dict.keys()):
+        #     s += f"    layer: {layer}    {sorted(layer_synapse_dict[layer])}\n"
+        s += f"    layer: {layer}    {pattern}\n"
+        s += f"    neurons: {neurons}\n"
         s += f"    buffer: {str(buffer)}\n"
         print(s)
         NM.reset_delay_counter()
