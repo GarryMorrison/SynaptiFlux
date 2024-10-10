@@ -49,12 +49,14 @@ def action_init_store_buffer(synapse, value, NM, buffer):
 def action_store_buffer(synapse, value, NM, buffer):
     """Store the current active synapses as input to a neuron, with output str(buffer)."""
     if value > 0:
+        name = NM.get_neuron_name()
         # layers = '*'
         layers = 1 # hardwire in for now
         delay = NM.get_delay_counter()
         # delay = NM.get_delay_counter() - 1 # for testing purposes
         layer_synapse_dict = NM.get_active_synapses(layers, list(range(delay)))
         s = "To store:\n"
+        s += f"    name: {name}\n"
         s += f"    delay: {delay}\n"
         for layer in sorted(layer_synapse_dict.keys()):
             s += f"    layer: {layer}    {sorted(layer_synapse_dict[layer])}\n"

@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-9
+# Updated: 2024-10-10
 
 from collections import defaultdict
 from .neuron import Neuron
@@ -46,6 +46,7 @@ class NeuralModule:
     """Implement a neuron and synapse module."""
     def __init__(self, name):
         self.name = name
+        self.neuron_name_index = 0
         self.delay_counter = 0
         self.sources = {}
         self.current_sources_state = {}
@@ -60,6 +61,15 @@ class NeuralModule:
         self.default_synapse_params = {}
         self.default_action_fn = None
         self.default_action_params = {}
+
+    def get_neuron_name(self):
+        """Return a unique neuron name, and check it doesn't already exist."""
+        name = f"N{self.neuron_name_index}"
+        while name in self.neurons:
+            self.neuron_name_index += 1 # this is the increment approach, the other possible one is random integers.
+            name = f"N{self.neuron_name_index}"
+        self.neuron_name_index += 1 # maybe not needed if neuron is added with the given name.
+        return name
 
     def set_neuron_layer(self, name, n): # not sure how useful this method is, since we set the neuron layer on construction.
         """Set the named neuron's layer."""
