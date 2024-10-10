@@ -27,10 +27,13 @@ def module_store_buffer(name, symbols, infix_str):
 
     # Define our buffer:
     # buffer = Buffer("buffer: ")
-    buffer = Buffer("")
+    # buffer = Buffer("")
+    global_buffer = Buffer("")
+    store_buffer = Buffer("")
 
     # Define our action function:
-    action_fn = action_print_to_buffer
+    # action_fn = action_print_to_buffer
+    action_fn = action_print_to_buffers
 
     # Define our flush function:
     action_flush_fn = action_print_to_buffer_flush
@@ -64,13 +67,13 @@ def module_store_buffer(name, symbols, infix_str):
     NM.add_default_neuron('flush buffer flag', 0, [1], ['#OFF#'])
     NM.add_default_synapse('flush buffer flag S0', 'flush buffer flag')
     NM.update_synapse_fn('flush buffer flag S0', synapse_delayed_identity, {'sign': 1, 'delay': 1})
-    NM.update_synapse_action('flush buffer flag S0', action_flush_fn, {'buffer': buffer, 's': ''})
+    NM.update_synapse_action('flush buffer flag S0', action_flush_fn, {'buffer': global_buffer, 's': ''})
 
     # define our 'store buffer flag' neuron and synapse:
     NM.add_default_neuron('store buffer flag', 0, [1], ['#OFF#'])
     NM.add_default_synapse('store buffer flag S0', 'store buffer flag')
     NM.update_synapse_fn('store buffer flag S0', synapse_delayed_identity, {'sign': 1, 'delay': 1})
-    NM.update_synapse_action('store buffer flag S0', action_print_buffer, {'buffer': buffer}) # more involved action here later!
+    NM.update_synapse_action('store buffer flag S0', action_flush_fn, {'buffer': store_buffer, 's': ''}) # more involved action here later!
 
     # update the default trigger:
     NM.set_default_trigger(trigger_dot_product_threshold, {'threshold': 2})
@@ -96,10 +99,10 @@ def module_store_buffer(name, symbols, infix_str):
 
         NM.add_default_neuron(print_capital_neuron, 1, [1,1], [print_synapse, 'use capitals flag S0'])
         NM.add_default_synapse(print_capital_synapse, print_capital_neuron)
-        NM.update_synapse_action(print_capital_synapse, action_fn, {'buffer': buffer, 's': symbol.upper() + infix_str})
+        NM.update_synapse_action(print_capital_synapse, action_fn, {'buffer1': global_buffer, 'buffer2': store_buffer, 's': symbol.upper() + infix_str})
 
         NM.add_default_neuron(print_lower_neuron, 1, [1,1], [print_synapse, 'use capitals flag S0 not'])
         NM.add_default_synapse(print_lower_synapse, print_lower_neuron)
-        NM.update_synapse_action(print_lower_synapse, action_fn, {'buffer': buffer, 's': symbol + infix_str})
+        NM.update_synapse_action(print_lower_synapse, action_fn, {'buffer1': global_buffer, 'buffer2': store_buffer, 's': symbol + infix_str})
 
     return NM

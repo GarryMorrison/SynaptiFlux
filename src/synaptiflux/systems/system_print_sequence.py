@@ -14,6 +14,9 @@ def system_symbol_sequence(name, symbol_sequence, punctuation_symbols):
     # initialize our system:
     NS = NeuralSystem(name)
 
+    # switch off active synapse display for now:
+    NS.enable_active_synapses(False)
+
     # some prelims:
     seq_len = len(symbol_sequence)
     symbol_set = set([x.lower() for x in symbol_sequence])

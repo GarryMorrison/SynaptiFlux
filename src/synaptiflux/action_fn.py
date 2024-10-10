@@ -27,6 +27,12 @@ def action_print_to_buffer(synapse, value, buffer, s):
     if value > 0:
         buffer.append(s)
 
+def action_print_to_buffers(synapse, value, buffer1, buffer2, s):
+    """Append the given string to the given buffers, if value > 0."""
+    if value > 0:
+        buffer1.append(s)
+        buffer2.append(s)
+
 def action_print_to_buffer_flush(synapse, value, buffer, s):
     """Append the given string to the given buffer, then print the buffer, if value > 0."""
     if value > 0:
