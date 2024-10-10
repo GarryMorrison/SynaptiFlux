@@ -38,6 +38,9 @@ def module_store_buffer(name, symbols, infix_str):
     # Define our flush function:
     action_flush_fn = action_print_to_buffer_flush
 
+    # Define our init store buffer function:
+    action_init_store_fn = action_init_store_buffer
+
     # Define our store buffer function:
     action_store_fn = action_store_buffer
 
@@ -71,6 +74,12 @@ def module_store_buffer(name, symbols, infix_str):
     NM.add_default_synapse('flush buffer flag S0', 'flush buffer flag')
     NM.update_synapse_fn('flush buffer flag S0', synapse_delayed_identity, {'sign': 1, 'delay': 1})
     NM.update_synapse_action('flush buffer flag S0', action_flush_fn, {'buffer': global_buffer, 's': ''})
+
+    # define our 'init store buffer flag' neuron and synapse:
+    NM.add_default_neuron('init store buffer flag', 0, [1], ['#OFF#'])
+    NM.add_default_synapse('init store buffer flag S0', 'init store buffer flag')
+    NM.update_synapse_fn('init store buffer flag S0', synapse_delayed_identity, {'sign': 1, 'delay': 1})
+    NM.update_synapse_action('init store buffer flag S0', action_init_store_fn, {'NM': NM, 'buffer': store_buffer})
 
     # define our 'store buffer flag' neuron and synapse:
     NM.add_default_neuron('store buffer flag', 0, [1], ['#OFF#'])

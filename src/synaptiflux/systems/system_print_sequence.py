@@ -53,6 +53,7 @@ def system_symbol_sequence(name, symbol_sequence, punctuation_symbols):
 
     # create our outputs list:
     inputs_list = []
+    inputs_list.append(["!seq-0!", "init store buffer flag"])
     for k in range(seq_len):
         channel = f"!seq-{k}!"
         neuron = f"print {symbol_sequence[k].lower()}"
@@ -61,6 +62,7 @@ def system_symbol_sequence(name, symbol_sequence, punctuation_symbols):
         inputs_list.append([channel, neuron])
         if symbol_sequence[k] in punctuation_set:
             inputs_list.append([channel, "store buffer flag"])
+            inputs_list.append([f"!seq-{k+1}!", "init store buffer flag"])
     flush_channel = f"!seq-{seq_len}!"
     inputs_list.append([flush_channel, "flush buffer flag"]) # be sure to flush our buffer!
 

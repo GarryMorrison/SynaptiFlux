@@ -40,13 +40,19 @@ def action_print_to_buffer_flush(synapse, value, buffer, s):
         print(buffer)
         buffer.erase()
 
+def action_init_store_buffer(synapse, value, NM, buffer):
+    """Initialize the store buffer."""
+    if value > 0:
+        NM.reset_delay_counter()
+        buffer.erase()
+
 def action_store_buffer(synapse, value, NM, buffer):
     """Store the current active synapses as input to a neuron, with output str(buffer)."""
     if value > 0:
         # layers = '*'
         layers = 1 # hardwire in for now
-        # delay = NM.get_delay_counter()
-        delay = NM.get_delay_counter() - 1 # for testing purposes
+        delay = NM.get_delay_counter()
+        # delay = NM.get_delay_counter() - 1 # for testing purposes
         layer_synapse_dict = NM.get_active_synapses(layers, list(range(delay)))
         s = "To store:\n"
         s += f"    delay: {delay}\n"
