@@ -38,6 +38,9 @@ def module_store_buffer(name, symbols, infix_str):
     # Define our flush function:
     action_flush_fn = action_print_to_buffer_flush
 
+    # Define our store buffer function:
+    action_store_fn = action_store_buffer
+
     # comment out for now:
     # set infix_str to "\n" if desire println property.
     # set our action function:
@@ -73,7 +76,7 @@ def module_store_buffer(name, symbols, infix_str):
     NM.add_default_neuron('store buffer flag', 0, [1], ['#OFF#'])
     NM.add_default_synapse('store buffer flag S0', 'store buffer flag')
     NM.update_synapse_fn('store buffer flag S0', synapse_delayed_identity, {'sign': 1, 'delay': 1})
-    NM.update_synapse_action('store buffer flag S0', action_flush_fn, {'buffer': store_buffer, 's': ''}) # more involved action here later!
+    NM.update_synapse_action('store buffer flag S0', action_store_fn, {'NM': NM, 'buffer': store_buffer})
 
     # update the default trigger:
     NM.set_default_trigger(trigger_dot_product_threshold, {'threshold': 2})
