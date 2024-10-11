@@ -309,6 +309,8 @@ class NeuralModule:
 
     def get_test_neurons(self, pattern):
         """Given a pattern, return a sorted list of neuron names that are triggered by that pattern."""
+        # print(f"Inside NM.get_test_neurons() with pattern: {pattern}")
+        self.patch_in_new_synapses() # does this work or bug out?
         neurons = set()
         for name, neuron in self.neurons.items():
             value = neuron.test_pattern(self.synapses, pattern)
