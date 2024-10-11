@@ -1,7 +1,11 @@
 """Define some toy actions."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-10
+# Updated: 2024-10-11
+
+from .trigger_fn import trigger_dot_product_threshold
+from .pooling_fn import pooling_or
+from .synapse_fn import *
 
 def action_null(synapse, value):
     """Do nothing action."""
@@ -50,6 +54,7 @@ def action_store_buffer(synapse, value, NM, buffer):
     """Store the current active synapses as input to a neuron, with output str(buffer)."""
     if value > 0:
         name = NM.get_neuron_name()
+        synapse_name = f"{name} S0"
         layers = '*'
         # layers = 1 # hardwire in for now
         delay = NM.get_delay_counter()
@@ -58,8 +63,6 @@ def action_store_buffer(synapse, value, NM, buffer):
         layer = sorted(layer_synapse_dict.keys())[-1] # errors out if layers_synapse_dict is empty!
         pattern = sorted(layer_synapse_dict[layer])
         neurons = NM.get_test_neurons(pattern)
-        if len(neurons) == 0:
-            print("Will store a neuron and synapse!")
         s = "To store:\n"
         s += f"    name: {name}\n"
         s += f"    delay: {delay}\n"
@@ -67,7 +70,23 @@ def action_store_buffer(synapse, value, NM, buffer):
         #     s += f"    layer: {layer}    {sorted(layer_synapse_dict[layer])}\n"
         s += f"    layer: {layer}    {pattern}\n"
         s += f"    neurons: {neurons}\n"
-        s += f"    buffer: {str(buffer)}\n"
+        s += f"    buffer: {str(buffer)}"
         print(s)
+        if len(neurons) > 0:
+            print("That pattern already triggers a neuron.")
+            return
+        print("Will store a neuron and synapse!\n")
+        pattern_len = len(pattern)
+        compare_pattern = [1] * pattern_len
+        threshold = pattern_len
+        NM.add_neuron(name, layer + 1, compare_pattern, pattern, trigger_dot_product_threshold, {'threshold': threshold}, pooling_or, {})
+        NM.print_neuron(name)
+        prefix = "stored sequence: "
+        # NM.add_synapse(synapse_name, name, synapse_delayed_identity, {'sign': 1, 'delay': 0}, action_println, {'s': prefix + str(buffer)}) # bugs out due to change in synapse dictionary size!
+        # NM.print_synapse(synapse_name)
         NM.reset_delay_counter()
         buffer.erase()
+
+
+# add_neuron(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
+# add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)

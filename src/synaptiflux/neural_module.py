@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-10
+# Updated: 2024-10-11
 
 from collections import defaultdict
 from .neuron import Neuron
@@ -338,6 +338,18 @@ class NeuralModule:
         """Erase the synapse from the module with the given name."""
         # print(f"Erasing synapse {name}")
         del self.synapses[name] # Is this sufficient, or do we need to tweak other dictionaries too?
+
+    def print_neuron(self, name):
+        """Print the named neuron."""
+        if name not in self.neurons:
+            return
+        print(self.neurons[name])
+
+    def print_synapse(self, name):
+        """Print the named synapse."""
+        if name not in self.synapses:
+            return
+        print(self.synapses[name])
 
     def str_default_fns(self):
         """Return default functions as a string."""
