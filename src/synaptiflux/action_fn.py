@@ -63,7 +63,7 @@ def action_store_buffer(synapse, value, NM, buffer):
         # layer = sorted(layer_synapse_dict.keys())[-1] # errors out if layers_synapse_dict is empty!
         layer = 1 # hardwire in for now
         pattern = sorted(layer_synapse_dict[layer])
-        neurons = NM.get_test_neurons(pattern)
+        neurons = NM.get_test_neurons(pattern) # doesn't currently work!
         s = "To store:\n"
         s += f"    name: {name}\n"
         s += f"    delay: {delay}\n"
@@ -74,10 +74,10 @@ def action_store_buffer(synapse, value, NM, buffer):
         s += f"    buffer: {str(buffer)}"
         print(s)
         if len(pattern) == 0:
-            print("Empty pattern!")
+            print("Empty pattern!\n")
             return
         if len(neurons) > 0:
-            print("That pattern already triggers a neuron.")
+            print("That pattern already triggers a neuron.\n")
             return
         print("Will store a neuron and synapse!\n")
         pattern_len = len(pattern)
