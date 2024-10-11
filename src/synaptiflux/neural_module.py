@@ -52,6 +52,7 @@ class NeuralModule:
         self.current_sources_state = {}
         self.neurons = {}
         self.current_poked_neurons = set()
+        self.new_synapses = {}
         self.synapses = {}
         self.default_trigger_fn = None
         self.default_trigger_params = {}
@@ -166,7 +167,8 @@ class NeuralModule:
         if axon_name in self.neurons:
            layer = self.neurons[axon_name].get_layer()
            synapse.set_layer(layer)
-        self.synapses[name] = synapse
+        # self.synapses[name] = synapse
+        self.new_synapses[name] = synapse # does this break anything?
 
     def add_default_synapse(self, name, axon_name):
         """Add a default synapse to our system."""
@@ -174,18 +176,23 @@ class NeuralModule:
         if axon_name in self.neurons:
            layer = self.neurons[axon_name].get_layer()
            synapse.set_layer(layer)
-        self.synapses[name] = synapse
+        # self.synapses[name] = synapse
+        self.new_synapses[name] = synapse
 
     def update_synapse_fn(self, name, synapse_fn, synapse_params):
         """Update the synapse function for a synapse."""
         if name not in self.synapses:
-            return
+            if name in self.new_synapses:
+                self.new_synapses[name].update_fn(synapse_fn, synapse_params)
+                return
         self.synapses[name].update_fn(synapse_fn, synapse_params)
 
     def update_synapse_action(self, name, action_fn, action_params):
         """Update the synapse action for a synapse."""
         if name not in self.synapses:
-            return
+            if name in self.new_synapses:
+                self.new_synapses[name].update_action(action_fn, action_params)
+                return
         self.synapses[name].update_action(action_fn, action_params)
 
     def test_source(self, name, steps):
@@ -207,6 +214,17 @@ class NeuralModule:
                 poked = True
             neuron.update_axon(self.current_sources_state, self.synapses, poked)
         self.current_poked_neurons.clear()
+
+    def patch_in_new_synapses(self):
+        """Patch in new synapses."""
+        spike_history_len = 0
+        for label, synapse in self.synapses.items():
+            spike_history_len = synapse.get_spike_history_len()
+            break
+        for label, synapse in self.new_synapses.items(): # patch in the new synapses:
+            synapse.set_spike_history([0]*spike_history_len)
+            self.synapses[label] = synapse
+        self.new_synapses.clear()
 
     def update_synapses(self):
         """Update our synapses."""
@@ -283,6 +301,7 @@ class NeuralModule:
     def update_system(self, steps):
         """Update our system."""
         for _ in range(steps):
+            self.patch_in_new_synapses()
             self.update_neurons()
             self.update_synapses()
             self.update_sources()
@@ -348,7 +367,9 @@ class NeuralModule:
     def print_synapse(self, name):
         """Print the named synapse."""
         if name not in self.synapses:
-            return
+            if name in self.new_synapses:
+                print(self.new_synapses[name])
+                return
         print(self.synapses[name])
 
     def str_default_fns(self):

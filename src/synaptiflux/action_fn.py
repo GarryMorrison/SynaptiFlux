@@ -60,7 +60,8 @@ def action_store_buffer(synapse, value, NM, buffer):
         delay = NM.get_delay_counter()
         # delay = NM.get_delay_counter() - 1 # for testing purposes
         layer_synapse_dict = NM.get_active_synapses(layers, list(range(delay)))
-        layer = sorted(layer_synapse_dict.keys())[-1] # errors out if layers_synapse_dict is empty!
+        # layer = sorted(layer_synapse_dict.keys())[-1] # errors out if layers_synapse_dict is empty!
+        layer = 1 # hardwire in for now
         pattern = sorted(layer_synapse_dict[layer])
         neurons = NM.get_test_neurons(pattern)
         s = "To store:\n"
@@ -72,6 +73,9 @@ def action_store_buffer(synapse, value, NM, buffer):
         s += f"    neurons: {neurons}\n"
         s += f"    buffer: {str(buffer)}"
         print(s)
+        if len(pattern) == 0:
+            print("Empty pattern!")
+            return
         if len(neurons) > 0:
             print("That pattern already triggers a neuron.")
             return
@@ -82,8 +86,8 @@ def action_store_buffer(synapse, value, NM, buffer):
         NM.add_neuron(name, layer + 1, compare_pattern, pattern, trigger_dot_product_threshold, {'threshold': threshold}, pooling_or, {})
         NM.print_neuron(name)
         prefix = "stored sequence: "
-        # NM.add_synapse(synapse_name, name, synapse_delayed_identity, {'sign': 1, 'delay': 0}, action_println, {'s': prefix + str(buffer)}) # bugs out due to change in synapse dictionary size!
-        # NM.print_synapse(synapse_name)
+        NM.add_synapse(synapse_name, name, synapse_delayed_identity, {'sign': 1, 'delay': 0}, action_println, {'s': prefix + str(buffer)})
+        NM.print_synapse(synapse_name)
         NM.reset_delay_counter()
         buffer.erase()
 

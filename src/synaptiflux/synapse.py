@@ -1,7 +1,7 @@
 """Implement a single synapse."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-5
+# Updated: 2024-10-11
 
 class Synapse:
     """Implements a single reductionist synapse."""
@@ -50,6 +50,14 @@ class Synapse:
     def append_to_history(self, value):
         """Append to the spike history list, just used for testing."""
         self.spike_history.append(value)
+
+    def get_spike_history_len(self):
+        """Return the length of the current spike history."""
+        return len(self.spike_history)
+
+    def set_spike_history(self, spike_history):
+        """Set the spike history. Eg, used if adding a new synapse part way through a run."""
+        self.spike_history = spike_history
 
     def update_spike_history(self, neurons):
         """Given a dictionary of neurons, calculate and update the spike history list.
