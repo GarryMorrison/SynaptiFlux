@@ -150,7 +150,8 @@ class Neuron:
         self.trigger_fn[pattern_no] = trigger_fn
         self.trigger_params[pattern_no] = trigger_params
 
-    def test_pattern(self, synapses, pattern): # later remove synapses parameter. No longer needed!
+    # def test_pattern(self, synapses, pattern): # later remove synapses parameter. No longer needed!
+    def test_pattern(self, pattern):
         """Feed a pattern into a neuron, and test if it triggers or not, using the trigger function."""
         for k in range(self.pattern_count):
             input_pattern = []
