@@ -1,7 +1,7 @@
 """Define some toy actions."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-11
+# Updated: 2024-10-13
 
 from .trigger_fn import trigger_dot_product_threshold
 from .pooling_fn import pooling_or
@@ -50,7 +50,7 @@ def action_init_store_buffer(synapse, value, NM, buffer):
         NM.reset_delay_counter()
         buffer.erase()
 
-def action_store_buffer(synapse, value, NM, buffer):
+def action_store_buffer(synapse, value, NM, buffer, verbose=False):
     """Store the current active synapses as input to a neuron, with output str(buffer)."""
     if value > 0:
         name = NM.get_neuron_name()
@@ -70,24 +70,30 @@ def action_store_buffer(synapse, value, NM, buffer):
         # for layer in sorted(layer_synapse_dict.keys()):
         #     s += f"    layer: {layer}    {sorted(layer_synapse_dict[layer])}\n"
         s += f"    layer: {layer}    {pattern}\n"
-        s += f"    neurons: {neurons}\n"
+        s += f"    matching neurons: {neurons}\n"
         s += f"    buffer: {str(buffer)}"
-        print(s)
+        if verbose:
+            print(s)
         if len(pattern) == 0:
-            print("Empty pattern!\n")
+            if verbose:
+                print("Empty pattern!\n")
             return
         if len(neurons) > 0:
-            print("That pattern already triggers a neuron.\n")
+            if verbose:
+                print("That pattern already triggers a neuron.\n")
             return
-        print("Will store a neuron and synapse!\n")
+        # print("Will store a neuron and synapse!\n")
         pattern_len = len(pattern)
         compare_pattern = [1] * pattern_len
         threshold = pattern_len
         NM.add_neuron(name, layer + 1, compare_pattern, pattern, trigger_dot_product_threshold, {'threshold': threshold}, pooling_or, {})
-        NM.print_neuron(name)
+        # NM.print_neuron(name)
         prefix = "stored sequence: "
         NM.add_synapse(synapse_name, name, synapse_delayed_identity, {'sign': 1, 'delay': 0}, action_println, {'s': prefix + str(buffer)})
-        NM.print_synapse(synapse_name)
+        if verbose:
+            print("Will store a neuron and synapse!\n")
+            NM.print_neuron(name)
+            NM.print_synapse(synapse_name)
         NM.reset_delay_counter()
         buffer.erase()
 

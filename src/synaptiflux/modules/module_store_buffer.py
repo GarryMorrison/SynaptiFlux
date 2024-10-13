@@ -1,7 +1,7 @@
 """Implement a general print symbols module that prints to a buffer and stores buffers to neurons."""
 # Author: Garry Morrison
 # Created: 2024-10-10
-# Updated: 2024-10-10
+# Updated: 2024-10-13
 
 from ..neural_module import NeuralModule
 from ..source_fn import *
@@ -16,7 +16,7 @@ def escape_symbol(s):
     s = s.replace('\n', '\\n') # more later!
     return s
 
-def module_store_buffer(name, symbols, infix_str):
+def module_store_buffer(name, symbols, infix_str, verbose=False):
     """Implement a general print symbols module that prints to a buffer."""
     # check infix_str is a string:
     if not isinstance(infix_str, str):
@@ -85,7 +85,7 @@ def module_store_buffer(name, symbols, infix_str):
     NM.add_default_neuron('store buffer flag', 0, [1], ['#OFF#'])
     NM.add_default_synapse('store buffer flag S0', 'store buffer flag')
     NM.update_synapse_fn('store buffer flag S0', synapse_delayed_identity, {'sign': 1, 'delay': 1})
-    NM.update_synapse_action('store buffer flag S0', action_store_fn, {'NM': NM, 'buffer': store_buffer})
+    NM.update_synapse_action('store buffer flag S0', action_store_fn, {'NM': NM, 'buffer': store_buffer, 'verbose': verbose})
 
     # update the default trigger:
     NM.set_default_trigger(trigger_dot_product_threshold, {'threshold': 2})

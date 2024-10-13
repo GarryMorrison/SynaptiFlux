@@ -21,7 +21,7 @@ class NeuralSystem:
         self.module_outputs = {}
         self.module_inputs_history = {}   # comment out?
         self.module_outputs_history = {}
-        self.show_active_synapses = True
+        self.show_active_synapses = False
         self.active_synapses_layers = '*'
         # self.active_synapses_layers = 1
         self.active_synapses_delays = 0

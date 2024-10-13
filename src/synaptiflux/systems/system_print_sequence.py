@@ -1,7 +1,7 @@
 """Implement a general print sequence system that prints to a buffer."""
 # Author: Garry Morrison
 # Created: 2024-10-9
-# Updated: 2024-10-10
+# Updated: 2024-10-13
 
 from ..neural_system import NeuralSystem
 from ..modules import module_sequence
@@ -9,13 +9,13 @@ from ..modules import module_sequence
 from ..modules import module_store_buffer
 from ..source_fn import *
 
-def system_symbol_sequence(name, symbol_sequence, punctuation_symbols):
+def system_symbol_sequence(name, symbol_sequence, punctuation_symbols, verbose=False):
     """Implement a system to print a sequence."""
     # initialize our system:
     NS = NeuralSystem(name)
 
     # switch off active synapse display for now:
-    NS.enable_active_synapses(False)
+    # NS.enable_active_synapses(False) # active synapse delay is now off by default
 
     # some prelims:
     seq_len = len(symbol_sequence)
@@ -48,7 +48,7 @@ def system_symbol_sequence(name, symbol_sequence, punctuation_symbols):
 
 
     # add our print sequence module:
-    NM_print_symbols = module_store_buffer.module_store_buffer('print symbols module', sorted(symbol_set), infix_str = "")
+    NM_print_symbols = module_store_buffer.module_store_buffer('print symbols module', sorted(symbol_set), infix_str = "", verbose=verbose)
     NS.register_module('print symbols module', NM_print_symbols)
 
     # create our outputs list:
