@@ -3,7 +3,7 @@
 # Created: 2024-9-18
 # Updated: 2024-10-13
 
-from .trigger_fn import trigger_dot_product_threshold
+from .trigger_fn import trigger_dot_product_threshold, trigger_list_simm_threshold
 from .pooling_fn import pooling_or
 from .synapse_fn import *
 
@@ -86,7 +86,8 @@ def action_store_buffer(synapse, value, NM, buffer, verbose=False):
         pattern_len = len(pattern)
         compare_pattern = [1] * pattern_len
         threshold = pattern_len
-        NM.add_neuron(name, layer + 1, compare_pattern, pattern, trigger_dot_product_threshold, {'threshold': threshold}, pooling_or, {})
+        # NM.add_neuron(name, layer + 1, compare_pattern, pattern, trigger_dot_product_threshold, {'threshold': threshold}, pooling_or, {})
+        NM.add_neuron(name, layer + 1, compare_pattern, pattern, trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
         # NM.print_neuron(name)
         prefix = "stored sequence: "
         NM.add_synapse(synapse_name, name, synapse_delayed_identity, {'sign': 1, 'delay': 0}, action_println, {'s': prefix + str(buffer)})

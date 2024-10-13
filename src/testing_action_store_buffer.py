@@ -27,6 +27,7 @@ if __name__ == '__main__':
     print(f"The sequence to process: {seq1}")
     NS1 = sf.systems.system_print_sequence.system_symbol_sequence('example sequence system', seq1, ' ,.!?', verbose=False)
     NS1.update_system(20)
+    # print(NS1)
 
     # next sequence:
     print("\n----------------------------------------")
@@ -34,4 +35,4 @@ if __name__ == '__main__':
     print(f"The sequence to process: {seq2}")
     NS2 = sf.systems.system_print_sequence.system_symbol_sequence('example sequence system', seq2, ' ,.!?', verbose=False)
     NS2.update_system(20)
-
+    # print(NS2)
