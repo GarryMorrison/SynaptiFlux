@@ -1,7 +1,7 @@
 """Implement a single reductionist neuron."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-11
+# Updated: 2024-10-13
 
 class Neuron:
     """Implements a single reductionist neuron."""
@@ -150,24 +150,26 @@ class Neuron:
         self.trigger_fn[pattern_no] = trigger_fn
         self.trigger_params[pattern_no] = trigger_params
 
-    def test_pattern(self, synapses, pattern):
+    def test_pattern(self, synapses, pattern): # later remove synapses parameter. No longer needed!
         """Feed a pattern into a neuron, and test if it triggers or not, using the trigger function."""
         for k in range(self.pattern_count):
             input_pattern = []
             for label in self.pattern_labels[k]:
                 value = 0
-                delay = 0
-                new_label = label
-                if label not in synapses:
-                    try:
-                        new_label, delay_str = label.rsplit(" D", 1)
-                        delay = int(delay_str)
-                    except ValueError:
-                        delay = 0
-                if label in synapses or new_label in synapses:
-                    # value = synapses[label].read_synapse(delay)
-                    if label in pattern or new_label in pattern:
-                        value = 1
+                # delay = 0
+                # new_label = label
+                # if label not in synapses:
+                #     try:
+                #         new_label, delay_str = label.rsplit(" D", 1)
+                #         delay = int(delay_str)
+                #     except ValueError:
+                #         delay = 0
+                # if label in synapses or new_label in synapses:
+                #     # value = synapses[label].read_synapse(delay)
+                #     if label in pattern or new_label in pattern:
+                #         value = 1
+                if label in pattern:
+                    value = 1
                 input_pattern.append(value)
             fn = self.trigger_fn[k]
             result = fn(self.pattern[k], input_pattern, **self.trigger_params[k])
