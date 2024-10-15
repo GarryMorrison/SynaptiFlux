@@ -11,4 +11,4 @@ from .trigger_fn import *
 from .pooling_fn import *
 from .buffer import *
 from .fn_buffer import *
-
+from .parse_seq import *
