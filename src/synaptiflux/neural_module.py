@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-13
+# Updated: 2024-10-15
 
 from collections import defaultdict
 from .neuron import Neuron
@@ -62,6 +62,14 @@ class NeuralModule:
         self.default_synapse_params = {}
         self.default_action_fn = None
         self.default_action_params = {}
+
+    def do_you_know_neuron(self, name):
+        """Return's True/False if a neuron with the given name is known to the module."""
+        return name in self.neurons
+
+    def do_you_know_synapse(self, name):
+        """Return's True/False if a synapse with the given name is known to the module."""
+        return name in self.synapses
 
     def get_neuron_name(self):
         """Return a unique neuron name, and check it doesn't already exist."""
