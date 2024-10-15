@@ -78,7 +78,7 @@ def parse_if_then_machine(NM, s, verbose=False):
 
     for line in s.splitlines():
         line = line.strip()
-        if len(line) == 0:
+        if len(line) == 0 or line.startswith('--'):
             continue
         # print("line:", line)
         try:

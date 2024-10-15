@@ -14,6 +14,7 @@ if __name__ == '__main__':
     # define our if-then machine to parse:
     s = """
 
+    -- our greetings if-then machine:
     pattern |node: 1: 1> => |H> . |e> . |l> . |l> . |o>
     pattern |node: 1: 2> => |H> . |e> . |y>
     pattern |node: 1: 3> => |H> . |i>
