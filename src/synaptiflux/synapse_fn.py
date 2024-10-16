@@ -1,7 +1,7 @@
 """Define some example synapse functions."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-9-18
+# Updated: 2024-10-16
 
 def synapse_identity(axon, sign):
     """The identity synapse, which returns the last element in an axon list, up to a sign change for the case of inhibition."""
@@ -81,3 +81,16 @@ def synapse_delta(axon, sign):
     if axon[-2] != axon[-1]:
         return sign * 1
     return 0
+
+synapse_fn_map = {
+    'identity': synapse_identity,
+    'delayed_identity': synapse_delayed_identity,
+    'delayed_not': synapse_delayed_not,
+    'delayed_min': synapse_delayed_min,
+    'delayed_max': synapse_delayed_max,
+    'sum': synapse_sum,
+    'average': synapse_average,
+    'delta_plus': synapse_delta_plus,
+    'delta_minus': synapse_delta_minus,
+    'delta': synapse_delta,
+}

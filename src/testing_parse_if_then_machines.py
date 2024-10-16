@@ -1,7 +1,7 @@
 """A quick test of parsing if-then machines, using our new parse code."""
 # Author: Garry Morrison
 # Created: 2024-10-15
-# Updated: 2024-10-15
+# Updated: 2024-10-16
 
 import synaptiflux as sf
 
@@ -14,13 +14,19 @@ if __name__ == '__main__':
     # define our if-then machine to parse:
     s = """
 
-    -- our greetings if-then machine:
-    pattern |node: 1: 1> => |H> . |e> . |l> . |l> . |o>
-    pattern |node: 1: 2> => |H> . |e> . |y>
-    pattern |node: 1: 3> => |H> . |i>
-    pattern |node: 1: 4> => |G> . |'> . |d> . |a> . |y>
-    pattern |node: 1: 5> => |M> . |o> . |r> . |n> . |i> . |n> . |g>
-    then |node: 1: *> => |Greetings!>
+    -- define our default functions:
+    layer |*> => |1>
+    trigger_fn |*> => |trigger: simm> + |threshold: 0.98>
+    pooling_fn |*> => |pooling: or>
+    synapse_fn |*> => |synapse: delayed_identity> + |sign: 1> + |delay: 2>
+    action_fn |*> => |action: println> + |s: some unspecified string>
+
+
+    -- define our if-then machine:
+    pattern |neuron 1> => 2|alpha> + 3|beta> + 5|gamma>
+    pattern |neuron 1> => 5|x> + 7|y>
+    then-0 |neuron 1> => |action: println> + |s: detected neuron 1>
+
 
     """
 
@@ -32,3 +38,10 @@ if __name__ == '__main__':
 
     # see what we have:
     print(NM)
+
+    # test our parse sp to dict function:
+    # print(sf.parse_sp_to_dict('|trigger: simm> + |threshold: 0.98>'))
+    # print(sf.parse_sp_to_dict('|synapse: delayed_identity> + |sign: 1> + |delay: 2>'))
+    # print(sf.parse_sp_to_dict('|action: println> + |s: some unspecified string>'))
+
+

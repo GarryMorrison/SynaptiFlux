@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-15
+# Updated: 2024-10-16
 
 from collections import defaultdict
 from .neuron import Neuron
@@ -54,6 +54,7 @@ class NeuralModule:
         self.current_poked_neurons = set()
         self.new_synapses = {}
         self.synapses = {}
+        self.default_layer = 0
         self.default_trigger_fn = None
         self.default_trigger_params = {}
         self.default_pooling_fn = None
@@ -108,6 +109,10 @@ class NeuralModule:
     def reset_delay_counter(self):
         """Reset the delay counter to 0."""
         self.delay_counter = 0
+
+    def set_default_layer(self, n):
+        """Set the default layer."""
+        self.default_layer = n
 
     def set_default_trigger(self, fn, params):
         """Set the default trigger."""
@@ -386,6 +391,7 @@ class NeuralModule:
     def str_default_fns(self):
         """Return default functions as a string."""
         s = "\nDefault functions and parameters:\n"
+        s += f"    layer: {self.default_layer}\n\n"
         s += f"    trigger: {self.default_trigger_fn}\n"
         s += f"    params: {self.default_trigger_params}\n"
         s += f"\n    pooling: {self.default_pooling_fn}\n"

@@ -1,7 +1,7 @@
 """Define some toy actions."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-13
+# Updated: 2024-10-16
 
 from .trigger_fn import trigger_dot_product_threshold, trigger_list_simm_threshold
 from .pooling_fn import pooling_or
@@ -101,3 +101,16 @@ def action_store_buffer(synapse, value, NM, buffer, verbose=False):
 
 # add_neuron(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
 # add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)
+
+
+action_fn_map = {
+    'null': action_null,
+    'println': action_println,
+    'print': action_print,
+    'print_buffer': action_print_buffer,
+    'print_to_buffer': action_print_to_buffer,
+    'print_to_buffers': action_print_to_buffers,
+    'print_to_buffer_flush': action_print_to_buffer_flush,
+    'init_store_buffer': action_init_store_buffer,
+    'store_buffer': action_store_buffer,
+}
