@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # define our if-then machine to parse:
     s = """
 
-    -- define our default functions:
+    -- define our default functions and parameters:
     layer |*> => |1>
     trigger_fn |*> => |trigger: simm> + |threshold: 0.98>
     pooling_fn |*> => |pooling: or>

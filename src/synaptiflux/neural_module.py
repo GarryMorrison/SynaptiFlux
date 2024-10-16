@@ -114,6 +114,10 @@ class NeuralModule:
         """Set the default layer."""
         self.default_layer = n
 
+    def get_default_layer(self):
+        """Get the default layer."""
+        return self.default_layer
+
     def set_default_trigger(self, fn, params):
         """Set the default trigger."""
         self.default_trigger_fn = fn

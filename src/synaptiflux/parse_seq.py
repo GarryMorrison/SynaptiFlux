@@ -182,7 +182,8 @@ def process_if_then_machine_learn_rule(NM, name, operator, ket, seq, verbose=Fal
             print(f"params: {sp_dict}")
         NM.set_default_action(action_fn, sp_dict)
     elif operator == 'pattern':
-        layer = 0 # hard code in the layer number for now
+        # layer = 0 # hard code in the layer number for now
+        layer = NM.get_default_layer() # use this for now
         synapse_number = 0 # hard code in the synapse number for now
         coeffs, labels = parse_seq(seq, synapse_number=synapse_number)
         if not NM.do_you_know_neuron(name):
