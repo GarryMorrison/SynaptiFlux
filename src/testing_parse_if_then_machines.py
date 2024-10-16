@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     -- define our if-then machine:
     pattern |neuron 1> => 2|alpha> + 3|beta> + 5|gamma>
-    pattern |neuron 1> => 5|x> + 7|y>
+    pattern |neuron 1> => 7|x> + 11|y>
     then-0 |neuron 1> => |action: println> + |s: detected neuron 1>
 
 

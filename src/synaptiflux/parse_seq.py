@@ -143,7 +143,7 @@ def process_functions(sp_dict, fn_key, fn_map):
 def process_if_then_machine_learn_rule(NM, name, operator, ket, seq, verbose=False):
     """Process a single if then machine learn rule."""
     if verbose:
-        print(f"Found a learn rule:\n    name: {name}\n    operator: {operator}\n    ket: {ket}\n    seq: {seq}\n")
+        print(f"\nFound a learn rule:\n    name: {name}\n    operator: {operator}\n    ket: {ket}\n    seq: {seq}")
     sp_dict = parse_sp_to_dict(seq, cast_values=True)
     if operator == 'layer':
         try:
@@ -188,12 +188,12 @@ def process_if_then_machine_learn_rule(NM, name, operator, ket, seq, verbose=Fal
         coeffs, labels = parse_seq(seq, synapse_number=synapse_number)
         if not NM.do_you_know_neuron(name):
             if verbose:
-                print(f"Unknown neuron \"{name}\", adding a new one to our module.\n")
+                print(f"Unknown neuron \"{name}\", adding a new neuron to our module.")
             # NM.add_neuron(name, layer, coeffs, labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
             NM.add_default_neuron(name, layer, coeffs, labels)
         else:
             if verbose:
-                print(f"Appending pattern to neuron \"{name}\"\n")
+                print(f"Appending pattern to neuron \"{name}\"")
             # NM.append_neuron_pattern(name, coeffs, labels, trigger_fn, trigger_params)
             NM.append_default_neuron_pattern(name, coeffs, labels)
     elif operator.startswith('then-'):
@@ -218,19 +218,44 @@ def process_if_then_machine_learn_rule(NM, name, operator, ket, seq, verbose=Fal
 
 def parse_if_then_machine(NM, s, verbose=False):
     """Parse if-then machines in the given string and store them in the given neural module."""
+    inside_chunk = False
+    chunk_name = ""
     for line in s.splitlines():
         line = line.strip()
         if len(line) == 0 or line.startswith('--'):
             continue
         # print("line:", line)
+        if line.startswith('as |') and line.endswith('>:'): # detected a chunk
+            inside_chunk = True
+            chunk_name = line[3:-1]
+            if verbose:
+                print(f"\nDetected a chunk, with ket: \"{chunk_name}\"")
+            continue
+        if line == "end:": # detected the end of a chunk:
+            inside_chunk = False
+            if verbose:
+                print(f"\nEnd of chunk: \"{chunk_name}\"\n")
+            chunk_name = ""
+            continue
+        if inside_chunk:
+            try:
+                operator, seq = line.split(" => ")
+                if not chunk_name.startswith('|') or not chunk_name.endswith('>'):
+                    print(f"invalid chunk name: {chunk_name}") # wrap in `if verbose` too? Or should it raise an exception?
+                    continue
+                name = chunk_name[1:-1]
+                process_if_then_machine_learn_rule(NM, name, operator, chunk_name, seq, verbose=verbose)
+            except:
+                continue
+            continue
         try:
             operator, ket, seq = parse_learn_rule(line)
+            if not ket.startswith('|') or not ket.endswith('>'):
+                print(f"invalid ket: {ket}") # wrap in `if verbose` too? Or should it raise an exception?
+                continue
+            name = ket[1:-1]
+            process_if_then_machine_learn_rule(NM, name, operator, ket, seq, verbose=verbose)
         except:
             continue
-        if not ket.startswith('|') or not ket.endswith('>'):
-            print(f"invalid ket: {ket}") # wrap in `if verbose` too? Or should it raise an exception?
-            continue
-        name = ket[1:-1]
-        process_if_then_machine_learn_rule(NM, name, operator, ket, seq, verbose=verbose)
     return NM
 
