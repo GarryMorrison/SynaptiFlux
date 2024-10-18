@@ -50,9 +50,10 @@ class NeuralModule:
         self.delay_counter = 0
         self.sources = {}
         self.current_sources_state = {}
+        self.latent_neurons = {}
         self.neurons = {}
         self.current_poked_neurons = set()
-        self.new_synapses = {}
+        self.new_synapses = {} # rename to latent_synapses?
         self.synapses = {}
         self.default_layer = 0
         self.default_trigger_fn = None
@@ -177,6 +178,30 @@ class NeuralModule:
         if name not in self.neurons:
             return
         self.neurons[name].update_trigger(pattern_no, trigger_fn, trigger_params)
+
+    def add_latent_neuron_layer(self, name, layer):
+        """Add a latent neuron's layer number."""
+        if name not in self.latent_neurons:
+            self.latent_neurons[name] = {}
+        self.latent_neurons[name]['layer'] = layer
+
+    def add_latent_neuron_pooling(self, name, pooling_fn, pooling_params):
+        """Add a latent neuron's pooling function."""
+        if name not in self.latent_neurons:
+            self.latent_neurons[name] = {}
+        self.latent_neurons[name]['pooling_fn'] = pooling_fn
+        self.latent_neurons[name]['pooling_params'] = pooling_params
+
+    def add_latent_neuron_trigger(self, name, trigger_fn, trigger_params):
+        """Add a latent neuron's trigger function."""
+        if name not in self.latent_neurons:
+            self.latent_neurons[name] = {}
+        self.latent_neurons[name]['trigger_fn'] = trigger_fn
+        self.latent_neurons[name]['trigger_params'] = trigger_params
+
+    def clear_latent_neurons(self):
+        """Clear our latent neurons."""
+        self.latent_neurons.clear()
 
     def add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params):
         """Add a synapse to our system."""
