@@ -34,7 +34,7 @@ if __name__ == '__main__':
     print(f"Our if-then machine: {s}")
 
     # parse the machine:
-    NM = sf.parse_if_then_machine(NM, s, verbose=True)
+    sf.parse_if_then_machine(NM, s, verbose=True)
 
     # see what we have:
     print(NM)

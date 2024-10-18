@@ -1,7 +1,7 @@
 """Parse simple SDB."""
 # Author: Garry Morrison
 # Created: 2024-10-15
-# Updated: 2024-10-16
+# Updated: 2024-10-18
 
 from .trigger_fn import trigger_list_simm_threshold, trigger_fn_map
 from .pooling_fn import pooling_or, pooling_fn_map
@@ -125,7 +125,7 @@ def parse_traditional_if_then_machine(NM, s, verbose=False):
             synapse_name = f"{name} S0"
             NM.add_synapse(synapse_name, name, synapse_fn, synapse_params, action_fn, {'s': seq} )
             NM.patch_in_new_synapses()
-    return NM
+    # return NM
 
 # add_neuron(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
 # append_neuron_pattern(self, name, seed_pattern, synapse_labels, trigger_fn, trigger_params)
@@ -257,5 +257,5 @@ def parse_if_then_machine(NM, s, verbose=False):
             process_if_then_machine_learn_rule(NM, name, operator, ket, seq, verbose=verbose)
         except:
             continue
-    return NM
+    # return NM
 
