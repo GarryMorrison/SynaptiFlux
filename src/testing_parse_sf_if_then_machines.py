@@ -9,7 +9,7 @@ if __name__ == '__main__':
     print("Testing the parsing of an if-then machine in sf chunk notation:")
 
     # define our neural module:
-    NM = sf.NeuralModule("if then machine")
+    NM = sf.NeuralModule("SynaptiFlux if then machine")
 
     # define our if-then machine to parse:
     s = """
@@ -45,6 +45,6 @@ if __name__ == '__main__':
     sf.parse_sf_if_then_machine(NM, s, verbose=True)
 
     # see what we have:
-    # print(NM)
+    print(NM)
 
 

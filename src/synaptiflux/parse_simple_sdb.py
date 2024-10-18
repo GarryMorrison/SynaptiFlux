@@ -274,19 +274,19 @@ def parse_sf_if_then_machine(NM, s, verbose=False):
         if line == "as default:":
             inside_default_chunk = True
             if verbose:
-                print("\nStart of a default chunk")
+                print("\nStart of a default chunk:")
             continue
         if line.startswith('as neuron |') and line.endswith('>:'): # detected a neuron chunk
             inside_neuron_chunk = True
             chunk_name = line[10:-1]
             if verbose:
-                print(f"\nStart of a neuron chunk, with ket: \"{chunk_name}\"")
+                print(f"\nStart of a neuron chunk, with ket: \"{chunk_name}\":")
             continue
         if line.startswith('as synapse |') and line.endswith('>:'): # detected a neuron chunk
             inside_synapse_chunk = True
             chunk_name = line[11:-1]
             if verbose:
-                print(f"\nStart of a synapse chunk, with ket: \"{chunk_name}\"")
+                print(f"\nStart of a synapse chunk, with ket: \"{chunk_name}\":")
             continue
         if line == "end:": # detected the end of a chunk:
             if verbose:
@@ -311,7 +311,51 @@ def parse_sf_if_then_machine(NM, s, verbose=False):
 def process_default_chunk_line(NM, operator, sp, verbose=False):
     """Process a single line of a default chunk."""
     if verbose:
-        print(f"Chunk line:\n    operator: {operator}\n    sp: {sp}\n")
+        print(f"\nChunk line:\n    operator: {operator}\n    sp: {sp}")
+    if operator == 'layer':
+        try:
+            layer = int(parse_ket(sp, synapse_number=None)[-1])
+        except:
+            layer = 0
+        if verbose:
+            print("Parsed result:")
+            print(f"    layer: {layer}")
+        NM.set_default_layer(layer)
+        return
+    sp_dict = parse_sp_to_dict(sp, cast_values=True)
+    if operator == 'trigger_fn':
+        trigger_fn = process_functions(sp_dict, "trigger", trigger_fn_map)
+        del sp_dict['trigger']
+        if verbose:
+            print("Parsed result:")
+            print(f"    trigger_fn: {trigger_fn}")
+            print(f"    params: {sp_dict}")
+        NM.set_default_trigger(trigger_fn, sp_dict)
+    elif operator == 'pooling_fn':
+        pooling_fn = process_functions(sp_dict, "pooling", pooling_fn_map)
+        del sp_dict['pooling']
+        if verbose:
+            print("Parsed result:")
+            print(f"    pooling_fn: {pooling_fn}")
+            print(f"    params: {sp_dict}")
+        NM.set_default_pooling(pooling_fn, sp_dict)
+    elif operator == 'synapse_fn':
+        synapse_fn = process_functions(sp_dict, "synapse", synapse_fn_map)
+        del sp_dict['synapse']
+        if verbose:
+            print("Parsed result:")
+            print(f"    synapse_fn: {synapse_fn}")
+            print(f"    params: {sp_dict}")
+        NM.set_default_synapse(synapse_fn, sp_dict)
+    elif operator == 'action_fn':
+        action_fn = process_functions(sp_dict, "action", action_fn_map)
+        del sp_dict['action']
+        if verbose:
+            print("Parsed result:")
+            print(f"    action_fn: {action_fn}")
+            print(f"    params: {sp_dict}")
+        NM.set_default_action(action_fn, sp_dict)
+
 
 def process_neuron_chunk_line(NM, chunk_name, operator, sp, verbose=False):
     """Process a single line of a neuron chunk."""
