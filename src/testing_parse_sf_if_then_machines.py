@@ -26,6 +26,9 @@ if __name__ == '__main__':
 
     -- define our if-then machine:
     as neuron |neuron 1>:
+        layer => |3>
+        pooling_fn => |pooling: xor>
+        trigger_fn => |trigger: simm> + |threshold: 0.75>
         pattern => 2|alpha> + 3|beta>
         pattern => 5|x> + 7|y> + 11|z>
     end:
@@ -46,6 +49,6 @@ if __name__ == '__main__':
     sf.parse_sf_if_then_machine(NM, s, verbose=True)
 
     # see what we have:
-    print(NM)
+    # print(NM)
 
 

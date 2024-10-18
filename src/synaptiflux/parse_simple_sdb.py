@@ -382,6 +382,33 @@ def process_neuron_chunk_line(NM, chunk_name, operator, sp, verbose=False):
                 print(f"Appending pattern to neuron \"{neuron_name}\"")
             # NM.append_neuron_pattern(name, coeffs, labels, trigger_fn, trigger_params)
             NM.append_default_neuron_pattern(neuron_name, coeffs, labels)
+        return
+    if operator == 'layer':
+        try:
+            layer = int(parse_ket(sp)[-1])
+        except:
+            layer = 0 # set to 0, or do nothing and return?
+        if verbose:
+            print(f"Parsed result:\n    layer: {layer}")
+        NM.add_latent_neuron_layer(neuron_name, layer)
+        return
+    sp_dict = parse_sp_to_dict(sp, cast_values=True)
+    if operator == 'pooling_fn':
+        pooling_fn = process_functions(sp_dict, "pooling", pooling_fn_map)
+        del sp_dict['pooling']
+        if verbose:
+            print("Parsed result:")
+            print(f"    pooling_fn: {pooling_fn}")
+            print(f"    params: {sp_dict}")
+        NM.add_latent_neuron_pooling(neuron_name, pooling_fn, sp_dict)
+    elif operator == 'trigger_fn':
+        trigger_fn = process_functions(sp_dict, "trigger", trigger_fn_map)
+        del sp_dict['trigger']
+        if verbose:
+            print("Parsed result:")
+            print(f"    trigger_fn: {trigger_fn}")
+            print(f"    params: {sp_dict}")
+        NM.add_latent_neuron_trigger(neuron_name, trigger_fn, sp_dict)
 
 def process_synapse_chunk_line(NM, chunk_name, operator, sp, verbose=False):
     """Process a single line of a synapse chunk."""
