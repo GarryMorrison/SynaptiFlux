@@ -360,7 +360,28 @@ def process_default_chunk_line(NM, operator, sp, verbose=False):
 def process_neuron_chunk_line(NM, chunk_name, operator, sp, verbose=False):
     """Process a single line of a neuron chunk."""
     if verbose:
-        print(f"Chunk line:\n    name: {chunk_name}\n    operator: {operator}\n    sp: {sp}\n")
+        print(f"\nChunk line:\n    name: {chunk_name}\n    operator: {operator}\n    sp: {sp}")
+    try:
+        neuron_name = parse_ket(chunk_name)[-1]
+    except:
+        return
+    if operator == 'pattern':
+        # layer = 0 # hard code in the layer number for now
+        layer = NM.get_default_layer() # use this for now
+        synapse_number = 0 # hard code in the synapse number for now
+        coeffs, labels = parse_seq(sp, synapse_number=synapse_number)
+        if verbose:
+            print(f"Parsed result:\n    coeffs: {coeffs}\n    labels: {labels}")
+        if not NM.do_you_know_neuron(neuron_name):
+            if verbose:
+                print(f"Unknown neuron \"{neuron_name}\", adding a new neuron to our module.")
+            # NM.add_neuron(name, layer, coeffs, labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
+            NM.add_default_neuron(neuron_name, layer, coeffs, labels)
+        else:
+            if verbose:
+                print(f"Appending pattern to neuron \"{neuron_name}\"")
+            # NM.append_neuron_pattern(name, coeffs, labels, trigger_fn, trigger_params)
+            NM.append_default_neuron_pattern(neuron_name, coeffs, labels)
 
 def process_synapse_chunk_line(NM, chunk_name, operator, sp, verbose=False):
     """Process a single line of a synapse chunk."""
