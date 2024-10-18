@@ -199,6 +199,45 @@ class NeuralModule:
         self.latent_neurons[name]['trigger_fn'] = trigger_fn
         self.latent_neurons[name]['trigger_params'] = trigger_params
 
+    def add_latent_neuron_pattern(self, name, seed_pattern, synapse_labels): # test this beasty!!
+        """Add a latent neuron to the module."""
+        if name not in self.latent_neurons:
+            if name not in self.neurons:
+                layer = self.get_default_layer()
+                self.add_default_neuron(name, layer, seed_pattern, synapse_labels)
+            else:
+                self.append_default_neuron_pattern(name, seed_pattern, synapse_labels)
+        else:
+            if 'layer' in self.latent_neurons[name]:
+                layer = self.latent_neurons[name]['layer']
+            else:
+                layer = self.get_default_layer()
+
+            if 'pooling_fn' in self.latent_neurons[name]:
+                pooling_fn = self.latent_neurons[name]['pooling_fn']
+            else:
+                pooling_fn = self.default_pooling_fn
+            if 'pooling_params' in self.latent_neurons[name]:
+                pooling_params = self.latent_neurons[name]['pooling_params']
+            else:
+                pooling_params = self.default_pooling_params
+
+            if 'trigger_fn' in self.latent_neurons[name]:
+                trigger_fn = self.latent_neurons[name]['trigger_fn']
+            else:
+                trigger_fn = self.default_pooling_fn
+            if 'trigger_params' in self.latent_neurons[name]:
+                trigger_params = self.latent_neurons[name]['trigger_params']
+            else:
+                trigger_params = self.default_trigger_params
+
+            # now build our neuron:
+            if name not in self.neurons:
+                self.add_neuron(name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
+            else:
+                self.append_neuron_pattern(name, seed_pattern, synapse_labels, trigger_fn, trigger_params)
+
+
     def clear_latent_neurons(self):
         """Clear our latent neurons."""
         self.latent_neurons.clear()

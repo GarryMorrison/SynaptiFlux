@@ -295,6 +295,7 @@ def parse_sf_if_then_machine(NM, s, verbose=False):
             inside_neuron_chunk = False
             inside_synapse_chunk = False
             chunk_name = ""
+            NM.clear_latent_neurons() # is this the best place for this code?
             continue
         operator, sp = line.split(" => ", 1)
         if inside_default_chunk:
@@ -376,12 +377,14 @@ def process_neuron_chunk_line(NM, chunk_name, operator, sp, verbose=False):
             if verbose:
                 print(f"Unknown neuron \"{neuron_name}\", adding a new neuron to our module.")
             # NM.add_neuron(name, layer, coeffs, labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
-            NM.add_default_neuron(neuron_name, layer, coeffs, labels)
+            # NM.add_default_neuron(neuron_name, layer, coeffs, labels)
+            NM.add_latent_neuron_pattern(neuron_name, coeffs, labels)
         else:
             if verbose:
                 print(f"Appending pattern to neuron \"{neuron_name}\"")
             # NM.append_neuron_pattern(name, coeffs, labels, trigger_fn, trigger_params)
-            NM.append_default_neuron_pattern(neuron_name, coeffs, labels)
+            # NM.append_default_neuron_pattern(neuron_name, coeffs, labels)
+            NM.add_latent_neuron_pattern(neuron_name, coeffs, labels)
         return
     if operator == 'layer':
         try:
