@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-16
+# Updated: 2024-10-18
 
 from collections import defaultdict
 from .neuron import Neuron
@@ -172,11 +172,11 @@ class NeuralModule:
             return
         self.neurons[name].update_pooling(pooling_fn, pooling_params)
 
-    def update_neuron_trigger(self, name, pattern_no, pooling_fn, pooling_params):
+    def update_neuron_trigger(self, name, pattern_no, trigger_fn, trigger_params):
         """Update the trigger function for a neuron's pattern."""
         if name not in self.neurons:
             return
-        self.neurons[name].update_trigger(pattern_no, pooling_fn, pooling_params)
+        self.neurons[name].update_trigger(pattern_no, trigger_fn, trigger_params)
 
     def add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params):
         """Add a synapse to our system."""
