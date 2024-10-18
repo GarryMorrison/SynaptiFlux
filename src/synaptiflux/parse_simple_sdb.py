@@ -365,5 +365,36 @@ def process_neuron_chunk_line(NM, chunk_name, operator, sp, verbose=False):
 def process_synapse_chunk_line(NM, chunk_name, operator, sp, verbose=False):
     """Process a single line of a synapse chunk."""
     if verbose:
-        print(f"Chunk line:\n    name: {chunk_name}\n    operator: {operator}\n    sp: {sp}\n")
-
+        print(f"\nChunk line:\n    name: {chunk_name}\n    operator: {operator}\n    sp: {sp}")
+    try:
+        synapse_name = parse_ket(chunk_name)[-1]
+    except:
+        return
+    if operator == 'axon':
+        try:
+            # synapse_name = parse_ket(chunk_name)[-1]
+            axon_name = parse_ket(sp)[-1]
+            NM.add_default_synapse(synapse_name, axon_name)
+            NM.patch_in_new_synapses()
+            if verbose:
+                print(f"Parsed result:\n    axon_name: {axon_name}")
+        except:
+            return
+        return
+    sp_dict = parse_sp_to_dict(sp, cast_values=True)
+    if operator == 'synapse_fn':
+        synapse_fn = process_functions(sp_dict, "synapse", synapse_fn_map)
+        del sp_dict['synapse']
+        if verbose:
+            print("Parsed result:")
+            print(f"    synapse_fn: {synapse_fn}")
+            print(f"    params: {sp_dict}")
+        NM.update_synapse_fn(synapse_name, synapse_fn, sp_dict)
+    elif operator == 'action_fn':
+        action_fn = process_functions(sp_dict, "action", action_fn_map)
+        del sp_dict['action']
+        if verbose:
+            print("Parsed result:")
+            print(f"    action_fn: {action_fn}")
+            print(f"    params: {sp_dict}")
+        NM.update_synapse_action(synapse_name, action_fn, sp_dict)

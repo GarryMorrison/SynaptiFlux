@@ -31,9 +31,10 @@ if __name__ == '__main__':
     end:
 
     -- define a synapse:
-    as synapse |neuron 1 S0>:
+    as synapse |neuron 1 S0 not>:
         axon => |neuron 1>
-        action_fn => |action: println> + |s: synapse activated by neuron 1>
+        synapse_fn => |synapse: delayed_not> + |sign: 1> + |delay: 0>
+        action_fn => |action: println> + |s: synapse activated by not of neuron 1>
     end:
 
     """
