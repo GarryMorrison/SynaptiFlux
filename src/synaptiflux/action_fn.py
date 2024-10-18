@@ -1,7 +1,7 @@
 """Define some toy actions."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-16
+# Updated: 2024-10-19
 
 from .trigger_fn import trigger_dot_product_threshold, trigger_list_simm_threshold
 from .pooling_fn import pooling_or
@@ -113,4 +113,16 @@ action_fn_map = {
     'print_to_buffer_flush': action_print_to_buffer_flush,
     'init_store_buffer': action_init_store_buffer,
     'store_buffer': action_store_buffer,
+}
+
+action_inverse_fn_map = {
+    'action_null': 'null',
+    'action_println': 'println',
+    'action_print': 'print',
+    'action_print_buffer': 'print_buffer',
+    'action_print_to_buffer': 'print_to_buffer',
+    'action_print_to_buffers': 'print_to_buffers',
+    'action_print_to_buffer_flush': 'print_to_buffer_flush',
+    'action_init_store_buffer': 'init_store_buffer',
+    'action_store_buffer': 'store_buffer',
 }

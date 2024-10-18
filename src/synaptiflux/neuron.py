@@ -1,7 +1,11 @@
 """Implement a single reductionist neuron."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-13
+# Updated: 2024-10-19
+
+from .parse_simple_sdb import sp_dict_to_sp, coeff_labels_to_sp
+from .pooling_fn import pooling_inverse_fn_map
+from .trigger_fn import trigger_inverse_fn_map
 
 class Neuron:
     """Implements a single reductionist neuron."""
@@ -177,6 +181,26 @@ class Neuron:
             if result != 0:
                 return True
         return False
+
+    def as_chunk(self, default_layer=None, default_trigger_fn=None, default_trigger_params=None, default_pooling_fn=None, default_pooling_params=None):
+        """Output the neuron in chunk notation."""
+        s = f"\nas neuron |{self.name}>:\n"
+        if self.layer != default_layer:
+            s += f"    layer => |{self.layer}>\n"
+        if self.pooling_fn != default_pooling_fn or self.pooling_params != default_pooling_params:
+            pooling_dict = {}
+            pooling_dict['pooling'] = pooling_inverse_fn_map[self.pooling_fn.__name__]
+            pooling_dict.update(self.pooling_params)
+            s += f"    pooling => {sp_dict_to_sp(pooling_dict)}\n"
+        for k in range(self.pattern_count):
+            if self.trigger_fn[k] != default_trigger_fn or self.trigger_params[k] != default_trigger_params:
+                trigger_dict = {}
+                trigger_dict['trigger'] = trigger_inverse_fn_map[self.trigger_fn[k].__name__]
+                trigger_dict.update(self.trigger_params[k])
+                s += f"    trigger_fn => {sp_dict_to_sp(trigger_dict)}\n"
+            s += f"    pattern => {coeff_labels_to_sp(self.pattern[k], self.pattern_labels[k])}\n"
+        s += "end:\n"
+        return s
 
     def __str__(self):
         if not self.valid:

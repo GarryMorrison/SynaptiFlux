@@ -1,11 +1,16 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-18
+# Updated: 2024-10-19
 
 from collections import defaultdict
 from .neuron import Neuron
 from .synapse import Synapse
+from .parse_simple_sdb import sp_dict_to_sp
+from .trigger_fn import trigger_inverse_fn_map
+from .pooling_fn import pooling_inverse_fn_map
+from .synapse_fn import synapse_inverse_fn_map
+from .action_fn import action_inverse_fn_map
 
 def process_layers(synapses, layers):
     """Given a synapses dict, and layers, return valid layers.
@@ -441,6 +446,37 @@ class NeuralModule:
         """Erase the synapse from the module with the given name."""
         # print(f"Erasing synapse {name}")
         del self.synapses[name] # Is this sufficient, or do we need to tweak other dictionaries too?
+
+    def as_chunk(self):
+        """Output the neural module in chunk notation."""
+        trigger_dict = {}
+        pooling_dict = {}
+        synapse_dict = {}
+        action_dict = {}
+
+        trigger_dict['trigger'] = trigger_inverse_fn_map[self.default_trigger_fn.__name__]
+        trigger_dict.update(self.default_trigger_params)
+
+        pooling_dict['pooling'] = pooling_inverse_fn_map[self.default_pooling_fn.__name__]
+        pooling_dict.update(self.default_pooling_params)
+
+        synapse_dict['synapse'] = synapse_inverse_fn_map[self.default_synapse_fn.__name__]
+        synapse_dict.update(self.default_synapse_params)
+
+        action_dict['action'] = action_inverse_fn_map[self.default_action_fn.__name__]
+        action_dict.update(self.default_action_params)
+        s = "\nas default:\n"
+        s += f"    layer => |{self.default_layer}>\n"
+        s += f"    trigger_fn => {sp_dict_to_sp(trigger_dict)}\n"
+        s += f"    pooling_fn => {sp_dict_to_sp(pooling_dict)}\n"
+        s += f"    synapse_fn => {sp_dict_to_sp(synapse_dict)}\n"
+        s += f"    action_fn => {sp_dict_to_sp(action_dict)}\n"
+        s += "end:\n"
+        for name, neuron in self.neurons.items():
+            s += neuron.as_chunk(self.default_layer, self.default_trigger_fn, self.default_trigger_params, self.default_pooling_fn, self.default_pooling_params)
+        for name, synapse in self.synapses.items():
+            s += synapse.as_chunk(self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
+        return s
 
     def print_neuron(self, name):
         """Print the named neuron."""

@@ -1,7 +1,7 @@
 """Parse simple SDB."""
 # Author: Garry Morrison
 # Created: 2024-10-15
-# Updated: 2024-10-18
+# Updated: 2024-10-19
 
 from .trigger_fn import trigger_list_simm_threshold, trigger_fn_map
 from .pooling_fn import pooling_or, pooling_fn_map
@@ -32,6 +32,13 @@ def parse_sp(s, synapse_number=None): # superpositions do not require synapse nu
     labels = [x[1] for x in kets]
     return coeffs, labels
 
+def coeff_labels_to_sp(coeffs, labels):
+    """Map coeffs, labels back to a superposition notation."""
+    list_kets = [f"{coeff}|{label}>" for coeff,label in zip(coeffs, labels)] # really should check both lists are the same length!
+    if len(list_kets) == 0:
+        return '|>'
+    return " + ".join(list_kets)
+
 def parse_sp_to_dict(s, cast_values=False):
     """Parse a superposition containing |key: value> pairs into a python dictionary."""
     sp_dict = {}
@@ -44,6 +51,16 @@ def parse_sp_to_dict(s, cast_values=False):
             value = cast_value(value)
         sp_dict[key] = value
     return sp_dict
+
+def sp_dict_to_sp(sp_dict):
+    """Convert a sp_dict back into a superposition."""
+    list_kets = []
+    for key, value in sp_dict.items():
+        ket = f"|{key}: {value}>"
+        list_kets.append(ket)
+    if len(list_kets) == 0:
+        return "|>"
+    return " + ".join(list_kets)
 
 def parse_seq(s, synapse_number): # sequences require synapse numbers.
     """Parse a SDB sequence."""

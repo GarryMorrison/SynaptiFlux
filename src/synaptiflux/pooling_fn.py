@@ -1,7 +1,7 @@
 """Define some toy pooling functions."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-16
+# Updated: 2024-10-19
 
 def pooling_or(list1):
     """Pool the outputs from our trigger functions into a single value."""
@@ -32,4 +32,11 @@ pooling_fn_map = {
     'xor': pooling_xor,
     'sum': pooling_sum,
     'sum_mod2': pooling_sum_mod2
+}
+
+pooling_inverse_fn_map = {
+    'pooling_or': 'or',
+    'pooling_xor': 'xor',
+    'pooling_sum': 'sum',
+    'pooling_sum_mod2': 'sum_mod2'
 }

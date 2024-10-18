@@ -1,7 +1,11 @@
 """Implement a single synapse."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-11
+# Updated: 2024-10-19
+
+from .parse_simple_sdb import sp_dict_to_sp
+from .synapse_fn import synapse_inverse_fn_map
+from .action_fn import action_inverse_fn_map
 
 class Synapse:
     """Implements a single reductionist synapse."""
@@ -70,6 +74,26 @@ class Synapse:
         value = self.synapse_fn(neurons[self.axon_name].axon, **self.params)
         self.spike_history.append(value)
         self.action_fn(self, value, **self.action_params)
+
+    def as_chunk(self, default_synapse_fn=None, default_synapse_params=None, default_action_fn=None, default_action_params=None):
+        """Output the synapse in chunk notation."""
+
+        s = f"\nas synapse |{self.name}>:\n"
+        s += f"    axon => |{self.axon_name}>\n"
+        # if self.synapse_fn is not default_synapse_fn or self.params is not default_synapse_params:
+        if self.synapse_fn != default_synapse_fn or self.params != default_synapse_params:
+            synapse_dict = {}
+            synapse_dict['synapse'] = synapse_inverse_fn_map[self.synapse_fn.__name__]
+            synapse_dict.update(self.params)
+            s += f"    synapse_fn => {sp_dict_to_sp(synapse_dict)}\n"
+        # if self.action_fn is not default_action_fn or self.action_params is not default_action_params:
+        if self.action_fn != default_action_fn or self.action_params != default_action_params:
+            action_dict = {}
+            action_dict['action'] = action_inverse_fn_map[self.action_fn.__name__]
+            action_dict.update(self.action_params)
+            s += f"    action_fn => {sp_dict_to_sp(action_dict)}\n"
+        s += "end:\n"
+        return s
 
     def __str__(self):
         s = f"Synapse: {self.name}\n"

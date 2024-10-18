@@ -1,7 +1,7 @@
 """Define some toy trigger functions."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-16
+# Updated: 2024-10-19
 
 # trigger_fn_map = {
 #     'dot_product': trigger_dot_product_threshold,
@@ -53,3 +53,7 @@ trigger_fn_map = {
     'simm': trigger_list_simm_threshold
 }
 
+trigger_inverse_fn_map = {
+    'trigger_dot_product_threshold': 'dot_product',
+    'trigger_list_simm_threshold': 'simm'
+}
