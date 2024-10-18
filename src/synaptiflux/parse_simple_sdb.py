@@ -259,3 +259,67 @@ def parse_if_then_machine(NM, s, verbose=False):
             continue
     # return NM
 
+
+def parse_sf_if_then_machine(NM, s, verbose=False):
+    """Parse if-then machines in the given string and store them in the given neural module."""
+    inside_default_chunk = False
+    inside_neuron_chunk = False
+    inside_synapse_chunk = False
+    chunk_name = ""
+    for line in s.splitlines():
+        line = line.strip()
+        if len(line) == 0 or line.startswith('--'):
+            continue
+        # print("line:", line)
+        if line == "as default:":
+            inside_default_chunk = True
+            if verbose:
+                print("\nStart of a default chunk")
+            continue
+        if line.startswith('as neuron |') and line.endswith('>:'): # detected a neuron chunk
+            inside_neuron_chunk = True
+            chunk_name = line[10:-1]
+            if verbose:
+                print(f"\nStart of a neuron chunk, with ket: \"{chunk_name}\"")
+            continue
+        if line.startswith('as synapse |') and line.endswith('>:'): # detected a neuron chunk
+            inside_synapse_chunk = True
+            chunk_name = line[11:-1]
+            if verbose:
+                print(f"\nStart of a synapse chunk, with ket: \"{chunk_name}\"")
+            continue
+        if line == "end:": # detected the end of a chunk:
+            if verbose:
+                print(f"\nEnd of chunk: \"{chunk_name}\"\n")
+            inside_default_chunk = False
+            inside_neuron_chunk = False
+            inside_synapse_chunk = False
+            chunk_name = ""
+            continue
+        operator, sp = line.split(" => ", 1)
+        if inside_default_chunk:
+            process_default_chunk_line(NM, operator, sp, verbose)
+            continue
+        elif inside_neuron_chunk:
+            process_neuron_chunk_line(NM, chunk_name, operator, sp, verbose)
+            continue
+        elif inside_synapse_chunk:
+            process_synapse_chunk_line(NM, chunk_name, operator, sp, verbose)
+            continue
+        continue
+
+def process_default_chunk_line(NM, operator, sp, verbose=False):
+    """Process a single line of a default chunk."""
+    if verbose:
+        print(f"Chunk line:\n    operator: {operator}\n    sp: {sp}\n")
+
+def process_neuron_chunk_line(NM, chunk_name, operator, sp, verbose=False):
+    """Process a single line of a neuron chunk."""
+    if verbose:
+        print(f"Chunk line:\n    name: {chunk_name}\n    operator: {operator}\n    sp: {sp}\n")
+
+def process_synapse_chunk_line(NM, chunk_name, operator, sp, verbose=False):
+    """Process a single line of a synapse chunk."""
+    if verbose:
+        print(f"Chunk line:\n    name: {chunk_name}\n    operator: {operator}\n    sp: {sp}\n")
+
