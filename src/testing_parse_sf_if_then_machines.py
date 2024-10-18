@@ -30,6 +30,7 @@ if __name__ == '__main__':
         pooling_fn => |pooling: sum_mod2>
         trigger_fn => |trigger: simm> + |threshold: 0.75>
         pattern => 2|alpha> + 3|beta>
+        trigger_fn => |trigger: simm> + |threshold: 0.5>
         pattern => 5|x> + 7|y> + 11|z>
     end:
 
