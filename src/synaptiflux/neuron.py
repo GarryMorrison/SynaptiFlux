@@ -1,7 +1,7 @@
 """Implement a single reductionist neuron."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-19
+# Updated: 2024-10-20
 
 from .parse_simple_sdb import sp_dict_to_sp, coeff_labels_to_sp
 from .pooling_fn import pooling_inverse_fn_map
@@ -192,8 +192,19 @@ class Neuron:
             pooling_dict['pooling'] = pooling_inverse_fn_map[self.pooling_fn.__name__]
             pooling_dict.update(self.pooling_params)
             s += f"    pooling => {sp_dict_to_sp(pooling_dict)}\n"
+        latent_trigger_fn = None
+        latent_trigger_params = {}
         for k in range(self.pattern_count):
-            if self.trigger_fn[k] != default_trigger_fn or self.trigger_params[k] != default_trigger_params:
+            update_trigger_fn = False
+            if latent_trigger_fn is None:
+                if self.trigger_fn[k] != default_trigger_fn or self.trigger_params[k] != default_trigger_params:
+                    update_trigger_fn = True
+            else:
+                if self.trigger_fn[k] != latent_trigger_fn or self.trigger_params[k] != latent_trigger_params:
+                    update_trigger_fn = True
+            if update_trigger_fn:
+                latent_trigger_fn = self.trigger_fn[k]
+                latent_trigger_params = self.trigger_params[k]
                 trigger_dict = {}
                 trigger_dict['trigger'] = trigger_inverse_fn_map[self.trigger_fn[k].__name__]
                 trigger_dict.update(self.trigger_params[k])
