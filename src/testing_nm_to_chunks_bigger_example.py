@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     -- define our default functions and parameters using chunk notation:
     as default:
-        layer => |1>
+        layer => |3>
         trigger_fn => |trigger: simm> + |threshold: 0.98>
         pooling_fn => |pooling: or>
         synapse_fn => |synapse: identity> + |sign: 1>
@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
     -- define another if-then machine:
     as neuron |neuron 1>:
-        layer => |3>
+        layer => |1>
         pooling_fn => |pooling: sum_mod2>
         trigger_fn => |trigger: simm> + |threshold: 0.75>
         pattern => 2|alpha> + 3|beta>
