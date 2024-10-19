@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-19
+# Updated: 2024-10-20
 
 from collections import defaultdict
 from .neuron import Neuron
@@ -472,10 +472,17 @@ class NeuralModule:
         s += f"    synapse_fn => {sp_dict_to_sp(synapse_dict)}\n"
         s += f"    action_fn => {sp_dict_to_sp(action_dict)}\n"
         s += "end:\n"
-        for name, neuron in self.neurons.items():
+        neuron_synapse_set = defaultdict(set) # this might be better off doing somewhere else, not every time as_chunk() is called?
+        for synapse_name, synapse in self.synapses.items():
+            neuron_name = synapse.get_parent_axon_name()
+            neuron_synapse_set[neuron_name].add(synapse_name)
+        for neuron_name, neuron in self.neurons.items():
             s += neuron.as_chunk(self.default_layer, self.default_trigger_fn, self.default_trigger_params, self.default_pooling_fn, self.default_pooling_params)
-        for name, synapse in self.synapses.items():
-            s += synapse.as_chunk(self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
+            for synapse_name in neuron_synapse_set[neuron_name]:
+                synapse = self.synapses[synapse_name]
+                s += synapse.as_chunk(self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
+        # for name, synapse in self.synapses.items():
+        #     s += synapse.as_chunk(self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
         return s
 
     def print_neuron(self, name):
