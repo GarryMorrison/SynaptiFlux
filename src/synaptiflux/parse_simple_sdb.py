@@ -1,7 +1,7 @@
 """Parse simple SDB."""
 # Author: Garry Morrison
 # Created: 2024-10-15
-# Updated: 2024-10-19
+# Updated: 2024-10-20
 
 from .trigger_fn import trigger_list_simm_threshold, trigger_fn_map
 from .pooling_fn import pooling_or, pooling_fn_map
@@ -9,6 +9,11 @@ from .synapse_fn import synapse_identity, synapse_fn_map
 from .action_fn import action_println, action_fn_map
 from .misc import cast_value
 
+def ket_coeff(c):
+    """Map a coeff to the empty string if == 1, else return unchanged."""
+    if c == 1:
+        return ''
+    return c
 
 def parse_ket(s, synapse_number=None):
     """Parse a SDB ket."""
@@ -34,7 +39,7 @@ def parse_sp(s, synapse_number=None): # superpositions do not require synapse nu
 
 def coeff_labels_to_sp(coeffs, labels):
     """Map coeffs, labels back to a superposition notation."""
-    list_kets = [f"{coeff}|{label}>" for coeff,label in zip(coeffs, labels)] # really should check both lists are the same length!
+    list_kets = [f"{ket_coeff(coeff)}|{label}>" for coeff,label in zip(coeffs, labels)] # really should check both lists are the same length!
     if len(list_kets) == 0:
         return '|>'
     return " + ".join(list_kets)
