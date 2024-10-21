@@ -1,12 +1,12 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-20
+# Updated: 2024-10-22
 
 from collections import defaultdict
 from .neuron import Neuron
 from .synapse import Synapse
-from .parse_simple_sdb import sp_dict_to_sp
+from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine
 from .trigger_fn import trigger_inverse_fn_map
 from .pooling_fn import pooling_inverse_fn_map
 from .synapse_fn import synapse_inverse_fn_map
@@ -499,6 +499,17 @@ class NeuralModule:
         # for name, synapse in self.synapses.items():
         #     s += synapse.as_chunk(self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
         return s
+
+    def save_chunks(self, filename):
+        """Save the neural module to a file, with the given filename."""
+        with open(filename, 'w') as f:
+            f.write(self.as_chunk())
+
+    def load_chunks(self, filename):
+        """Load the given file into the neural module."""
+        with open(filename, 'r') as f:
+            s = f.read()
+            parse_sf_if_then_machine(self, s, verbose=False)
 
     def print_neuron(self, name):
         """Print the named neuron."""

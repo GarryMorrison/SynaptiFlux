@@ -1,0 +1,32 @@
+as default:
+    layer => |3>
+    trigger_fn => |trigger: simm> + |threshold: 0.98>
+    pooling_fn => |pooling: or>
+    synapse_fn => |synapse: identity> + |sign: 1>
+    action_fn => |action: null>
+end:
+
+as neuron |Greetings>:
+    pattern => |H> . |e> . |l> . |l> . |o>
+    pattern => |H> . |i>
+    pattern => |H> . |e> . |y>
+    pattern => |Day greeting>
+end:
+
+as synapse |Greetings S0>:
+    axon => |Greetings>
+    action_fn => |action: println> + |s: Greetings!>
+end:
+
+as neuron |Day greeting>:
+    pattern => |M> . |o> . |r> . |n> . |i> . |n> . |g>
+    pattern => |N> . |o> . |o> . |n>
+    pattern => |A> . |f> . |t> . |e> . |r> . |n> . |o> . |o> . |n>
+    pattern => |E> . |v> . |e> . |n> . |i> . |n> . |g>
+end:
+
+as synapse |Day greeting S0>:
+    axon => |Day greeting>
+    action_fn => |action: println> + |s: Day greeting>
+end:
+

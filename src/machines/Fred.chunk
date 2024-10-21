@@ -1,0 +1,31 @@
+
+as default:
+    layer => |3>
+    trigger_fn => |trigger: simm> + |threshold: 0.98>
+    pooling_fn => |pooling: or>
+    synapse_fn => |synapse: identity> + |sign: 1>
+    action_fn => |action: null>
+end:
+
+as neuron |person: Fred Smith>:
+    pattern => |F> . |r> . |e> . |d>
+    pattern => |F> . |r> . |e> . |d> . |d> . |i> . |e>
+    pattern => |F> . |r> . |e> . |d> . | > . |S> . |m> . |i> . |t> . |h>
+end:
+
+as synapse |person: Fred Smith S0>:
+    axon => |person: Fred Smith>
+    action_fn => |action: println> + |s: person: Fred Smith>
+end:
+
+
+as neuron |person: Fred Roberts>:
+    pattern => |F> . |r> . |e> . |d>
+    pattern => |R> . |o> . |b> . |o>
+    pattern => |F> . |r> . |e> . |d> . | > . |R> . |o> . |b> . |e> . |r> . |t> . |s>
+end:
+
+as synapse |person: Fred Roberts S0>:
+    axon => |person: Fred Roberts>
+    action_fn => |action: println> + |s: person: Fred Roberts>
+end:
