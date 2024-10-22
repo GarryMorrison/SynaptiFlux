@@ -1,7 +1,7 @@
 """Implement a neural system, which is a collection of neural modules."""
 # Author: Garry Morrison
 # Created: 2024-9-19
-# Updated: 2024-10-8
+# Updated: 2024-10-22
 
 from .neural_module import NeuralModule, display_layer_synapse_dict
 
@@ -66,6 +66,17 @@ class NeuralSystem:
 #         """Update our sources."""
 #         for label, source in self.sources.items():
 #             self.current_sources_state[label] = next(self.sources[label])
+
+    def __setitem__(self, name, module):
+        """Register a new module in our system."""
+        self.register_module(name, module)
+
+    def __getitem__(self, name):
+        """Get a module in our system."""
+        if name in self.modules:
+            return self.modules[name]
+        else:
+            raise KeyError(f"Module \"{name}\" not in system.")
 
     def register_module(self, name, module):
         """Register a new module in our system."""
