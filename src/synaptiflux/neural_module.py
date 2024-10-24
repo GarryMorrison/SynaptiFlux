@@ -593,6 +593,19 @@ class NeuralModule:
         """Output the module as a JSON string, with neurons and corresponding synapses in groups."""
         return json.dumps(self.as_grouped_dict(), indent=4)
 
+    def save_as_json(self, filename, grouped=True):
+        """Save the module as json to a file."""
+        if grouped:
+            output_dict = self.as_grouped_dict()
+            output_dict['json_type'] = 'grouped'
+        else:
+            output_dict = self.as_dict()
+            output_dict['json_type'] = 'flat'
+        with open(filename, 'w') as f:
+            json.dump(output_dict, f, indent=4)
+        # with open(filename, 'w', encoding='utf-8') as f: # UTF-8 version
+        #     json.dump(data, f, ensure_ascii=False, indent=4)
+
     def print_neuron(self, name):
         """Print the named neuron."""
         if name not in self.neurons:

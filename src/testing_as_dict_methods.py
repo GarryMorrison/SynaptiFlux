@@ -23,6 +23,11 @@ if __name__ == '__main__':
     print('\n-------------------\nmodule.as_grouped_json():')
     print(NM0.as_grouped_json())
 
+    # save to file:
+    dest_filename0 = 'machines/greetings.json'
+    print(f"saving file: {dest_filename0}")
+    NM0.save_as_json(dest_filename0, grouped=True)
+
     # print()
     # NM1 = sf.NeuralModule('module 1')
     # source_filename1 = 'machines/Fred.chunk'
