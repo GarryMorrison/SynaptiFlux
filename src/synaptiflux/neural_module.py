@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-22
+# Updated: 2024-10-24
 
 from collections import defaultdict
 from .neuron import Neuron
@@ -500,6 +500,10 @@ class NeuralModule:
         #     s += synapse.as_chunk(self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
         return s
 
+    def from_chunk(self, s):
+        """Import chunk string into the neural module."""
+        parse_sf_if_then_machine(self, s, verbose=False)
+
     def save_chunks(self, filename):
         """Save the neural module to a file, with the given filename."""
         with open(filename, 'w') as f:
@@ -509,7 +513,8 @@ class NeuralModule:
         """Load the given file into the neural module."""
         with open(filename, 'r') as f:
             s = f.read()
-            parse_sf_if_then_machine(self, s, verbose=False)
+            # parse_sf_if_then_machine(self, s, verbose=False)
+            self.from_chunk(s)
 
     def print_neuron(self, name):
         """Print the named neuron."""
