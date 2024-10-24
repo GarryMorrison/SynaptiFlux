@@ -550,6 +550,7 @@ class NeuralModule:
     def as_dict(self):
         """Output the module as a Python dictionary."""
         output_dict = {}
+        output_dict['neurons'] = [neuron.as_dict() for name, neuron in self.neurons.items()]
         output_dict['synapses'] = [synapse.as_dict() for name, synapse in self.synapses.items()]
         # return json.dumps(output_dict, indent=4)
         return output_dict

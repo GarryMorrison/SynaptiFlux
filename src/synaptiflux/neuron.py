@@ -1,7 +1,7 @@
 """Implement a single reductionist neuron."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-20
+# Updated: 2024-10-24
 
 from .parse_simple_sdb import sp_dict_to_sp, coeff_labels_to_sp
 from .pooling_fn import pooling_inverse_fn_map
@@ -212,6 +212,31 @@ class Neuron:
             s += f"    pattern => {coeff_labels_to_sp(self.pattern[k], self.pattern_labels[k])}\n"
         s += "end:\n"
         return s
+
+    def as_dict(self):
+        """Ouput the neuron as a Python dictionary."""
+        output_dict = {}
+
+        pooling_dict = {}
+        pooling_dict['pooling'] = pooling_inverse_fn_map[self.pooling_fn.__name__]
+        pooling_dict.update(self.pooling_params)
+
+        patterns = []
+        for k in range(self.pattern_count):
+            pattern_dict = {}
+            trigger_dict = {}
+            trigger_dict['trigger'] = trigger_inverse_fn_map[self.trigger_fn[k].__name__]
+            trigger_dict.update(self.trigger_params[k])
+            pattern_dict['trigger_fn'] = trigger_dict
+            pattern_dict['coeffs'] = self.pattern[k]
+            pattern_dict['synapse_labels'] = self.pattern_labels[k]
+            patterns.append(pattern_dict)
+
+        output_dict['name'] = self.name
+        output_dict['activation_count'] = self.activation_count
+        output_dict['pooling_fn'] = pooling_dict
+        output_dict['patterns'] = patterns
+        return output_dict
 
     def __str__(self):
         if not self.valid:
