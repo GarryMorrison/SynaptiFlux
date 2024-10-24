@@ -595,12 +595,13 @@ class NeuralModule:
 
     def save_as_json(self, filename, grouped=True):
         """Save the module as json to a file."""
+        output_dict = {}
         if grouped:
-            output_dict = self.as_grouped_dict()
             output_dict['json_type'] = 'grouped'
+            output_dict.update(self.as_grouped_dict())
         else:
-            output_dict = self.as_dict()
             output_dict['json_type'] = 'flat'
+            output_dict.update(self.as_dict())
         with open(filename, 'w') as f:
             json.dump(output_dict, f, indent=4)
         # with open(filename, 'w', encoding='utf-8') as f: # UTF-8 version
