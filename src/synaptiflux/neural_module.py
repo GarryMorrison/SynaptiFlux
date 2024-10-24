@@ -3,6 +3,7 @@
 # Created: 2024-9-18
 # Updated: 2024-10-24
 
+import json
 from collections import defaultdict
 from .neuron import Neuron
 from .synapse import Synapse
@@ -515,6 +516,36 @@ class NeuralModule:
             s = f.read()
             # parse_sf_if_then_machine(self, s, verbose=False)
             self.from_chunk(s)
+
+    def defaults_as_dict(self):
+        """Convert default settings to a python dictionary."""
+        default_dict = {}
+        trigger_dict = {}
+        pooling_dict = {}
+        synapse_dict = {}
+        action_dict = {}
+
+        # build our dictionaries:
+        trigger_dict['trigger'] = trigger_inverse_fn_map[self.default_trigger_fn.__name__]
+        trigger_dict.update(self.default_trigger_params)
+
+        pooling_dict['pooling'] = pooling_inverse_fn_map[self.default_pooling_fn.__name__]
+        pooling_dict.update(self.default_pooling_params)
+
+        synapse_dict['synapse'] = synapse_inverse_fn_map[self.default_synapse_fn.__name__]
+        synapse_dict.update(self.default_synapse_params)
+
+        action_dict['action'] = action_inverse_fn_map[self.default_action_fn.__name__]
+        action_dict.update(self.default_action_params)
+
+        # populate our dictionary:
+        default_dict['layer'] = self.default_layer
+        default_dict['pooling_fn'] = pooling_dict
+        default_dict['trigger_fn'] = trigger_dict
+        default_dict['synapse_fn'] = synapse_dict
+        default_dict['action_fn'] = action_dict
+        # return default_dict
+        return json.dumps(default_dict, indent=4)
 
     def print_neuron(self, name):
         """Print the named neuron."""
