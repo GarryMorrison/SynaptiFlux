@@ -18,6 +18,8 @@ if __name__ == '__main__':
     print(NM0)
     print('module.defaults_as_dict():')
     print(NM0.defaults_as_dict())
+    print('\n-------------------\nmodule.as_json():')
+    print(NM0.as_json())
 
     # print()
     # NM1 = sf.NeuralModule('module 1')

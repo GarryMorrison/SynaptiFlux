@@ -1,8 +1,9 @@
 """Implement a single synapse."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-19
+# Updated: 2024-10-24
 
+import json
 from .parse_simple_sdb import sp_dict_to_sp
 from .synapse_fn import synapse_inverse_fn_map
 from .action_fn import action_inverse_fn_map
@@ -94,6 +95,25 @@ class Synapse:
             s += f"    action_fn => {sp_dict_to_sp(action_dict)}\n"
         s += "end:\n"
         return s
+
+    def as_dict(self):
+        """Output the synapse in Python dictionary format."""
+        output_dict = {}
+
+        synapse_dict = {}
+        synapse_dict['synapse'] = synapse_inverse_fn_map[self.synapse_fn.__name__]
+        synapse_dict.update(self.params)
+
+        action_dict = {}
+        action_dict['action'] = action_inverse_fn_map[self.action_fn.__name__]
+        action_dict.update(self.action_params)
+
+        output_dict['synapse_name'] = self.name
+        output_dict['axon'] = self.axon_name
+        output_dict['synapse_fn'] = synapse_dict
+        output_dict['action_fn'] = action_dict
+        # return json.dumps(output_dict, indent=4)
+        return output_dict
 
     def __str__(self):
         s = f"Synapse: {self.name}\n"

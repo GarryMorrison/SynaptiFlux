@@ -544,8 +544,19 @@ class NeuralModule:
         default_dict['trigger_fn'] = trigger_dict
         default_dict['synapse_fn'] = synapse_dict
         default_dict['action_fn'] = action_dict
-        # return default_dict
-        return json.dumps(default_dict, indent=4)
+        return default_dict
+        # return json.dumps(default_dict, indent=4)
+
+    def as_dict(self):
+        """Output the module as a Python dictionary."""
+        output_dict = {}
+        output_dict['synapses'] = [synapse.as_dict() for name, synapse in self.synapses.items()]
+        # return json.dumps(output_dict, indent=4)
+        return output_dict
+
+    def as_json(self):
+        """Output the module as a JSON string."""
+        return json.dumps(self.as_dict(), indent=4)
 
     def print_neuron(self, name):
         """Print the named neuron."""
