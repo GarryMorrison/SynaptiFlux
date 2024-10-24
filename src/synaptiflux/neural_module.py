@@ -560,6 +560,39 @@ class NeuralModule:
         """Output the module as a JSON string."""
         return json.dumps(self.as_dict(), indent=4)
 
+    def as_grouped_dict(self):
+        """Output the module as a Python dictionary, with neurons and corresponding synapses in groups."""
+        output_dict = {}
+        layer_neuron_set = defaultdict(set) # maybe put this somewhere else?
+        for neuron_name, neuron in self.neurons.items():
+            layer = neuron.get_layer()
+            layer_neuron_set[layer].add(neuron_name)
+
+        neuron_synapse_set = defaultdict(set) # this might be better off doing somewhere else, not every time as_chunk() is called?
+        for synapse_name, synapse in self.synapses.items(): # also, synapses without corresponding neurons are not displayed
+            neuron_name = synapse.get_parent_axon_name()
+            neuron_synapse_set[neuron_name].add(synapse_name)
+
+        neuron_synapse_groups = []
+        for layer in sorted(layer_neuron_set.keys()):
+            for neuron_name in layer_neuron_set[layer]:
+                neuron_synapse_dict = {}
+                neuron = self.neurons[neuron_name]
+                neuron_synapse_dict['neuron'] = neuron.as_dict()
+                synapses = []
+                for synapse_name in neuron_synapse_set[neuron_name]:
+                    synapse = self.synapses[synapse_name]
+                    synapses.append(synapse.as_dict())
+                neuron_synapse_dict['synapses'] = synapses
+                neuron_synapse_groups.append(neuron_synapse_dict)
+        output_dict['defaults'] = self.defaults_as_dict()
+        output_dict['neuron_synapse_groups'] = neuron_synapse_groups
+        return output_dict
+
+    def as_grouped_json(self):
+        """Output the module as a JSON string, with neurons and corresponding synapses in groups."""
+        return json.dumps(self.as_grouped_dict(), indent=4)
+
     def print_neuron(self, name):
         """Print the named neuron."""
         if name not in self.neurons:
