@@ -691,9 +691,12 @@ class NeuralModule:
             for group_dict in neuron_synapse_groups:
                 # print(json.dumps(group_dict, indent=4))
                 neuron_dict = group_dict['neuron']
-                synapses_dict = group_dict['synapses']
+                synapses = group_dict['synapses']
                 neuron = Neuron.from_dict(neuron_dict)
                 print(neuron)
+                for synapse_dict in synapses:
+                    synapse = Synapse.from_dict(synapse_dict)
+                    print(synapse)
                 break # for testing only, delete later!
         except Exception as e:
             print(e)

@@ -1,12 +1,12 @@
 """Implement a single synapse."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-24
+# Updated: 2024-10-25
 
 import json
 from .parse_simple_sdb import sp_dict_to_sp
-from .synapse_fn import synapse_inverse_fn_map
-from .action_fn import action_inverse_fn_map
+from .synapse_fn import synapse_inverse_fn_map, synapse_fn_map
+from .action_fn import action_inverse_fn_map, action_fn_map
 
 class Synapse:
     """Implements a single reductionist synapse."""
@@ -114,6 +114,40 @@ class Synapse:
         output_dict['action_fn'] = action_dict
         # return json.dumps(output_dict, indent=4)
         return output_dict
+
+    @classmethod
+    def from_dict(cls, synapse_dict):
+        """Create the synapse from the given Python dictionary."""
+        # constructed_synapse = cls(name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)
+        constructed_synapse = cls('', '', None, {}, None, {})
+        for key, value in synapse_dict.items():
+            try:
+                if key == 'synapse_name':
+                    constructed_synapse.name = value
+                elif key == 'axon':
+                    constructed_synapse.axon_name = value
+                elif key == 'synapse_fn':
+                    try:
+                        synapse_fn_str = value['synapse']
+                        synapse_fn = synapse_fn_map[synapse_fn_str]
+                        del value['synapse']
+                        constructed_synapse.synapse_fn = synapse_fn
+                        # constructed_synapse.synapse_params = value # this is correct, in principle, but currently we have some tidying up to do for it to work
+                        constructed_synapse.params = value # hack for now!
+                    except Exception as e:
+                        print(e)
+                elif key == 'action_fn':
+                    try:
+                        action_fn_str = value['action']
+                        action_fn = action_fn_map[action_fn_str]
+                        del value['action']
+                        constructed_synapse.action_fn = action_fn
+                        constructed_synapse.action_params = value
+                    except Exception as e:
+                        print(e)
+            except Exception as e:
+                print(e)
+        return constructed_synapse
 
     def __str__(self):
         s = f"Synapse: {self.name}\n"
