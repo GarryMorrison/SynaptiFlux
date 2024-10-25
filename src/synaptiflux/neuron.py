@@ -1,11 +1,11 @@
 """Implement a single reductionist neuron."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-24
+# Updated: 2024-10-25
 
 from .parse_simple_sdb import sp_dict_to_sp, coeff_labels_to_sp
-from .pooling_fn import pooling_inverse_fn_map
-from .trigger_fn import trigger_inverse_fn_map
+from .pooling_fn import pooling_inverse_fn_map, pooling_fn_map
+from .trigger_fn import trigger_inverse_fn_map, trigger_fn_map
 
 class Neuron:
     """Implements a single reductionist neuron."""
@@ -237,6 +237,68 @@ class Neuron:
         output_dict['pooling_fn'] = pooling_dict
         output_dict['patterns'] = patterns
         return output_dict
+
+    @classmethod
+    def from_dict(cls, neuron_dict):
+        """Create the neuron from the given Python dictionary."""
+        constructed_neuron = cls('', 0, [], [], None, {}, None, {}) # do we need "constructed_neuron" here, or can we just use cls?
+        for key, value in neuron_dict.items():
+            try:
+                if key == 'name':
+                    constructed_neuron.name = value
+                elif key == 'layer':
+                    try:
+                        layer = int(value)
+                    except:
+                        layer = 0
+                    constructed_neuron.layer = layer
+                elif key == 'activation_count':
+                    try:
+                        activation_count = int(value)
+                    except:
+                        activation_count = 0
+                    constructed_neuron.activation_count = activation_count
+                elif key == 'pooling_fn':
+                    try:
+                        pooling_fn_str = value['pooling']
+                        pooling_fn = pooling_fn_map[pooling_fn_str]
+                        del value['pooling']
+                        constructed_neuron.pooling_fn = pooling_fn
+                        constructed_neuron.pooling_params = value
+                    except Exception as e:
+                        print(e)
+                        # continue
+                elif key == 'patterns':
+                    try:
+                        pattern_count = len(value)  # value == patterns list
+                        constructed_neuron.pattern_count = pattern_count
+                        # print(f"pattern count: {pattern_count}")
+                        for k in range(pattern_count):
+                            pattern = value[k]
+                            # print(f"\n pattern: {value[k]}")
+                            try:
+                                for pattern_key, pattern_value in pattern.items():
+                                    if pattern_key == 'trigger_fn':
+                                        trigger_fn_str = pattern_value['trigger']
+                                        trigger_fn = trigger_fn_map[trigger_fn_str]
+                                        del pattern_value['trigger']
+                                        # print(f"trigger_fn_str: {trigger_fn_str}, trigger_fn: {trigger_fn}")
+                                        constructed_neuron.trigger_fn[k] = trigger_fn
+                                        constructed_neuron.trigger_params[k] = pattern_value
+                                    elif pattern_key == 'coeffs':
+                                        constructed_neuron.pattern[k] = pattern_value
+                                    elif pattern_key == 'synapse_labels':
+                                        constructed_neuron.pattern_labels[k] = pattern_value
+                            except Exception as e:
+                                print(e)
+                    except Exception as e:
+                        print(e)
+
+            except Exception as e:
+                print(e)
+                continue
+        return constructed_neuron
+
 
     def __str__(self):
         if not self.valid:
