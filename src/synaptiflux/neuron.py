@@ -233,6 +233,7 @@ class Neuron:
             patterns.append(pattern_dict)
 
         output_dict['name'] = self.name
+        output_dict['layer'] = self.layer
         output_dict['activation_count'] = self.activation_count
         output_dict['pooling_fn'] = pooling_dict
         output_dict['patterns'] = patterns

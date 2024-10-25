@@ -110,6 +110,7 @@ class Synapse:
 
         output_dict['synapse_name'] = self.name
         output_dict['axon'] = self.axon_name
+        output_dict['layer'] = self.layer
         output_dict['synapse_fn'] = synapse_dict
         output_dict['action_fn'] = action_dict
         # return json.dumps(output_dict, indent=4)
@@ -126,6 +127,12 @@ class Synapse:
                     constructed_synapse.name = value
                 elif key == 'axon':
                     constructed_synapse.axon_name = value
+                elif key == 'layer':
+                    try:
+                        layer = int(value)
+                        constructed_synapse.layer = layer
+                    except Exception as e:
+                        print(e)
                 elif key == 'synapse_fn':
                     try:
                         synapse_fn_str = value['synapse']
