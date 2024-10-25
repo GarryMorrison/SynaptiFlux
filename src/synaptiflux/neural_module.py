@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-24
+# Updated: 2024-10-25
 
 import json
 from collections import defaultdict
@@ -70,6 +70,25 @@ class NeuralModule:
         self.default_synapse_params = {}
         self.default_action_fn = None
         self.default_action_params = {}
+
+    def __setitem__(self, key, value):
+        """Add a neuron or synapse to the module."""
+        if isinstance(value, Neuron):
+            self.neurons[key] = value
+        elif isintance(value, Synapse):
+            self.synapses[key] = value
+        else:
+            raise TypeError(f"Value must be either a Neuron or Synapse, not type: {type(value).__name__}")
+
+    def __getitem__(self, key):
+        """Return a neuron or synapse from the module for the given name."""
+        if key in self.neurons:
+            return self.neurons[key]
+        elif key in self.synapses:
+            return self.synapses[key]
+        # elif key in self.new_synapses: # not sure if we want to enable this or not?
+        #     return self.new_synapses[key]
+        raise KeyError(f"No neuron or synapse with the name: {key}")
 
     def do_you_know_neuron(self, name):
         """Return's True/False if a neuron with the given name is known to the module."""
