@@ -8,10 +8,10 @@ from collections import defaultdict
 from .neuron import Neuron
 from .synapse import Synapse
 from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine
-from .trigger_fn import trigger_inverse_fn_map
-from .pooling_fn import pooling_inverse_fn_map
-from .synapse_fn import synapse_inverse_fn_map
-from .action_fn import action_inverse_fn_map
+from .trigger_fn import trigger_inverse_fn_map, trigger_fn_map
+from .pooling_fn import pooling_inverse_fn_map, pooling_fn_map
+from .synapse_fn import synapse_inverse_fn_map, synapse_fn_map
+from .action_fn import action_inverse_fn_map, action_fn_map
 
 def process_layers(synapses, layers):
     """Given a synapses dict, and layers, return valid layers.
@@ -625,6 +625,58 @@ class NeuralModule:
             json.dump(output_dict, f, indent=4)
         # with open(filename, 'w', encoding='utf-8') as f: # UTF-8 version
         #     json.dump(data, f, ensure_ascii=False, indent=4)
+
+    def load_from_json(self, filename):
+        """Load the json file into the module."""
+        with open(filename, 'r') as f:
+            input_dict = json.load(f)
+            json_type = input_dict['json_type']
+            print(f"JSON type: {json_type}")
+            defaults_dict = input_dict['defaults']
+            print(json.dumps(defaults_dict, indent=4))
+            self.defaults_from_dict(defaults_dict)
+
+    def defaults_from_dict(self, defaults_dict):
+        """Load defaults into the neural module from the given dictionary."""
+        for key, value in defaults_dict.items():
+            if key == 'layer':
+                try:
+                    layer = int(value)
+                    self.set_default_layer(layer)
+                except:
+                    continue
+            elif key == 'pooling_fn':
+                try:
+                    pooling_fn_str = value['pooling']
+                    pooling_fn = pooling_fn_map[pooling_fn_str]
+                    del value['pooling']
+                    self.set_default_pooling(pooling_fn, value)
+                except:
+                    continue
+            elif key == 'trigger_fn':
+                try:
+                    trigger_fn_str = value['trigger']
+                    trigger_fn = trigger_fn_map[trigger_fn_str]
+                    del value['trigger']
+                    self.set_default_trigger(trigger_fn, value)
+                except:
+                    continue
+            elif key == 'synapse_fn':
+                try:
+                    synapse_fn_str = value['synapse']
+                    synapse_fn = synapse_fn_map[synapse_fn_str]
+                    del value['synapse']
+                    self.set_default_synapse(synapse_fn, value)
+                except:
+                    continue
+            elif key == 'action_fn':
+                try:
+                    action_fn_str = value['action']
+                    action_fn = action_fn_map[action_fn_str]
+                    del value['action']
+                    self.set_default_action(action_fn, value)
+                except:
+                    continue
 
     def print_neuron(self, name):
         """Print the named neuron."""
