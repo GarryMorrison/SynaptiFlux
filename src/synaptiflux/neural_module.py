@@ -633,8 +633,8 @@ class NeuralModule:
             json_type = input_dict['json_type']
             print(f"JSON type: {json_type}")
             defaults_dict = input_dict['defaults']
-            print(json.dumps(defaults_dict, indent=4))
-            self.defaults_from_dict(defaults_dict)
+            # print(json.dumps(defaults_dict, indent=4))
+            self.defaults_from_dict(defaults_dict) # load the defaults here, or in from_grouped_dict and from_dict??
             del input_dict['defaults']
             if json_type == 'grouped':
                 self.from_grouped_dict(input_dict)
@@ -686,6 +686,8 @@ class NeuralModule:
     def from_grouped_dict(self, input_dict):
         """Load the given 'grouped' dictionary into the neural module."""
         try:
+            # defaults_dict = input_dict['defaults'] # enable this?
+            # self.defaults_from_dict(defaults_dict)
             neuron_synapse_groups = input_dict['neuron_synapse_groups']
             # print(json.dumps(neuron_synapse_groups, indent=4))
             for group_dict in neuron_synapse_groups:
@@ -702,10 +704,22 @@ class NeuralModule:
                 # break # for testing only, delete later!
         except Exception as e:
             print(e)
-            return
 
     def from_dict(self, input_dict):
         """Load the given 'flat' dictionary into the neural module."""
+        try:
+            # defaults_dict = input_dict['defaults'] # enable this?
+            # self.defaults_from_dict(defaults_dict)
+            neurons = input_dict['neurons']
+            for neuron_dict in neurons:
+                neuron = Neuron.from_dict(neuron_dict)
+                self[neuron.name] = neuron
+            synapses = input_dict['synapses']
+            for synapse_dict in synapses:
+                synapse = Synapse.from_dict(synapse_dict)
+                self[synapse.name] = synapse
+        except Exception as e:
+            print(e)
 
     def print_neuron(self, name):
         """Print the named neuron."""
