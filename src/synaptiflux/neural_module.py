@@ -75,7 +75,7 @@ class NeuralModule:
         """Add a neuron or synapse to the module."""
         if isinstance(value, Neuron):
             self.neurons[key] = value
-        elif isintance(value, Synapse):
+        elif isinstance(value, Synapse):
             self.synapses[key] = value
         else:
             raise TypeError(f"Value must be either a Neuron or Synapse, not type: {type(value).__name__}")
@@ -693,11 +693,13 @@ class NeuralModule:
                 neuron_dict = group_dict['neuron']
                 synapses = group_dict['synapses']
                 neuron = Neuron.from_dict(neuron_dict)
-                print(neuron)
+                # print(neuron)
+                self[neuron.name] = neuron # wrap .name in a get method call?
                 for synapse_dict in synapses:
                     synapse = Synapse.from_dict(synapse_dict)
-                    print(synapse)
-                break # for testing only, delete later!
+                    # print(synapse)
+                    self[synapse.name] = synapse # wrap .name in a get method call?
+                # break # for testing only, delete later!
         except Exception as e:
             print(e)
             return
