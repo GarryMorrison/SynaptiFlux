@@ -1,5 +1,4 @@
 __pycache__/
 logs/
-machines/tmp*
-machines/tmp/
+tmp/
 

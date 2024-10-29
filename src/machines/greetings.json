@@ -20,6 +20,95 @@
     "neuron_synapse_groups": [
         {
             "neuron": {
+                "name": "Greetings",
+                "layer": 3,
+                "activation_count": 0,
+                "pooling_fn": {
+                    "pooling": "or"
+                },
+                "patterns": [
+                    {
+                        "trigger_fn": {
+                            "trigger": "simm",
+                            "threshold": 0.98
+                        },
+                        "coeffs": [
+                            1,
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "synapse_labels": [
+                            "H S0 D4",
+                            "e S0 D3",
+                            "l S0 D2",
+                            "l S0 D1",
+                            "o S0 D0"
+                        ]
+                    },
+                    {
+                        "trigger_fn": {
+                            "trigger": "simm",
+                            "threshold": 0.98
+                        },
+                        "coeffs": [
+                            1,
+                            1
+                        ],
+                        "synapse_labels": [
+                            "H S0 D1",
+                            "i S0 D0"
+                        ]
+                    },
+                    {
+                        "trigger_fn": {
+                            "trigger": "simm",
+                            "threshold": 0.98
+                        },
+                        "coeffs": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "synapse_labels": [
+                            "H S0 D2",
+                            "e S0 D1",
+                            "y S0 D0"
+                        ]
+                    },
+                    {
+                        "trigger_fn": {
+                            "trigger": "simm",
+                            "threshold": 0.98
+                        },
+                        "coeffs": [
+                            1
+                        ],
+                        "synapse_labels": [
+                            "Day greeting S0 D0"
+                        ]
+                    }
+                ]
+            },
+            "synapses": [
+                {
+                    "synapse_name": "Greetings S0",
+                    "axon": "Greetings",
+                    "layer": 3,
+                    "synapse_fn": {
+                        "synapse": "identity",
+                        "sign": 1
+                    },
+                    "action_fn": {
+                        "action": "println",
+                        "s": "Greetings!"
+                    }
+                }
+            ]
+        },
+        {
+            "neuron": {
                 "name": "Day greeting",
                 "layer": 3,
                 "activation_count": 0,
@@ -135,95 +224,6 @@
                     "action_fn": {
                         "action": "println",
                         "s": "Day greeting"
-                    }
-                }
-            ]
-        },
-        {
-            "neuron": {
-                "name": "Greetings",
-                "layer": 3,
-                "activation_count": 0,
-                "pooling_fn": {
-                    "pooling": "or"
-                },
-                "patterns": [
-                    {
-                        "trigger_fn": {
-                            "trigger": "simm",
-                            "threshold": 0.98
-                        },
-                        "coeffs": [
-                            1,
-                            1,
-                            1,
-                            1,
-                            1
-                        ],
-                        "synapse_labels": [
-                            "H S0 D4",
-                            "e S0 D3",
-                            "l S0 D2",
-                            "l S0 D1",
-                            "o S0 D0"
-                        ]
-                    },
-                    {
-                        "trigger_fn": {
-                            "trigger": "simm",
-                            "threshold": 0.98
-                        },
-                        "coeffs": [
-                            1,
-                            1
-                        ],
-                        "synapse_labels": [
-                            "H S0 D1",
-                            "i S0 D0"
-                        ]
-                    },
-                    {
-                        "trigger_fn": {
-                            "trigger": "simm",
-                            "threshold": 0.98
-                        },
-                        "coeffs": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "synapse_labels": [
-                            "H S0 D2",
-                            "e S0 D1",
-                            "y S0 D0"
-                        ]
-                    },
-                    {
-                        "trigger_fn": {
-                            "trigger": "simm",
-                            "threshold": 0.98
-                        },
-                        "coeffs": [
-                            1
-                        ],
-                        "synapse_labels": [
-                            "Day greeting S0 D0"
-                        ]
-                    }
-                ]
-            },
-            "synapses": [
-                {
-                    "synapse_name": "Greetings S0",
-                    "axon": "Greetings",
-                    "layer": 3,
-                    "synapse_fn": {
-                        "synapse": "identity",
-                        "sign": 1
-                    },
-                    "action_fn": {
-                        "action": "println",
-                        "s": "Greetings!"
                     }
                 }
             ]
