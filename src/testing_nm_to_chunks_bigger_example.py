@@ -1,7 +1,7 @@
 """A quick test of outputing neural modules in chunk notation."""
 # Author: Garry Morrison
 # Created: 2024-10-20
-# Updated: 2024-10-20
+# Updated: 2024-10-30
 
 import synaptiflux as sf
 
@@ -73,5 +73,6 @@ if __name__ == '__main__':
 
     # convert back to chunk notation:
     print("\n---------------------------------\nConverted back to chunk notation:")
-    print(NM.as_chunk())
+    print(NM.as_chunk(grouped=True))
+    # print(NM.as_chunk(grouped=False))
 

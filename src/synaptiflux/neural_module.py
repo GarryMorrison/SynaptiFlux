@@ -467,7 +467,7 @@ class NeuralModule:
         # print(f"Erasing synapse {name}")
         del self.synapses[name] # Is this sufficient, or do we need to tweak other dictionaries too?
 
-    def as_chunk(self):
+    def as_chunk(self, grouped=True):
         """Output the neural module in chunk notation."""
         trigger_dict = {}
         pooling_dict = {}
@@ -492,23 +492,25 @@ class NeuralModule:
         s += f"    synapse_fn => {sp_dict_to_sp(synapse_dict)}\n"
         s += f"    action_fn => {sp_dict_to_sp(action_dict)}\n"
         s += "end:\n"
-        layer_neuron_set = defaultdict(set) # maybe put this somewhere else?
-        for neuron_name, neuron in self.neurons.items():
-            layer = neuron.get_layer()
-            layer_neuron_set[layer].add(neuron_name)
 
-        neuron_synapse_set = defaultdict(set) # this might be better off doing somewhere else, not every time as_chunk() is called?
-        for synapse_name, synapse in self.synapses.items(): # also, synapses without corresponding neurons are not displayed
-            neuron_name = synapse.get_parent_axon_name()
-            neuron_synapse_set[neuron_name].add(synapse_name)
+        if grouped: # grouped output mode:
+            layer_neuron_set = defaultdict(set) # maybe put this somewhere else?
+            for neuron_name, neuron in self.neurons.items():
+                layer = neuron.get_layer()
+                layer_neuron_set[layer].add(neuron_name)
 
-        for layer in sorted(layer_neuron_set.keys()):
-            for neuron_name in layer_neuron_set[layer]:
-                neuron = self.neurons[neuron_name]
-                s += neuron.as_chunk(self.default_layer, self.default_trigger_fn, self.default_trigger_params, self.default_pooling_fn, self.default_pooling_params)
-                for synapse_name in neuron_synapse_set[neuron_name]:
-                    synapse = self.synapses[synapse_name]
-                    s += synapse.as_chunk(self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
+            neuron_synapse_set = defaultdict(set) # this might be better off doing somewhere else, not every time as_chunk() is called?
+            for synapse_name, synapse in self.synapses.items(): # also, synapses without corresponding neurons are not displayed
+                neuron_name = synapse.get_parent_axon_name()
+                neuron_synapse_set[neuron_name].add(synapse_name)
+
+            for layer in sorted(layer_neuron_set.keys()):
+                for neuron_name in layer_neuron_set[layer]:
+                    neuron = self.neurons[neuron_name]
+                    s += neuron.as_chunk(self.default_layer, self.default_trigger_fn, self.default_trigger_params, self.default_pooling_fn, self.default_pooling_params)
+                    for synapse_name in neuron_synapse_set[neuron_name]:
+                        synapse = self.synapses[synapse_name]
+                        s += synapse.as_chunk(self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
 
         # for neuron_name, neuron in self.neurons.items():
         #     s += neuron.as_chunk(self.default_layer, self.default_trigger_fn, self.default_trigger_params, self.default_pooling_fn, self.default_pooling_params)
@@ -518,6 +520,11 @@ class NeuralModule:
 
         # for name, synapse in self.synapses.items():
         #     s += synapse.as_chunk(self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
+        else: # flat mode:
+            for neuron_name, neuron in self.neurons.items():
+                s += neuron.as_chunk(self.default_layer, self.default_trigger_fn, self.default_trigger_params, self.default_pooling_fn, self.default_pooling_params)
+            for name, synapse in self.synapses.items():
+                s += synapse.as_chunk(self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
         return s
 
     def from_chunk(self, input_chunks):
