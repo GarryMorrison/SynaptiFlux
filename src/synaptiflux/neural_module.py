@@ -566,8 +566,8 @@ class NeuralModule:
         return default_dict
         # return json.dumps(default_dict, indent=4)
 
-    def as_dict(self):
-        """Output the module as a Python dictionary."""
+    def as_flat_dict(self):
+        """Output the module as a flat Python dictionary."""
         output_dict = {}
         output_dict['defaults'] = self.defaults_as_dict()
         output_dict['neurons'] = [neuron.as_dict() for name, neuron in self.neurons.items()]
@@ -577,7 +577,7 @@ class NeuralModule:
 
     def as_flat_json(self):
         """Output the module as a flat JSON string."""
-        return json.dumps(self.as_dict(), indent=4)
+        return json.dumps(self.as_flat_dict(), indent=4)
 
     def as_grouped_dict(self):
         """Output the module as a Python dictionary, with neurons and corresponding synapses in groups."""
@@ -620,7 +620,7 @@ class NeuralModule:
             output_dict.update(self.as_grouped_dict())
         else:
             output_dict['json_type'] = 'flat'
-            output_dict.update(self.as_dict())
+            output_dict.update(self.as_flat_dict())
         with open(filename, 'w') as f:
             json.dump(output_dict, f, indent=4)
         # with open(filename, 'w', encoding='utf-8') as f: # UTF-8 version

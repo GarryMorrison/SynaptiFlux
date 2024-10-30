@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # see what we have:
     # print(NM0)
     print(NM0.as_flat_json())
-    output_dict = NM0.as_dict()
+    output_dict = NM0.as_flat_dict()
 
     NM1 = sf.NeuralModule('as flat dict module')
     NM1.from_dict(output_dict)
