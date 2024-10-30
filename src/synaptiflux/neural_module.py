@@ -520,17 +520,18 @@ class NeuralModule:
         #     s += synapse.as_chunk(self.default_synapse_fn, self.default_synapse_params, self.default_action_fn, self.default_action_params)
         return s
 
-    def from_chunk(self, s):
+    def from_chunk(self, input_chunks):
         """Import chunk string into the neural module."""
-        parse_sf_if_then_machine(self, s, verbose=False)
+        parse_sf_if_then_machine(self, input_chunks, verbose=False)
 
-    def save_chunks(self, filename):
-        """Save the neural module to a file, with the given filename."""
+    def save_as_chunk(self, filename, grouped=True):
+        """Save the neural module to a file using chunk notation, with the given filename."""
         with open(filename, 'w') as f:
             f.write(self.as_chunk())
+            # f.write(self.as_chunk(grouped))
 
-    def load_chunks(self, filename):
-        """Load the given file into the neural module."""
+    def load_from_chunk(self, filename):
+        """Load the given file of chunks into the neural module."""
         with open(filename, 'r') as f:
             s = f.read()
             # parse_sf_if_then_machine(self, s, verbose=False)
