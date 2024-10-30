@@ -17,6 +17,6 @@ if __name__ == '__main__':
     output_dict = NM0.as_flat_dict()
 
     NM1 = sf.NeuralModule('as flat dict module')
-    NM1.from_dict(output_dict)
+    NM1.from_flat_dict(output_dict)
     # see what we have:
     print(NM1)

@@ -639,7 +639,7 @@ class NeuralModule:
             if json_type == 'grouped':
                 self.from_grouped_dict(input_dict)
             elif json_type == 'flat':
-                self.from_dict(input_dict)
+                self.from_flat_dict(input_dict)
 
     def defaults_from_dict(self, defaults_dict):
         """Load defaults into the neural module from the given dictionary."""
@@ -705,7 +705,7 @@ class NeuralModule:
         except Exception as e:
             print(e)
 
-    def from_dict(self, input_dict):
+    def from_flat_dict(self, input_dict):
         """Load the given 'flat' dictionary into the neural module."""
         try:
             # defaults_dict = input_dict['defaults'] # enable this?
