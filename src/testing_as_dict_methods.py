@@ -1,7 +1,7 @@
 """Testing outputing neural modules as dictionaries."""
 # Author: Garry Morrison
 # Created: 2024-10-24
-# Updated: 2024-10-24
+# Updated: 2024-10-30
 
 import synaptiflux as sf
 
@@ -18,8 +18,8 @@ if __name__ == '__main__':
     print(NM0)
     print('module.defaults_as_dict():')
     print(NM0.defaults_as_dict())
-    print('\n-------------------\nmodule.as_json():')
-    print(NM0.as_json())
+    print('\n-------------------\nmodule.as_flat_json():')
+    print(NM0.as_flat_json())
     print('\n-------------------\nmodule.as_grouped_json():')
     print(NM0.as_grouped_json())
 

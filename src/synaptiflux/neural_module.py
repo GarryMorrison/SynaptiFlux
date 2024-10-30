@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-25
+# Updated: 2024-10-30
 
 import json
 from collections import defaultdict
@@ -575,8 +575,8 @@ class NeuralModule:
         # return json.dumps(output_dict, indent=4)
         return output_dict
 
-    def as_json(self):
-        """Output the module as a JSON string."""
+    def as_flat_json(self):
+        """Output the module as a flat JSON string."""
         return json.dumps(self.as_dict(), indent=4)
 
     def as_grouped_dict(self):
