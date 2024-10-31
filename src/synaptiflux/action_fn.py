@@ -1,7 +1,7 @@
 """Define some toy actions."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-19
+# Updated: 2024-10-31
 
 from .trigger_fn import trigger_dot_product_threshold, trigger_list_simm_threshold
 from .pooling_fn import pooling_or
@@ -103,6 +103,13 @@ def action_store_buffer(synapse, value, NM, buffer, verbose=False):
 # add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)
 
 
+def action_counter_println(synapse, value, s, counter):
+    """Print string action, and counter, with new line, if value > 0."""
+    if value > 0:
+        print(f'{counter.get()}) {s}')
+        counter.increment()
+
+
 action_fn_map = {
     'null': action_null,
     'println': action_println,
@@ -113,6 +120,7 @@ action_fn_map = {
     'print_to_buffer_flush': action_print_to_buffer_flush,
     'init_store_buffer': action_init_store_buffer,
     'store_buffer': action_store_buffer,
+    'counter_println': action_counter_println,
 }
 
 action_inverse_fn_map = {
@@ -125,4 +133,5 @@ action_inverse_fn_map = {
     'action_print_to_buffer_flush': 'print_to_buffer_flush',
     'action_init_store_buffer': 'init_store_buffer',
     'action_store_buffer': 'store_buffer',
+    'action_counter_println': 'counter_println',
 }
