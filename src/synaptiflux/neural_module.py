@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-30
+# Updated: 2024-10-31
 
 import json
 from collections import defaultdict
@@ -53,6 +53,7 @@ class NeuralModule:
     def __init__(self, name):
         self.name = name
         self.neuron_name_index = 0
+        self.time_step_counter = 0
         self.delay_counter = 0
         self.sources = {}
         self.current_sources_state = {}
@@ -119,6 +120,22 @@ class NeuralModule:
         return -1 # maybe change this later?
 
     # Do we want default layers too?
+
+    def get_time_step(self):
+        """Get the current time step."""
+        return self.time_step_counter
+
+    def set_time_step(self, n):
+        """Set the current time step."""
+        self.time_step_counter = n
+
+    def reset_time_step(self):
+        """Reset the current time step."""
+        self.time_step_counter = 0
+
+    def increment_time_step(self):
+        """Increment the current time step."""
+        self.time_step_counter += 1
 
     def set_delay_counter(self, n):
         """Set our delay counter."""
@@ -411,6 +428,7 @@ class NeuralModule:
             self.update_neurons()
             self.update_synapses()
             self.update_sources()
+            self.increment_time_step()
             self.increment_delay_counter() # here or at the start of this sequence of methods?
 
     def get_test_neurons(self, pattern):

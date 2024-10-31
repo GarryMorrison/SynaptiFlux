@@ -109,6 +109,10 @@ def action_counter_println(synapse, value, s, counter):
         print(f'{counter.get()}) {s}')
         counter.increment()
 
+def action_time_step_println(synapse, value, s, NM):
+    """Print string action, and NM time step, with new line, if value > 0."""
+    if value > 0:
+        print(f'{NM.get_time_step()}) {s}')
 
 action_fn_map = {
     'null': action_null,
@@ -121,6 +125,7 @@ action_fn_map = {
     'init_store_buffer': action_init_store_buffer,
     'store_buffer': action_store_buffer,
     'counter_println': action_counter_println,
+    'time_step_println': action_time_step_println,
 }
 
 action_inverse_fn_map = {
@@ -134,4 +139,5 @@ action_inverse_fn_map = {
     'action_init_store_buffer': 'init_store_buffer',
     'action_store_buffer': 'store_buffer',
     'action_counter_println': 'counter_println',
+    'action_time_step_println': 'time_step_println',
 }
