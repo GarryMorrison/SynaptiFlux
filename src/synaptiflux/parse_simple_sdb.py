@@ -1,13 +1,30 @@
 """Parse simple SDB."""
 # Author: Garry Morrison
 # Created: 2024-10-15
-# Updated: 2024-10-20
+# Updated: 2024-11-1
 
 from .trigger_fn import trigger_list_simm_threshold, trigger_fn_map
 from .pooling_fn import pooling_or, pooling_fn_map
 from .synapse_fn import synapse_identity, synapse_fn_map
 from .action_fn import action_println, action_fn_map
 from .misc import cast_value
+import re
+
+def strip_delay(s):
+    """Strip the delay term from a label, if it has one."""
+    pattern = r'^(.*) D(\d+)$'
+    match = re.match(pattern, s)
+    if match:
+        return match.group(1)
+    return s
+
+def strip_synapse(s):
+    """Strip the synapse term from a label, if it has one."""
+    pattern = r'^(.*) S(\d+)$'
+    match = re.match(pattern, s)
+    if match:
+        return match.group(1)
+    return s
 
 def clean_ket_coeff(c):
     """Map a coeff to the empty string if == 1, else return unchanged."""
