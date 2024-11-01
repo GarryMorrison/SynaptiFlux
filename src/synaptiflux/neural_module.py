@@ -11,7 +11,7 @@ from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine, parse_seq
 from .trigger_fn import trigger_inverse_fn_map, trigger_fn_map, trigger_list_simm_threshold
 from .pooling_fn import pooling_inverse_fn_map, pooling_fn_map, pooling_or
 from .synapse_fn import synapse_inverse_fn_map, synapse_fn_map, synapse_identity
-from .action_fn import action_inverse_fn_map, action_fn_map, action_println
+from .action_fn import action_inverse_fn_map, action_fn_map, action_println, action_time_step_println
 
 def process_layers(synapses, layers):
     """Given a synapses dict, and layers, return valid layers.
@@ -786,7 +786,8 @@ class NeuralModule:
                 synapse_name = f'{neuron_name} S0' # hardwire in synapse number here for now.
                 if not self.do_you_know_synapse(synapse_name):
                     # self.add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)
-                    self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
+                    # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
+                    self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_time_step_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
                     self.patch_in_new_synapses() # is this the best place for this?
             # now build the unknown synapses:
             for synapse_name in clean_synapse_labels:
@@ -795,7 +796,8 @@ class NeuralModule:
                         print(f'Unknown synapse: "{synapse_name}"')
                     neuron_name = strip_synapse(synapse_name)
                     self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
-                    self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
+                    # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
+                    self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_time_step_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
                     self.patch_in_new_synapses() # is this the best place for this?
 
     def load_from_map(self, filename, verbose=False):
