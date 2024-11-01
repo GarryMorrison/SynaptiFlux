@@ -1,0 +1,9 @@
+-- a sample mapping file, in this case for Sam
+-- an even more compact representation for if-then machines
+
+|S> . |a> . |m> => |Sam>
+|op: mother> + |Sam> => |Liz>
+|op: father> + |Sam> => |Tom>
+|op: friends> + |Sam> => |Fred> + |Emma> + |Max>
+
+

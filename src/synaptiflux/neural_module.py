@@ -1,17 +1,17 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-31
+# Updated: 2024-11-1
 
 import json
 from collections import defaultdict
 from .neuron import Neuron
 from .synapse import Synapse
-from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine
-from .trigger_fn import trigger_inverse_fn_map, trigger_fn_map
-from .pooling_fn import pooling_inverse_fn_map, pooling_fn_map
-from .synapse_fn import synapse_inverse_fn_map, synapse_fn_map
-from .action_fn import action_inverse_fn_map, action_fn_map
+from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine, parse_seq, parse_sp, strip_delay, strip_synapse
+from .trigger_fn import trigger_inverse_fn_map, trigger_fn_map, trigger_list_simm_threshold
+from .pooling_fn import pooling_inverse_fn_map, pooling_fn_map, pooling_or
+from .synapse_fn import synapse_inverse_fn_map, synapse_fn_map, synapse_identity
+from .action_fn import action_inverse_fn_map, action_fn_map, action_println
 
 def process_layers(synapses, layers):
     """Given a synapses dict, and layers, return valid layers.
@@ -746,6 +746,62 @@ class NeuralModule:
                 self[synapse.name] = synapse
         except Exception as e:
             print(e)
+
+    def from_map(self, s, verbose=False):
+        """Load the map string s into the neural module."""
+        # set some defaults:
+        layer = 0
+        synapse_number = 0
+        for line in s.splitlines():
+            line = line.strip()
+            if len(line) == 0 or line.startswith('--'):
+                continue
+            # parse them:
+            try:
+                pattern, neurons = line.split(' => ', 1)
+                coeffs, synapse_labels = parse_seq(pattern, synapse_number=synapse_number)
+                neuron_names = parse_sp(neurons)[1]
+                clean_synapse_labels = [strip_delay(s) for s in synapse_labels]
+            except Exception as e:
+                print(e)
+                continue
+            if verbose:
+                print(f'\npattern: {pattern}')
+                print(f'neurons: {neurons}')
+                print(f'coeffs: {coeffs}')
+                print(f'synapse_labels: {synapse_labels}')
+                print(f'clean_synapse_labels: {clean_synapse_labels}')
+                print(f'neuron_names: {neuron_names}')
+            # now build the neurons:
+            for neuron_name in neuron_names:
+                if not self.do_you_know_neuron(neuron_name):
+                    if verbose:
+                        print(f'Unknown neuron: "{neuron_name}", adding it')
+                        # self.add_neuron(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
+                    self.add_neuron(neuron_name, layer, coeffs, synapse_labels, trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
+                else:
+                    if verbose:
+                        print(f'Known neuron: "{neuron_name}", appending to it')
+                    # TODO: append pattern to neuron here!
+                synapse_name = f'{neuron_name} S0' # hardwire in synapse number here for now.
+                if not self.do_you_know_synapse(synapse_name):
+                    # self.add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)
+                    self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
+                    self.patch_in_new_synapses() # is this the best place for this?
+            # now build the unknown synapses:
+            for synapse_name in clean_synapse_labels:
+                if not self.do_you_know_synapse(synapse_name):
+                    if verbose:
+                        print(f'Unknown synapse: "{synapse_name}"')
+                    neuron_name = strip_synapse(synapse_name)
+                    self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
+                    self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
+                    self.patch_in_new_synapses() # is this the best place for this?
+
+    def load_from_map(self, filename, verbose=False):
+        """Load the map file into the neural module."""
+        with open(filename, 'r') as f:
+            self.from_map(f.read(), verbose)
 
     def print_neuron(self, name):
         """Print the named neuron."""
