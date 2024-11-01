@@ -1,7 +1,7 @@
 """Parse simple SDB."""
 # Author: Garry Morrison
 # Created: 2024-10-15
-# Updated: 2024-11-1
+# Updated: 2024-11-2
 
 from .trigger_fn import trigger_list_simm_threshold, trigger_fn_map
 from .pooling_fn import pooling_or, pooling_fn_map
@@ -25,6 +25,22 @@ def strip_synapse(s):
     if match:
         return match.group(1)
     return s
+
+def extract_delay_number(s):
+    """Extract the delay number from a label, if it has one, else None."""
+    pattern = r'^(.*) D(\d+)$'
+    match = re.match(pattern, s)
+    if match:
+        return int(match.group(2))
+    return None
+
+def extract_synapse_number(s):
+    """Extract the synapse number from a label, if it has one, else None."""
+    pattern = r'^(.*) S(\d+)$'
+    match = re.match(pattern, s)
+    if match:
+        return int(match.group(2))
+    return None
 
 def clean_ket_coeff(c):
     """Map a coeff to the empty string if == 1, else return unchanged."""
@@ -84,13 +100,16 @@ def sp_dict_to_sp(sp_dict):
         return "|>"
     return " + ".join(list_kets)
 
-def parse_seq(s, synapse_number): # sequences require synapse numbers.
+def parse_seq(s, synapse_number, reverse=True): # sequences require synapse numbers.
     """Parse a SDB sequence."""
     sps = [parse_sp(x, synapse_number) for x in s.split(' . ')]
     full_coeffs = []
     full_labels = []
     for k in range(len(sps)):
-        delay = len(sps) - k - 1
+        if reverse:
+            delay = len(sps) - k - 1
+        else:
+            delay = k
         coeffs, labels = sps[k]
         # delay_labels = [f"{x} D{delay}" for x in labels if len(x) > 0]
         # full_coeffs += coeffs
