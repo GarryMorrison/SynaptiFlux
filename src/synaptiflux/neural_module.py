@@ -782,7 +782,8 @@ class NeuralModule:
                 else:
                     if verbose:
                         print(f'Known neuron: "{neuron_name}", appending to it')
-                    # TODO: append pattern to neuron here!
+                    # append_neuron_pattern(self, name, seed_pattern, synapse_labels, trigger_fn, trigger_params)
+                    self.append_neuron_pattern(neuron_name, coeffs, synapse_labels, trigger_list_simm_threshold, {'threshold': 0.98}) # test this code section
                 synapse_name = f'{neuron_name} S0' # hardwire in synapse number here for now.
                 if not self.do_you_know_synapse(synapse_name):
                     # self.add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)
