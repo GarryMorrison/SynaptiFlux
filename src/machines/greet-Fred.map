@@ -1,0 +1,26 @@
+-- a Greet Fred map example:
+
+-- the Greetings neuron:
+|H> . |e> . |l> . |l> . |o> => |Greetings!>
+|H> . |i> => |Greetings!>
+|H> . |e> . |y> => |Greetings!>
+|Day greeting> => |Greetings!>
+
+-- the day greetings neuron:
+|M> . |o> . |r> . |n> . |i> . |n> . |g> => |Day greeting>
+|N> . |o> . |o> . |n> => |Day greeting>
+|A> . |f> . |t> . |e> . |r> . |n> . |o> . |o> . |n> => |Day greeting>
+|E> . |v> . |e> . |n> . |i> . |n> . |g> => |Day greeting>
+
+
+-- the Fred Smith neuron:
+|F> . |r> . |e> . |d> => |person: Fred Smith>
+|F> . |r> . |e> . |d> . |d> . |i> . |e> => |person: Fred Smith>
+|F> . |r> . |e> . |d> . | > . |S> . |m> . |i> . |t> . |h> => |person: Fred Smith>
+
+-- the Fred Roberts neuron:
+|F> . |r> . |e> . |d> => |person: Fred Roberts>
+|R> . |o> . |b> . |o> => |person: Fred Roberts>
+|F> . |r> . |e> . |d> . | > . |R> . |o> . |b> . |e> . |r> . |t> . |s> => |person: Fred Roberts>
+
+
