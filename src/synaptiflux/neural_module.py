@@ -1,10 +1,10 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-11-1
+# Updated: 2024-11-2
 
 import json
-from collections import defaultdict
+from collections import defaultdict, deque
 from .neuron import Neuron
 from .synapse import Synapse
 from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine, parse_seq, parse_sp, strip_delay, strip_synapse
@@ -60,6 +60,7 @@ class NeuralModule:
         self.latent_neurons = {}
         self.neurons = {}
         self.current_poked_neurons = set()
+        self.poke_neuron_sequence_buffer = deque()
         self.new_synapses = {} # rename to latent_synapses?
         self.synapses = {}
         self.default_layer = 0
@@ -376,6 +377,19 @@ class NeuralModule:
         for name in names:
             self.current_poked_neurons.add(name)
 
+    def poke_neuron_sequence(self, seq):
+        """Poke neurons in a sequence, one each time step."""
+        self.poke_neuron_sequence_buffer.extend(seq)
+
+    def update_poked_neuron_set(self):
+        """Update the poked neuron set with values from the poked neuron sequence buffer."""
+        if self.poke_neuron_sequence_buffer: # check not empty:
+            next_value = self.poke_neuron_sequence_buffer.popleft()
+            if isinstance(next_value, list):
+                self.poke_neurons(next_value)
+            else:
+                self.poke_neuron(next_value)
+
 #     def read_synapse(self, name):
 #         """Read a single synapse."""
 #         if name not in self.synapses:
@@ -425,6 +439,7 @@ class NeuralModule:
         """Update our system."""
         for _ in range(steps):
             self.patch_in_new_synapses()
+            self.update_poked_neuron_set()
             self.update_neurons()
             self.update_synapses()
             self.update_sources()
@@ -844,7 +859,8 @@ class NeuralModule:
     def str_neurons(self):
         """Return neurons as a string."""
         s = "\nNeurons:\n"
-        s += f"    poked neurons: {self.current_poked_neurons}\n\n"
+        s += f"    poked neurons: {self.current_poked_neurons}\n"
+        s += f"    poked sequence buffer: {self.poke_neuron_sequence_buffer}\n\n"
         for label, neuron in self.neurons.items():
             s += f"{neuron}\n"
         return s

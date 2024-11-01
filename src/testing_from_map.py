@@ -1,7 +1,7 @@
 """Test the NM.from_map() method."""
 # Author: Garry Morrison
 # Created: 2024-11-1
-# Updated: 2024-11-1
+# Updated: 2024-11-2
 
 import synaptiflux as sf
 
@@ -21,12 +21,14 @@ if __name__ == '__main__':
     NM.poke_neurons(['Sam', 'op: friends'])
     NM.update_system(4)
     print()
-    NM.poke_neuron('S')
-    NM.update_system(1)
-    NM.poke_neuron('a')
-    NM.update_system(1)
-    NM.poke_neuron('m')
-    NM.update_system(3)
+    # NM.poke_neuron('S')
+    # NM.update_system(1)
+    # NM.poke_neuron('a')
+    # NM.update_system(1)
+    # NM.poke_neuron('m')
+    # NM.update_system(3)
+    NM.poke_neuron_sequence(list('Sam'))
+    NM.update_system(4)
     print()
 
     # see what we have:
