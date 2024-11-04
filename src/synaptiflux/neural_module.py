@@ -298,6 +298,7 @@ class NeuralModule:
            synapse.set_layer(layer)
         # self.synapses[name] = synapse
         self.new_synapses[name] = synapse # does this break anything?
+        self.add_synapse_alias(name, name)
 
     def add_default_synapse(self, name, axon_name):
         """Add a default synapse to our system."""
@@ -307,6 +308,7 @@ class NeuralModule:
            synapse.set_layer(layer)
         # self.synapses[name] = synapse
         self.new_synapses[name] = synapse
+        self.add_synapse_alias(name, name)
 
     def update_synapse_fn(self, name, synapse_fn, synapse_params):
         """Update the synapse function for a synapse."""
@@ -876,6 +878,7 @@ class NeuralModule:
         s += "    aliases:\n"
         for label, alias_set in self.synapse_alias_dict.items():
             s += f'        "{label}" -> {alias_set}\n'
+        s += '\n'
         for label, synapse in self.synapses.items():
             s += f"{synapse}\n"
         return s
