@@ -1,0 +1,11 @@
+-- Spelling of Sam test case:
+
+-- invoke using:
+-- NM.poke_neuron('spelling of Sam')
+-- or:
+-- NM.poke_neurons(['Sam', 'op: spelling'])
+
+|spelling of Sam> |=> |S> . |a> . |m>
+|op: spelling> + |Sam> => |spelling of Sam>
+|S> . |a> . |m> => |Sam>
+

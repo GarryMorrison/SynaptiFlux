@@ -1,0 +1,8 @@
+-- alpha beta test case:
+-- invoke using:
+-- NM.poke_neuron('alpha beta')
+
+|alpha beta> |=> 2|alpha> . 3|beta>
+2|alpha> . 3|beta> => |alpha beta detected>
+
+
