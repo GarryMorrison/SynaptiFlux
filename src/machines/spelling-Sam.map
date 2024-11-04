@@ -4,6 +4,15 @@
 -- NM.poke_neuron('spelling of Sam')
 -- or:
 -- NM.poke_neurons(['Sam', 'op: spelling'])
+--
+-- expected output:
+-- 0)    op: spelling
+-- 0)    Sam
+-- 1)    S
+-- 2)    a
+-- 3)    m
+-- 4)    Sam
+
 
 |spelling of Sam> |=> |S> . |a> . |m>
 |op: spelling> + |Sam> => |spelling of Sam>
