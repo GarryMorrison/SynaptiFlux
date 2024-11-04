@@ -7,10 +7,10 @@ import json
 from collections import defaultdict, deque
 from .neuron import Neuron
 from .synapse import Synapse
-from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine, parse_seq, parse_sp, strip_delay, strip_synapse
+from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine, parse_seq, parse_sp, strip_delay, strip_synapse, extract_delay_number
 from .trigger_fn import trigger_inverse_fn_map, trigger_fn_map, trigger_list_simm_threshold
 from .pooling_fn import pooling_inverse_fn_map, pooling_fn_map, pooling_or
-from .synapse_fn import synapse_inverse_fn_map, synapse_fn_map, synapse_identity
+from .synapse_fn import synapse_inverse_fn_map, synapse_fn_map, synapse_identity, synapse_delayed_identity
 from .action_fn import action_inverse_fn_map, action_fn_map, action_println, action_time_step_println
 
 def process_layers(synapses, layers):
@@ -778,50 +778,116 @@ class NeuralModule:
             line = line.strip()
             if len(line) == 0 or line.startswith('--'):
                 continue
+            if verbose:
+                print(f'\nline: {line}')
+            synapse_neuron = False
+            neuron_synapse = False
             # parse them:
             try:
                 pattern, neurons = line.split(' => ', 1)
                 coeffs, synapse_labels = parse_seq(pattern, synapse_number=synapse_number)
                 neuron_names = parse_sp(neurons)[1]
                 clean_synapse_labels = [strip_delay(s) for s in synapse_labels]
+                synapse_neuron = True
             except Exception as e:
-                print(e)
-                continue
-            if verbose:
-                print(f'\npattern: {pattern}')
-                print(f'neurons: {neurons}')
-                print(f'coeffs: {coeffs}')
-                print(f'synapse_labels: {synapse_labels}')
-                print(f'clean_synapse_labels: {clean_synapse_labels}')
-                print(f'neuron_names: {neuron_names}')
-            # now build the neurons:
-            for neuron_name in neuron_names:
-                if not self.do_you_know_neuron(neuron_name):
-                    if verbose:
-                        print(f'Unknown neuron: "{neuron_name}", adding it')
+                try:
+                    neurons, pattern = line.split(' |=> ', 1)
+                    neuron_names = parse_sp(neurons)[1]
+                    coeffs, synapse_labels = parse_seq(pattern, synapse_number=synapse_number, reverse=False)
+                    clean_synapse_labels = [strip_delay(s) for s in synapse_labels]
+                    clean_neuron_labels = [strip_synapse(s) for s in clean_synapse_labels]
+                    synapse_delays = [extract_delay_number(s) for s in synapse_labels]
+                    neuron_synapse = True
+                except Exception as e:
+                    print(e)
+                    continue
+            if synapse_neuron:
+                if verbose:
+                    print(f'\npattern: {pattern}')
+                    print(f'neurons: {neurons}')
+                    print(f'coeffs: {coeffs}')
+                    print(f'synapse_labels: {synapse_labels}')
+                    print(f'clean_synapse_labels: {clean_synapse_labels}')
+                    print(f'neuron_names: {neuron_names}')
+                # now build the neurons:
+                for neuron_name in neuron_names:
+                    if not self.do_you_know_neuron(neuron_name):
+                        if verbose:
+                            print(f'Unknown neuron: "{neuron_name}", adding it')
                         # self.add_neuron(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
-                    self.add_neuron(neuron_name, layer, coeffs, synapse_labels, trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
-                else:
-                    if verbose:
-                        print(f'Known neuron: "{neuron_name}", appending to it')
-                    # append_neuron_pattern(self, name, seed_pattern, synapse_labels, trigger_fn, trigger_params)
-                    self.append_neuron_pattern(neuron_name, coeffs, synapse_labels, trigger_list_simm_threshold, {'threshold': 0.98}) # test this code section
-                synapse_name = f'{neuron_name} S0' # hardwire in synapse number here for now.
-                if not self.do_you_know_synapse(synapse_name):
-                    # self.add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)
-                    # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
-                    self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_time_step_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
-                    self.patch_in_new_synapses() # is this the best place for this?
-            # now build the unknown synapses:
-            for synapse_name in clean_synapse_labels:
-                if not self.do_you_know_synapse(synapse_name):
-                    if verbose:
-                        print(f'Unknown synapse: "{synapse_name}"')
-                    neuron_name = strip_synapse(synapse_name)
-                    self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
-                    # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
-                    self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_time_step_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
-                    self.patch_in_new_synapses() # is this the best place for this?
+                        self.add_neuron(neuron_name, layer, coeffs, synapse_labels, trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
+                    else:
+                        if verbose:
+                            print(f'Known neuron: "{neuron_name}", appending to it')
+                        # append_neuron_pattern(self, name, seed_pattern, synapse_labels, trigger_fn, trigger_params)
+                        self.append_neuron_pattern(neuron_name, coeffs, synapse_labels, trigger_list_simm_threshold, {'threshold': 0.98}) # test this code section
+                    synapse_name = f'{neuron_name} S0' # hardwire in synapse number here for now.
+                    if not self.do_you_know_synapse(synapse_name):
+                        # self.add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)
+                        # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
+                        self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_time_step_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
+                        self.patch_in_new_synapses() # is this the best place for this?
+                # now build the unknown synapses:
+                for synapse_name in clean_synapse_labels:
+                    if not self.do_you_know_synapse(synapse_name):
+                        if verbose:
+                            print(f'Unknown synapse: "{synapse_name}"')
+                        neuron_name = strip_synapse(synapse_name)
+                        self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
+                        # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
+                        self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_time_step_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
+                        self.patch_in_new_synapses() # is this the best place for this?
+            if neuron_synapse:
+                if verbose:
+                    print(f'\nneurons: {neurons}')
+                    print(f'neuron_names: {neuron_names}')
+                    print(f'pattern: {pattern}')
+                    print(f'coeffs: {coeffs}')
+                    print(f'synapse_labels: {synapse_labels}')
+                    print(f'synapse_delays: {synapse_delays}')
+                    print(f'clean_synapse_labels: {clean_synapse_labels}')
+                    print(f'clean_neuron_labels: {clean_neuron_labels}')
+                # build our RHS neurons:
+                for neuron_name in clean_neuron_labels:
+                    if not self.do_you_know_neuron(neuron_name):
+                        if verbose:
+                            print(f'Unknown neuron: "{neuron_name}", adding it')
+                        # self.add_neuron(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
+                        self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
+                        synapse_name = f'{neuron_name} S{synapse_number}'
+                        if not self.do_you_know_synapse(synapse_name):
+                            if verbose:
+                                print(f'Unknown synapse: "{synapse_name}", adding it')
+                            self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_time_step_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
+                            self.patch_in_new_synapses() # is this the best place for this?
+                    # else:
+                    #     if verbose:
+                    #         print(f'Known neuron: "{neuron_name}", appending to it')
+                    #     # append_neuron_pattern(self, name, seed_pattern, synapse_labels, trigger_fn, trigger_params)
+                    #     self.append_neuron_pattern(neuron_name, [1], ['#OFF'], trigger_list_simm_threshold, {'threshold': 0.98}) # test this code section
+                # now build the LHS neurons:
+                for neuron_name in neuron_names:
+                    if not self.do_you_know_neuron(neuron_name):
+                        if verbose:
+                            print(f'Unknown neuron: "{neuron_name}", adding it')
+                        # self.add_neuron(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
+                        self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
+                    # else:
+                    #     if verbose:
+                    #         print(f'Known neuron: "{neuron_name}", appending to it')
+                    #     # append_neuron_pattern(self, name, seed_pattern, synapse_labels, trigger_fn, trigger_params)
+                    #     self.append_neuron_pattern(neuron_name, [1], ['#OFF#'], trigger_list_simm_threshold, {'threshold': 0.98}) # test this code section
+                    for idx in range(len(synapse_labels)):
+                        synapse_name = f'{neuron_name} S{idx}' # yeah, currently stomps on existing synapses! TODO: fix later!
+                        sign = coeffs[idx]
+                        delay = synapse_delays[idx]
+                        alias = f'{clean_neuron_labels[idx]} S0'
+                        if verbose:
+                            print(f'Adding synapse: "{synapse_name}", sign: {sign}, delay: {delay} -> "{alias}"')
+                        self.add_synapse(synapse_name, neuron_name, synapse_delayed_identity, {'sign': sign, 'delay': delay}, action_time_step_println, {'s': neuron_name, 'NM': self})
+                        self.patch_in_new_synapses() # is this the best place for this?
+                        self.add_synapse_alias(synapse_name, alias)
+
 
     def load_from_map(self, filename, verbose=False):
         """Load the map file into the neural module."""

@@ -6,6 +6,6 @@
 -- NM.poke_neurons(['Sam', 'op: spelling'])
 
 |spelling of Sam> |=> |S> . |a> . |m>
-|op: spelling> + |Sam> => |spelling of Sam>
+-- |op: spelling> + |Sam> => |spelling of Sam>
 |S> . |a> . |m> => |Sam>
 
