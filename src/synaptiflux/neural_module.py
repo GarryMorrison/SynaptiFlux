@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-11-2
+# Updated: 2024-11-4
 
 import json
 from collections import defaultdict, deque
@@ -63,6 +63,7 @@ class NeuralModule:
         self.poke_neuron_sequence_buffer = deque()
         self.new_synapses = {} # rename to latent_synapses?
         self.synapses = {}
+        self.synapse_alias_dict = defaultdict(set)
         self.default_layer = 0
         self.default_trigger_fn = None
         self.default_trigger_params = {}
@@ -284,6 +285,10 @@ class NeuralModule:
     def clear_latent_neurons(self):
         """Clear our latent neurons."""
         self.latent_neurons.clear()
+
+    def add_synapse_alias(self, source_synapse_name, destination_synapse_name):
+        """Add a synapse alias, where source synapses rewrite to destination synapses."""
+        self.synapse_alias_dict[destination_synapse_name].add(source_synapse_name)
 
     def add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params):
         """Add a synapse to our system."""
@@ -868,6 +873,9 @@ class NeuralModule:
     def str_synapses(self):
         """Return synapses as a string."""
         s = "Synapses:\n"
+        s += "    aliases:\n"
+        for label, alias_set in self.synapse_alias_dict.items():
+            s += f'        "{label}" -> {alias_set}\n'
         for label, synapse in self.synapses.items():
             s += f"{synapse}\n"
         return s
