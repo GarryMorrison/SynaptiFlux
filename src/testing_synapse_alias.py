@@ -35,15 +35,19 @@ if __name__ == '__main__':
     NM.add_synapse_alias('alpha S0', 'a S0')
 
     # poke and evolve the system:
+    print()
     NM.poke_neuron('a')
     NM.update_system(3)
 
+    print()
     NM.poke_neuron('b')
     NM.update_system(3)
 
+    print()
     NM.poke_neuron('alpha')
     NM.update_system(3)
 
     # see what we have:
+    print()
     print(NM)
 

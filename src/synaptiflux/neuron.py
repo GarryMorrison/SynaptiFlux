@@ -1,7 +1,7 @@
 """Implement a single reductionist neuron."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-25
+# Updated: 2024-11-4
 
 from .parse_simple_sdb import sp_dict_to_sp, coeff_labels_to_sp
 from .pooling_fn import pooling_inverse_fn_map, pooling_fn_map
@@ -102,7 +102,7 @@ class Neuron:
             return
         self.axon.append(value)
 
-    def update_axon(self, current_sources, synapses, poked):
+    def update_axon(self, current_sources, synapses, poked, synapse_alias_dict):
         """Calculate and then update our axon list."""
         if not self.valid:
             print("Invalid neuron")
@@ -129,8 +129,10 @@ class Neuron:
                             delay = int(delay_str)
                         except ValueError:
                             delay = 0
-                    if label in synapses:
-                        value = synapses[label].read_synapse(delay)
+                    # if label in synapses:
+                    #     value = synapses[label].read_synapse(delay)
+                    if label in synapse_alias_dict:
+                        value = max(synapses[sublabel].read_synapse(delay) for sublabel in synapse_alias_dict[label])
                 input_pattern.append(value)
             fn = self.trigger_fn[k]
             # print(f"{self.name} pattern: {input_pattern}")

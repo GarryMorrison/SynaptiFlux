@@ -343,7 +343,7 @@ class NeuralModule:
             poked = False
             if label in self.current_poked_neurons:
                 poked = True
-            neuron.update_axon(self.current_sources_state, self.synapses, poked)
+            neuron.update_axon(self.current_sources_state, self.synapses, poked, self.synapse_alias_dict)
         self.current_poked_neurons.clear()
 
     def patch_in_new_synapses(self):
@@ -877,7 +877,7 @@ class NeuralModule:
         s = "Synapses:\n"
         s += "    aliases:\n"
         for label, alias_set in self.synapse_alias_dict.items():
-            s += f'        "{label}" -> {alias_set}\n'
+            s += f'        "{label}" <- {alias_set}\n'
         s += '\n'
         for label, synapse in self.synapses.items():
             s += f"{synapse}\n"
