@@ -117,7 +117,10 @@ def action_time_step_println(synapse, value, s, NM):
 def action_time_step_coeff_println(synapse, value, s, NM):
     """Print string action, and NM time step, with new line, if value > 0."""
     if value > 0:
-        print(f'{NM.get_time_step()})    {value}, {s}')
+        if value == 1:
+            print(f'{NM.get_time_step()})    {s}')
+        else:
+            print(f'{NM.get_time_step()})    {value}, {s}')
 
 action_fn_map = {
     'null': action_null,
