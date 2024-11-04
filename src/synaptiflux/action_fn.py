@@ -1,7 +1,7 @@
 """Define some toy actions."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-10-31
+# Updated: 2024-11-4
 
 from .trigger_fn import trigger_dot_product_threshold, trigger_list_simm_threshold
 from .pooling_fn import pooling_or
@@ -114,6 +114,11 @@ def action_time_step_println(synapse, value, s, NM):
     if value > 0:
         print(f'{NM.get_time_step()}) {s}')
 
+def action_time_step_coeff_println(synapse, value, s, NM):
+    """Print string action, and NM time step, with new line, if value > 0."""
+    if value > 0:
+        print(f'{NM.get_time_step()})    {value}, {s}')
+
 action_fn_map = {
     'null': action_null,
     'println': action_println,
@@ -126,6 +131,7 @@ action_fn_map = {
     'store_buffer': action_store_buffer,
     'counter_println': action_counter_println,
     'time_step_println': action_time_step_println,
+    'time_step_coeff_println': action_time_step_coeff_println,
 }
 
 action_inverse_fn_map = {
@@ -140,4 +146,5 @@ action_inverse_fn_map = {
     'action_store_buffer': 'store_buffer',
     'action_counter_println': 'counter_println',
     'action_time_step_println': 'time_step_println',
+    'action_time_step_coeff_println': 'time_step_coeff_println',
 }
