@@ -881,12 +881,14 @@ class NeuralModule:
                         synapse_name = f'{neuron_name} S{idx}' # yeah, currently stomps on existing synapses! TODO: fix later!
                         sign = coeffs[idx]
                         delay = synapse_delays[idx]
-                        alias = f'{clean_neuron_labels[idx]} S0'
+                        alias = clean_neuron_labels[idx]
+                        alias_synapse = f'{alias} S0'
                         if verbose:
-                            print(f'Adding synapse: "{synapse_name}", sign: {sign}, delay: {delay} -> "{alias}"')
-                        self.add_synapse(synapse_name, neuron_name, synapse_delayed_identity, {'sign': sign, 'delay': delay}, action_time_step_println, {'s': neuron_name, 'NM': self})
+                            print(f'Adding synapse: "{synapse_name}", sign: {sign}, delay: {delay} -> "{alias_synapse}"')
+                        # self.add_synapse(synapse_name, neuron_name, synapse_delayed_identity, {'sign': sign, 'delay': delay}, action_time_step_println, {'s': neuron_name, 'NM': self})
+                        self.add_synapse(synapse_name, neuron_name, synapse_delayed_identity, {'sign': sign, 'delay': delay}, action_time_step_println, {'s': alias, 'NM': self})
                         self.patch_in_new_synapses() # is this the best place for this?
-                        self.add_synapse_alias(synapse_name, alias)
+                        self.add_synapse_alias(synapse_name, alias_synapse)
 
 
     def load_from_map(self, filename, verbose=False):
