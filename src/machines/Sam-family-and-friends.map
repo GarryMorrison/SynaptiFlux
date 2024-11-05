@@ -1,0 +1,57 @@
+-- In this map file we try to make clear the mapping between SDB learn rules and SF map notation:
+--
+-- SDB learn rules:
+-- mother |Sam> => |Liz>
+-- friends |Sam> => |Emma> + |Jane> + |Fred> + |Robert>
+-- father |Liz> => |Tom>
+-- age |Sam> => |22>
+-- age |Liz> => |57>
+-- age |Tom> => |87>
+-- age |Emma> => |25>
+-- age |Jane> => |23>
+-- age |Fred> => |21>
+-- age |Robert> => |27>
+-- friends |Emma> => |Julia> + |Jane> + |Mike>
+-- friends |Robert> => |Harry> + |George>
+--
+--
+-- SF map notation:
+|op: mother> + |Sam> => |Liz>
+|op: friends> + |Sam> => |Emma> + |Jane> + |Fred> + |Robert>
+|op: father> + |Liz> => |Tom>
+|op: age> + |Sam> => |22>
+|op: age> + |Liz> => |57>
+|op: age> + |Tom> => |87>
+|op: age> + |Emma> => |25>
+|op: age> + |Jane> => |23>
+|op: age> + |Fred> => |21>
+|op: age> + |Robert> => |27>
+|op: friends> + |Emma> => |Julia> + |Jane> + |Mike>
+|op: friends> + |Robert> => |Harry> + |George>
+
+
+print: Testing the SDB <-> SF correspondence:
+print:
+
+print: Sam's mother:
+poke: |op: mother> + |Sam>
+update: 4
+
+print: Sam's friends:
+poke: |op: friends> + |Sam>
+update: 4
+
+print: Sam's mother's age:
+poke: |op: mother> + |Sam> . |op: age>
+update: 5
+
+print: Sam's mother's father's age:
+poke: |op: mother> + |Sam> . |op: father> . |op: age>
+update: 6
+
+print: Sam's friend's friend's:
+poke: |op: friends> + |Sam> . |op: friends>
+update: 5
+
+
+
