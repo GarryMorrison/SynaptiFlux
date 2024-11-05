@@ -33,7 +33,15 @@ if __name__ == '__main__':
 
     # now poke and evolve:
     print()
-    NM1.poke_neuron('alpha beta')
+    NM1.poke_neuron('alpha beta no match')
+    NM1.update_system(10)
+
+    print()
+    NM1.poke_neuron('alpha beta exact')
+    NM1.update_system(10)
+
+    print()
+    NM1.poke_neuron('alpha beta min')
     NM1.update_system(10)
 
 

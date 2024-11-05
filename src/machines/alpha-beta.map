@@ -1,18 +1,37 @@
 -- alpha beta test case:
+--
 -- invoke using:
--- NM.poke_neuron('alpha beta')
+-- NM.poke_neuron('alpha beta no match')
+--
+-- expected output:
+-- 0)    alpha
+-- 1)    beta
+--
+-- Or:
+-- NM.poke_neuron('alpha beta exact')
 --
 -- expected output:
 -- 0)    2.0, alpha
 -- 1)    3.0, beta
 -- 2)    alpha beta detected
+--
+-- Or:
+-- NM.poke_neuron('alpha beta min')
+--
+-- expected output:
+-- 0)    5.0, alpha
+-- 1)    7.0, beta
+-- 2)    alpha beta detected
 
+
+-- testing no match:
+|alpha beta no match> |=> |alpha> . |beta>
 
 -- testing exact simm match:
--- |alpha beta> |=> 2|alpha> . 3|beta>
+|alpha beta exact> |=> 2|alpha> . 3|beta>
 
 -- testing min simm match:
-|alpha beta> |=> 5|alpha> . 7|beta>
+|alpha beta min> |=> 5|alpha> . 7|beta>
 
 -- show that the pattern is matched:
 2|alpha> . 3|beta> => |alpha beta detected>
