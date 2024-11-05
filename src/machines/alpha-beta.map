@@ -8,7 +8,13 @@
 -- 2)    alpha beta detected
 
 
-|alpha beta> |=> 2|alpha> . 3|beta>
+-- testing exact simm match:
+-- |alpha beta> |=> 2|alpha> . 3|beta>
+
+-- testing min simm match:
+|alpha beta> |=> 5|alpha> . 7|beta>
+
+-- show that the pattern is matched:
 2|alpha> . 3|beta> => |alpha beta detected>
 
 

@@ -1,14 +1,14 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-11-4
+# Updated: 2024-11-5
 
 import json
 from collections import defaultdict, deque
 from .neuron import Neuron
 from .synapse import Synapse
 from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine, parse_seq, parse_sp, strip_delay, strip_synapse, extract_delay_number
-from .trigger_fn import trigger_inverse_fn_map, trigger_fn_map, trigger_list_simm_threshold
+from .trigger_fn import trigger_inverse_fn_map, trigger_fn_map, trigger_list_simm_threshold, trigger_list_min_simm_threshold
 from .pooling_fn import pooling_inverse_fn_map, pooling_fn_map, pooling_or
 from .synapse_fn import synapse_inverse_fn_map, synapse_fn_map, synapse_identity, synapse_delayed_identity
 from .action_fn import action_inverse_fn_map, action_fn_map, action_println, action_time_step_println, action_time_step_coeff_println
@@ -815,12 +815,12 @@ class NeuralModule:
                         if verbose:
                             print(f'Unknown neuron: "{neuron_name}", adding it')
                         # self.add_neuron(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
-                        self.add_neuron(neuron_name, layer, coeffs, synapse_labels, trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
+                        self.add_neuron(neuron_name, layer, coeffs, synapse_labels, trigger_list_min_simm_threshold, {'threshold': 0.98}, pooling_or, {})
                     else:
                         if verbose:
                             print(f'Known neuron: "{neuron_name}", appending to it')
                         # append_neuron_pattern(self, name, seed_pattern, synapse_labels, trigger_fn, trigger_params)
-                        self.append_neuron_pattern(neuron_name, coeffs, synapse_labels, trigger_list_simm_threshold, {'threshold': 0.98}) # test this code section
+                        self.append_neuron_pattern(neuron_name, coeffs, synapse_labels, trigger_list_min_simm_threshold, {'threshold': 0.98}) # test this code section
                     synapse_name = f'{neuron_name} S0' # hardwire in synapse number here for now.
                     if not self.do_you_know_synapse(synapse_name):
                         # self.add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)
@@ -833,7 +833,7 @@ class NeuralModule:
                         if verbose:
                             print(f'Unknown synapse: "{synapse_name}"')
                         neuron_name = strip_synapse(synapse_name)
-                        self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
+                        self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_min_simm_threshold, {'threshold': 0.98}, pooling_or, {})
                         # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
                         self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_time_step_coeff_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
                         self.patch_in_new_synapses() # is this the best place for this?
@@ -853,7 +853,7 @@ class NeuralModule:
                         if verbose:
                             print(f'Unknown neuron: "{neuron_name}", adding it')
                         # self.add_neuron(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
-                        self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
+                        self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_min_simm_threshold, {'threshold': 0.98}, pooling_or, {})
                         synapse_name = f'{neuron_name} S{synapse_number}'
                         if not self.do_you_know_synapse(synapse_name):
                             if verbose:
@@ -871,7 +871,7 @@ class NeuralModule:
                         if verbose:
                             print(f'Unknown neuron: "{neuron_name}", adding it')
                         # self.add_neuron(self, name, layer, seed_pattern, synapse_labels, trigger_fn, trigger_params, pooling_fn, pooling_params)
-                        self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_simm_threshold, {'threshold': 0.98}, pooling_or, {})
+                        self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_min_simm_threshold, {'threshold': 0.98}, pooling_or, {})
                     # else:
                     #     if verbose:
                     #         print(f'Known neuron: "{neuron_name}", appending to it')
