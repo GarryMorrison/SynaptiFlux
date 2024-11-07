@@ -1,7 +1,7 @@
 """Implement a single reductionist neuron."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-11-4
+# Updated: 2024-11-8
 
 from .parse_simple_sdb import sp_dict_to_sp, coeff_labels_to_sp
 from .pooling_fn import pooling_inverse_fn_map, pooling_fn_map
@@ -132,7 +132,8 @@ class Neuron:
                     # if label in synapses:
                     #     value = synapses[label].read_synapse(delay)
                     if label in synapse_alias_dict:
-                        value = max(synapses[sublabel].read_synapse(delay) for sublabel in synapse_alias_dict[label])
+                        # value = max(synapses[sublabel].read_synapse(delay) for sublabel in synapse_alias_dict[label])
+                        value = sum(synapses[sublabel].read_synapse(delay) for sublabel in synapse_alias_dict[label]) # testing max vs sum
                 input_pattern.append(value)
             fn = self.trigger_fn[k]
             # print(f"{self.name} pattern: {input_pattern}")

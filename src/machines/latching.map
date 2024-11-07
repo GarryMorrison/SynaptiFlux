@@ -1,0 +1,35 @@
+print:
+print: Testing the idea of simple and alternating latches ...
+print: ------------------------------------------------------
+print:
+
+|simple latch> => |simple latch on neuron>
+|simple latch on neuron> |=> |simple latch>
+|simple latch off neuron> |=> -10 |simple latch>
+
+update: 5
+print:
+print: Switch on simple latch:
+poke: |simple latch on neuron>
+update: 5
+print:
+print: Switch off simple latch:
+poke: |simple latch off neuron>
+update: 5
+
+
+|alternating latch> => |alternating latch on neuron>
+|alternating latch on neuron> |=> |> . |> . |> . |alternating latch>
+|alternating latch off neuron> |=> -10 |alternating latch>
+
+update: 5
+print:
+print: Switch on an alternating latch with period 4:
+poke: |alternating latch on neuron>
+update: 20
+print:
+print: Switch off alternating latch (NB: the phase must be correct for this to switch off the neuron):
+update: 3
+poke: |alternating latch off neuron>
+update: 20
+
