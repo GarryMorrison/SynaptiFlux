@@ -1,20 +1,24 @@
--- In this map file we try to make clear the mapping between SDB learn rules and SF map notation:
---
--- SDB learn rules:
--- mother |Sam> => |Liz>
--- friends |Sam> => |Emma> + |Jane> + |Fred> + |Robert>
--- father |Liz> => |Tom>
--- age |Sam> => |22>
--- age |Liz> => |57>
--- age |Tom> => |87>
--- age |Emma> => |25>
--- age |Jane> => |23>
--- age |Fred> => |21>
--- age |Robert> => |27>
--- friends |Emma> => |Julia> + |Jane> + |Mike>
--- friends |Robert> => |Harry> + |George>
---
---
+print:
+print: Testing the SDB <-> SF correspondence:
+print: --------------------------------------
+print:
+print: In this map file we try to make clear the mapping between SDB learn rules and our new SF map notation ...
+
+print:
+print: SDB learn rules:
+print:     mother |Sam> => |Liz>
+print:     friends |Sam> => |Emma> + |Jane> + |Fred> + |Robert>
+print:     father |Liz> => |Tom>
+print:     age |Sam> => |22>
+print:     age |Liz> => |57>
+print:     age |Tom> => |87>
+print:     age |Emma> => |25>
+print:     age |Jane> => |23>
+print:     age |Fred> => |21>
+print:     age |Robert> => |27>
+print:     friends |Emma> => |Julia> + |Jane> + |Mike>
+print:     friends |Robert> => |Harry> + |George>
+
 -- SF map notation:
 |op: mother> + |Sam> => |Liz>
 |op: friends> + |Sam> => |Emma> + |Jane> + |Fred> + |Robert>
