@@ -1,0 +1,43 @@
+print:
+print: Testing simple counting of digits ...
+print: -------------------------------------
+print:
+
+-- define our counting sequence:
+-- NB: we have a 1 time-step pause between each digit
+|count to ten> |=> |0> . |> . |1> . |> . |2> . |> . |3> . |> . |4> . |> . |5> . |> . |6> . |> . |7> . |> . |8> . |> . |9> . |> . |10>
+
+print: Counting ...
+poke: |count to ten>
+update: 22
+
+-- define our mappings from digits to words:
+|op: word> + |0> => |zero>
+|op: word> + |1> => |one>
+|op: word> + |2> => |two>
+|op: word> + |3> => |three>
+|op: word> + |4> => |four>
+|op: word> + |5> => |five>
+|op: word> + |6> => |six>
+|op: word> + |7> => |seven>
+|op: word> + |8> => |eight>
+|op: word> + |9> => |nine>
+|op: word> + |10> => |ten>
+
+-- implement an alternating latching mechanism, with period 2, for |op: word>:
+-- the period 2 is to line up with the 1 time-step pause between digits
+-- we could have used an always on latch, but then the output would be a little messier
+|op: word> => |word mode on neuron>
+|word mode on neuron> |=> |> . |op: word>
+|word mode off neuron> |=> -10 |op: word>
+
+print:
+print: Switch on word mode:
+poke: |word mode on neuron>
+update: 1
+
+print:
+print: Counting again, this time with mapping to words enabled ...
+poke: |count to ten>
+update: 22
+
