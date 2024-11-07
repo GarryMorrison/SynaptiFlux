@@ -17,23 +17,27 @@ def main():
         stem = filepath.stem
         print(f'Loading {filename}')
         # print(f'stem: {stem}')
-        NM = sf.NeuralModule(stem)
+        NM = sf.NeuralModule(stem) # initialize our neural module
         with open(filename, 'r') as f:
             for line in f:
                 line = line.strip()
-                if len(line) == 0 or line.startswith('--'):
+                if len(line) == 0 or line.startswith('--'): # either empty or comment line, so continue the loop
                     continue
                 # print(f'line: {line}')
-                if line == 'print:':
+                if line == 'print:': # print an empty line
                     print()
-                elif line.startswith('print: '):
+                elif line.startswith('print: '): # print a string
                     print(line[7:])
-                elif line.startswith('poke: '):
+                elif line.startswith('poke: '): # poke list in SDB sequence style
                     poke_list = sf.parse_sdb_sequence_to_poke_list(line[6:])
                     # print(f'poke: {line[6:]}')
                     print(f'poke_list: {poke_list}')
                     NM.poke_neuron_sequence(poke_list)
-                elif line.startswith('update: '):
+                elif line.startswith('poke-list: '): # poke list in Python list style
+                    poke_list = line[11:]
+                    print(f'poke_list: {poke_list}')
+                    NM.poke_neuron_sequence(poke_list)
+                elif line.startswith('update: '): # update the system by the given integer number of time steps
                     try:
                         steps = int(line[8:])
                     except Exception as e:
@@ -41,7 +45,7 @@ def main():
                         continue
                     print(f'update: {steps}')
                     NM.update_system(steps)
-                elif line == 'exit:':
+                elif line == 'exit:': # exit the current map file
                     print(f'Exiting {filename}')
                     break
                 else:
