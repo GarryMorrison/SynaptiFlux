@@ -75,3 +75,8 @@ print: SDB: age friends |Sam>
 poke: |op: friends> + |Sam> . |op: age>
 update: 5
 
+print:
+print: Liz's father's age:
+print: SDB: age father |Liz>
+poke-list: [['op: father', 'Liz'], ['op: age']]
+update: 4

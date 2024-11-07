@@ -4,6 +4,7 @@
 # Updated: 2024-11-7
 
 import sys
+import ast
 from pathlib import Path
 import synaptiflux as sf
 
@@ -31,11 +32,11 @@ def main():
                 elif line.startswith('poke: '): # poke list in SDB sequence style
                     poke_list = sf.parse_sdb_sequence_to_poke_list(line[6:])
                     # print(f'poke: {line[6:]}')
-                    print(f'poke_list: {poke_list}')
+                    print(f'poke-list: {poke_list}')
                     NM.poke_neuron_sequence(poke_list)
                 elif line.startswith('poke-list: '): # poke list in Python list style
-                    poke_list = line[11:]
-                    print(f'poke_list: {poke_list}')
+                    poke_list = ast.literal_eval(line[11:])
+                    print(f'poke-list: {poke_list}')
                     NM.poke_neuron_sequence(poke_list)
                 elif line.startswith('update: '): # update the system by the given integer number of time steps
                     try:
