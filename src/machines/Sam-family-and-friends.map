@@ -30,29 +30,44 @@
 |op: friends> + |Robert> => |Harry> + |George>
 
 
-print: Testing the SDB <-> SF correspondence:
 print:
+print: Testing the SDB <-> SF correspondence:
+print: --------------------------------------
 
+print:
 print: Sam's mother:
+print: SDB: mother |Sam>
 poke: |op: mother> + |Sam>
 update: 4
-exit:
+-- exit:
 
+print:
 print: Sam's friends:
+print: SDB: friends |Sam>
 poke: |op: friends> + |Sam>
 update: 4
 
+print:
 print: Sam's mother's age:
+print: SDB: age mother |Sam>
 poke: |op: mother> + |Sam> . |op: age>
 update: 5
 
+print:
 print: Sam's mother's father's age:
+print: SDB: age father mother |Sam>
 poke: |op: mother> + |Sam> . |op: father> . |op: age>
 update: 6
 
+print:
 print: Sam's friend's friend's:
+print: SDB: friends friends |Sam>
 poke: |op: friends> + |Sam> . |op: friends>
 update: 5
 
-
+print:
+print: Sam's friend's age's:
+print: SDB: age friends |Sam>
+poke: |op: friends> + |Sam> . |op: age>
+update: 5
 

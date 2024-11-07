@@ -1,7 +1,7 @@
 """Parse simple SDB."""
 # Author: Garry Morrison
 # Created: 2024-10-15
-# Updated: 2024-11-2
+# Updated: 2024-11-7
 
 from .trigger_fn import trigger_list_simm_threshold, trigger_fn_map
 from .pooling_fn import pooling_or, pooling_fn_map
@@ -99,6 +99,12 @@ def sp_dict_to_sp(sp_dict):
     if len(list_kets) == 0:
         return "|>"
     return " + ".join(list_kets)
+
+def parse_sdb_sequence_to_poke_list(s):
+    """Parse a SDB sequenced to neuron sequence poke list."""
+    seq = s.split(' . ')
+    poke_list = [parse_sp(elt, synapse_number=None)[1] for elt in seq]
+    return poke_list
 
 def parse_seq(s, synapse_number, reverse=True): # sequences require synapse numbers.
     """Parse a SDB sequence."""
