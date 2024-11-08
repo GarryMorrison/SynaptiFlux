@@ -18,6 +18,14 @@ def operator_normalize(coeffs0, labels0, t=1):
     new_coeffs = [elt * t / coeff_sum for elt in coeffs0]
     return new_coeffs, labels0
 
+def operator_rescale(coeffs0, labels0, t=1):
+    """Rescale the coeffs in the pattern so the max coeff == t."""
+    coeff_max = max(coeffs0)
+    if coeff_max == 0:
+        return coeffs0, labels0 # not sure the best thing to return when the max of the coeffs is zero?
+    new_coeffs = [elt * t / coeff_max for elt in coeffs0]
+    return new_coeffs, labels0
+
 def operator_drop_below(coeffs0, labels0, threshold):
     """Drop elements from the pattern with coeff < threshold."""
     new_coeffs, new_labels = zip(*[(v,l) for v,l in zip(coeffs0, labels0) if v >= threshold])

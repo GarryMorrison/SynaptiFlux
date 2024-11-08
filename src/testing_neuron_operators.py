@@ -35,3 +35,7 @@ if __name__ == '__main__':
     N1.apply_operator(0, sf.operator_drop_below, {'threshold': 2.5})
     print(N1)
 
+    # rescale(10):
+    print("rescale(10):")
+    N1.apply_operator(0, sf.operator_rescale, {'t': 10})
+    print(N1)
