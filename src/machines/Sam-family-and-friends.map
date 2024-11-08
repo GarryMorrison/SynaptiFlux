@@ -7,6 +7,7 @@ print: In this map file we try to make clear the mapping between SDB learn rules
 print:
 print: SDB learn rules:
 print:     mother |Sam> => |Liz>
+print:     father |Sam> => |Gerald>
 print:     friends |Sam> => |Emma> + |Jane> + |Fred> + |Robert>
 print:     father |Liz> => |Tom>
 print:     age |Sam> => |22>
@@ -21,6 +22,7 @@ print:     friends |Robert> => |Harry> + |George>
 
 -- SF map notation:
 |op: mother> + |Sam> => |Liz>
+|op: father> + |Sam> => |Gerald>
 |op: friends> + |Sam> => |Emma> + |Jane> + |Fred> + |Robert>
 |op: father> + |Liz> => |Tom>
 |op: age> + |Sam> => |22>
@@ -80,3 +82,10 @@ print: Liz's father's age:
 print: SDB: age father |Liz>
 poke-list: [['op: father', 'Liz'], ['op: age']]
 update: 4
+
+print:
+print: Sam's mother and father:
+print: SDB: (mother + father) |Sam>
+poke: |op: mother> + |op: father> + |Sam>
+update: 4
+
