@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-11-5
+# Updated: 2024-11-8
 
 import json
 from collections import defaultdict, deque
@@ -593,17 +593,29 @@ class NeuralModule:
         action_dict = {}
 
         # build our dictionaries:
-        trigger_dict['trigger'] = trigger_inverse_fn_map[self.default_trigger_fn.__name__]
-        trigger_dict.update(self.default_trigger_params)
+        if self.default_trigger_fn is None:
+            trigger_dict = None
+        else:
+            trigger_dict['trigger'] = trigger_inverse_fn_map[self.default_trigger_fn.__name__]
+            trigger_dict.update(self.default_trigger_params)
 
-        pooling_dict['pooling'] = pooling_inverse_fn_map[self.default_pooling_fn.__name__]
-        pooling_dict.update(self.default_pooling_params)
+        if self.default_pooling_fn is None:
+            pooling_dict = None
+        else:
+            pooling_dict['pooling'] = pooling_inverse_fn_map[self.default_pooling_fn.__name__]
+            pooling_dict.update(self.default_pooling_params)
 
-        synapse_dict['synapse'] = synapse_inverse_fn_map[self.default_synapse_fn.__name__]
-        synapse_dict.update(self.default_synapse_params)
+        if self.default_synapse_fn is None:
+            synapse_dict = None
+        else:
+            synapse_dict['synapse'] = synapse_inverse_fn_map[self.default_synapse_fn.__name__]
+            synapse_dict.update(self.default_synapse_params)
 
-        action_dict['action'] = action_inverse_fn_map[self.default_action_fn.__name__]
-        action_dict.update(self.default_action_params)
+        if self.default_action_fn is None:
+            action_dict = None
+        else:
+            action_dict['action'] = action_inverse_fn_map[self.default_action_fn.__name__]
+            action_dict.update(self.default_action_params)
 
         # populate our dictionary:
         default_dict['layer'] = self.default_layer

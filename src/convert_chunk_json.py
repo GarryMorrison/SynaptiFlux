@@ -1,8 +1,9 @@
 """A script to convert back and forth between chunk and JSON representations of neural modules."""
 # Author: Garry Morrison
 # Created: 2024-10-30
-# Updated: 2024-10-30
+# Updated: 2024-11-8
 
+import sys
 import argparse
 from pathlib import Path
 import synaptiflux as sf
@@ -65,6 +66,8 @@ def main():
             NM.load_from_chunk(source_path)
         elif source_ext == '.json':
             NM.load_from_json(source_path)
+        # elif source_ext == '.map': # .map files use NeuralModules as a parameter, so can't be converted to JSON!
+        #     NM.load_from_map(source_path)
         else:
             print(f'Unrecognized extension: {source_ext}')
             sys.exit(1)
