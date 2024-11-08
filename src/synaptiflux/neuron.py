@@ -303,6 +303,15 @@ class Neuron:
                 continue
         return constructed_neuron
 
+    def apply_operator(self, pattern_number, operator, params):
+        """Apply the operator with params to the given pattern number."""
+        if pattern_number >= self.pattern_count:
+            return # no matching pattern, so return
+        coeffs = self.pattern[pattern_number]
+        labels = self.pattern_labels[pattern_number]
+        new_coeffs, new_labels = operator(coeffs, labels, **params)
+        self.pattern[pattern_number] = new_coeffs
+        self.pattern_labels[pattern_number] = new_labels
 
     def __str__(self):
         if not self.valid:
