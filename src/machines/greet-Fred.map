@@ -1,4 +1,6 @@
--- a Greet Fred map example:
+print:
+print: a Greet Fred map example ...
+print: ----------------------------
 
 -- the Greetings neuron:
 |H> . |e> . |l> . |l> . |o> => |Greetings!>
@@ -22,5 +24,9 @@
 |F> . |r> . |e> . |d> => |person: Fred Roberts>
 |R> . |o> . |b> . |o> => |person: Fred Roberts>
 |F> . |r> . |e> . |d> . | > . |R> . |o> . |b> . |e> . |r> . |t> . |s> => |person: Fred Roberts>
+
+
+poke-string: Hey Fred. Afternoon Robo!
+update: 30
 
 

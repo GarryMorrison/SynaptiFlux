@@ -38,6 +38,10 @@ def main():
                     poke_list = ast.literal_eval(line[11:])
                     print(f'poke-list: {poke_list}')
                     NM.poke_neuron_sequence(poke_list)
+                elif line.startswith('poke-string: '): # poke a string, converted to a list of characters
+                    poke_list = list(line[13:])
+                    print(f'poke-list: {poke_list}')
+                    NM.poke_neuron_sequence(poke_list)
                 elif line.startswith('update: '): # update the system by the given integer number of time steps
                     try:
                         steps = int(line[8:])
