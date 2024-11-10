@@ -807,6 +807,7 @@ class NeuralModule:
                 coeffs, synapse_labels = parse_seq(pattern, synapse_number=synapse_number)
                 neuron_names = parse_sp(neurons)[1]
                 clean_synapse_labels = [strip_delay(s) for s in synapse_labels]
+                # max_layer = max(self.synapses[synapse_name].get_layer() for synapse_name in clean_synapse_labels) # unknown synapses break this!
                 synapse_neuron = True
             except Exception as e:
                 try:
@@ -828,6 +829,7 @@ class NeuralModule:
                     print(f'synapse_labels: {synapse_labels}')
                     print(f'clean_synapse_labels: {clean_synapse_labels}')
                     print(f'neuron_names: {neuron_names}')
+                    # print(f'max_layer: {max_layer}') # we don't have enough info at this stage to know this
                 # now build the neurons:
                 for neuron_name in neuron_names:
                     if not self.do_you_know_neuron(neuron_name):
@@ -847,7 +849,7 @@ class NeuralModule:
                         self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_layer_time_step_coeff_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
                         self.patch_in_new_synapses() # is this the best place for this?
                 # initialize neuron_layer_dict:
-                neuron_layer_dict = defaultdict(int)
+                # neuron_layer_dict = defaultdict(int)
                 # now build the unknown synapses:
                 for synapse_name in clean_synapse_labels:
                     neuron_name = strip_synapse(synapse_name)
@@ -859,16 +861,22 @@ class NeuralModule:
                         # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
                         self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_layer_time_step_coeff_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
                         self.patch_in_new_synapses() # is this the best place for this?
-                    neuron_layer_dict[neuron_name] = max(neuron_layer_dict[neuron_name], self.synapses[synapse_name].get_layer())
+                    # neuron_layer_dict[neuron_name] = max(neuron_layer_dict[neuron_name], self.synapses[synapse_name].get_layer())
                 # now write the neuron layers to our neurons:
-                for neuron_name, layer in neuron_layer_dict.items(): # do we need to write synapse layers too?
-                    # self[neuron_name].set_layer(layer + 1) # self.neurons[name] = neuron
-                    self.neurons[neuron_name].set_layer(layer + 1)
+                # for neuron_name, layer in neuron_layer_dict.items(): # do we need to write synapse layers too?
+                #     # self[neuron_name].set_layer(layer + 1)
+                #     self.neurons[neuron_name].set_layer(layer + 1)
                 # now write the neuron layers to our synapses:
                 # for synapse_name in clean_synapse_labels:
                 #     neuron_name = strip_synapse(synapse_name)
                 #     layer = self.neurons[neuron_name].get_layer()
                 #     self.synapses[synapse_name].set_layer(layer)
+                max_layer = max(self.synapses[synapse_name].get_layer() for synapse_name in clean_synapse_labels)
+                if verbose:
+                    print(f'max_layer: {max_layer}')
+                for neuron_name in neuron_names:
+                    self.neurons[neuron_name].set_layer(max_layer + 1)
+                self.update_synapse_layers()
             if neuron_synapse:
                 if verbose:
                     print(f'\nneurons: {neurons}')
