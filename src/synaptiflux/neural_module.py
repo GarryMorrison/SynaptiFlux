@@ -839,16 +839,29 @@ class NeuralModule:
                         # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
                         self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_layer_time_step_coeff_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
                         self.patch_in_new_synapses() # is this the best place for this?
+                # initialize neuron_layer_dict:
+                neuron_layer_dict = defaultdict(int)
                 # now build the unknown synapses:
                 for synapse_name in clean_synapse_labels:
+                    neuron_name = strip_synapse(synapse_name)
                     if not self.do_you_know_synapse(synapse_name):
                         if verbose:
                             print(f'Unknown synapse: "{synapse_name}"')
-                        neuron_name = strip_synapse(synapse_name)
+                        # neuron_name = strip_synapse(synapse_name)
                         self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_min_simm_threshold, {'threshold': 0.98}, pooling_or, {})
                         # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
                         self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_layer_time_step_coeff_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
                         self.patch_in_new_synapses() # is this the best place for this?
+                    neuron_layer_dict[neuron_name] = max(neuron_layer_dict[neuron_name], self.synapses[synapse_name].get_layer())
+                # now write the neuron layers to our neurons:
+                for neuron_name, layer in neuron_layer_dict.items(): # do we need to write synapse layers too?
+                    # self[neuron_name].set_layer(layer + 1) # self.neurons[name] = neuron
+                    self.neurons[neuron_name].set_layer(layer + 1)
+                # now write the neuron layers to our synapses:
+                for synapse_name in clean_synapse_labels:
+                    neuron_name = strip_synapse(synapse_name)
+                    layer = self.neurons[neuron_name].get_layer()
+                    self.synapses[synapse_name].set_layer(layer)
             if neuron_synapse:
                 if verbose:
                     print(f'\nneurons: {neurons}')
