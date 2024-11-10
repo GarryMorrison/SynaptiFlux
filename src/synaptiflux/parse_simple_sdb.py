@@ -1,7 +1,7 @@
 """Parse simple SDB."""
 # Author: Garry Morrison
 # Created: 2024-10-15
-# Updated: 2024-11-7
+# Updated: 2024-11-10
 
 from .trigger_fn import trigger_list_simm_threshold, trigger_fn_map
 from .pooling_fn import pooling_or, pooling_fn_map
@@ -76,6 +76,12 @@ def coeff_labels_to_sp(coeffs, labels):
     if len(list_kets) == 0:
         return '|>'
     return " + ".join(list_kets)
+
+def list_to_sp(lst):
+    """Convert a list to its superposition representatino."""
+    if len(lst) == 0:
+        return '|>'
+    return " + ".join(f'|{elt}>' for elt in lst)
 
 def parse_sp_to_dict(s, cast_values=False):
     """Parse a superposition containing |key: value> pairs into a python dictionary."""
