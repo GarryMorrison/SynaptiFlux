@@ -9,7 +9,12 @@ if __name__ == '__main__':
     print('Testing auto-learning layers in NM.from_map() ...')
 
     NM = sf.NeuralModule('testing auto-learning')
-    s = '|H> . |i> => |Greetings!>'
+    # s = '|H> . |i> => |Greetings!>'
+
+    s = """
+|F> . |r> . |e> . |d> => |Fred>
+|op: age> + |Fred> => |39>
+"""
 
     NM.from_map(s, verbose=True)
 
