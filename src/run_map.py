@@ -50,6 +50,8 @@ def main():
                         continue
                     print(f'update: {steps}')
                     NM.update_system(steps)
+                elif line == 'print-global-sequences:': # print our NM global sequences
+                    NM.print_global_sequences(layers=None) # None param for now
                 elif line == 'exit:': # exit the current map file
                     print(f'Exiting {filename}')
                     break

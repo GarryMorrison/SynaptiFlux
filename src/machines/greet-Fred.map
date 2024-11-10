@@ -28,5 +28,6 @@ print: ----------------------------
 
 poke-string: Hey Fred. Afternoon Robo!
 update: 30
+print-global-sequences:
 
 

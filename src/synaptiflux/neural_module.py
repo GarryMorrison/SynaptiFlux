@@ -11,7 +11,7 @@ from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine, parse_seq
 from .trigger_fn import trigger_inverse_fn_map, trigger_fn_map, trigger_list_simm_threshold, trigger_list_min_simm_threshold
 from .pooling_fn import pooling_inverse_fn_map, pooling_fn_map, pooling_or
 from .synapse_fn import synapse_inverse_fn_map, synapse_fn_map, synapse_identity, synapse_delayed_identity
-from .action_fn import action_inverse_fn_map, action_fn_map, action_println, action_time_step_println, action_time_step_coeff_println, action_layer_time_step_coeff_println
+from .action_fn import action_inverse_fn_map, action_fn_map, action_println, action_time_step_println, action_time_step_coeff_println, action_layer_time_step_coeff_println, action_layer_time_step_coeff_println_global_sequence
 
 def process_layers(synapses, layers):
     """Given a synapses dict, and layers, return valid layers.
@@ -847,7 +847,7 @@ class NeuralModule:
                     if not self.do_you_know_synapse(synapse_name):
                         # self.add_synapse(self, name, axon_name, synapse_fn_type, params, synapse_action_type, action_params)
                         # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
-                        self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_layer_time_step_coeff_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
+                        self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_layer_time_step_coeff_println_global_sequence, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
                         self.patch_in_new_synapses() # is this the best place for this?
                 # initialize neuron_layer_dict:
                 # neuron_layer_dict = defaultdict(int)
@@ -860,7 +860,7 @@ class NeuralModule:
                         # neuron_name = strip_synapse(synapse_name)
                         self.add_neuron(neuron_name, layer, [1], ['#OFF#'], trigger_list_min_simm_threshold, {'threshold': 0.98}, pooling_or, {})
                         # self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_println, {'s': neuron_name})
-                        self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_layer_time_step_coeff_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
+                        self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_layer_time_step_coeff_println_global_sequence, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
                         self.patch_in_new_synapses() # is this the best place for this?
                     # neuron_layer_dict[neuron_name] = max(neuron_layer_dict[neuron_name], self.synapses[synapse_name].get_layer())
                 # now write the neuron layers to our neurons:
@@ -899,7 +899,7 @@ class NeuralModule:
                         if not self.do_you_know_synapse(synapse_name):
                             if verbose:
                                 print(f'Unknown synapse: "{synapse_name}", adding it')
-                            self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_layer_time_step_coeff_println, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
+                            self.add_synapse(synapse_name, neuron_name, synapse_identity, {'sign': 1}, action_layer_time_step_coeff_println_global_sequence, {'s': neuron_name, 'NM': self}) # does this work?? Yup!
                             self.patch_in_new_synapses() # is this the best place for this?
                     # else:
                     #     if verbose:
@@ -927,7 +927,7 @@ class NeuralModule:
                         if verbose:
                             print(f'Adding synapse: "{synapse_name}", sign: {sign}, delay: {delay} -> "{alias_synapse}"')
                         # self.add_synapse(synapse_name, neuron_name, synapse_delayed_identity, {'sign': sign, 'delay': delay}, action_time_step_println, {'s': neuron_name, 'NM': self})
-                        self.add_synapse(synapse_name, neuron_name, synapse_delayed_identity, {'sign': sign, 'delay': delay}, action_layer_time_step_coeff_println, {'s': alias, 'NM': self})
+                        self.add_synapse(synapse_name, neuron_name, synapse_delayed_identity, {'sign': sign, 'delay': delay}, action_layer_time_step_coeff_println_global_sequence, {'s': alias, 'NM': self})
                         self.patch_in_new_synapses() # is this the best place for this?
                         self.add_synapse_alias(synapse_name, alias_synapse)
         # self.update_synapse_layers()

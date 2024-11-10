@@ -130,6 +130,18 @@ def action_layer_time_step_coeff_println(synapse, value, s, NM):
         else:
             print(f'{synapse.get_layer()}: {NM.get_time_step()})    {value}, {s}')
 
+def action_layer_time_step_coeff_println_global_sequence(synapse, value, s, NM):
+    """Print string action, layer, and NM time step, with new line, if value > 0."""
+    if value > 0:
+        layer = synapse.get_layer()
+        time_step = NM.get_time_step()
+        if value == 1:
+            print(f'{layer}: {time_step})    {s}')
+        else:
+            print(f'{layer}: {time_step})    {value}, {s}')
+        NM.append_to_global_sequence(layer, time_step, s)
+
+
 action_fn_map = {
     'null': action_null,
     'println': action_println,
@@ -144,6 +156,7 @@ action_fn_map = {
     'time_step_println': action_time_step_println,
     'time_step_coeff_println': action_time_step_coeff_println,
     'layer_time_step_coeff_println': action_layer_time_step_coeff_println,
+    'layer_time_step_coeff_println_global_sequence': action_layer_time_step_coeff_println_global_sequence,
 }
 
 action_inverse_fn_map = {
@@ -160,4 +173,5 @@ action_inverse_fn_map = {
     'action_time_step_println': 'time_step_println',
     'action_time_step_coeff_println': 'time_step_coeff_println',
     'action_layer_time_step_coeff_println': 'layer_time_step_coeff_println',
+    'action_layer_time_step_coeff_println_global_sequence': 'layer_time_step_coeff_println_global_sequence',
 }
