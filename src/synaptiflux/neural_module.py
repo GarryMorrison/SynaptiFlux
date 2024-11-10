@@ -121,6 +121,13 @@ class NeuralModule:
             return self.neurons[name].get_layer()
         return -1 # maybe change this later?
 
+    def update_synapse_layers(self):
+        """Update our synapse layers."""
+        for synapse_name, synapse in self.synapses.items():
+            neuron_name = strip_synapse(synapse_name)
+            layer = self.neurons[neuron_name].get_layer()
+            synapse.set_layer(layer)
+
     # Do we want default layers too?
 
     def get_time_step(self):
@@ -858,10 +865,10 @@ class NeuralModule:
                     # self[neuron_name].set_layer(layer + 1) # self.neurons[name] = neuron
                     self.neurons[neuron_name].set_layer(layer + 1)
                 # now write the neuron layers to our synapses:
-                for synapse_name in clean_synapse_labels:
-                    neuron_name = strip_synapse(synapse_name)
-                    layer = self.neurons[neuron_name].get_layer()
-                    self.synapses[synapse_name].set_layer(layer)
+                # for synapse_name in clean_synapse_labels:
+                #     neuron_name = strip_synapse(synapse_name)
+                #     layer = self.neurons[neuron_name].get_layer()
+                #     self.synapses[synapse_name].set_layer(layer)
             if neuron_synapse:
                 if verbose:
                     print(f'\nneurons: {neurons}')
@@ -914,7 +921,7 @@ class NeuralModule:
                         self.add_synapse(synapse_name, neuron_name, synapse_delayed_identity, {'sign': sign, 'delay': delay}, action_layer_time_step_coeff_println, {'s': alias, 'NM': self})
                         self.patch_in_new_synapses() # is this the best place for this?
                         self.add_synapse_alias(synapse_name, alias_synapse)
-
+        # self.update_synapse_layers()
 
     def load_from_map(self, filename, verbose=False):
         """Load the map file into the neural module."""
