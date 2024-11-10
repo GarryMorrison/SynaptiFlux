@@ -7,7 +7,7 @@ import json
 from collections import defaultdict, deque
 from .neuron import Neuron
 from .synapse import Synapse
-from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine, parse_seq, parse_sp, strip_delay, strip_synapse, extract_delay_number
+from .parse_simple_sdb import sp_dict_to_sp, parse_sf_if_then_machine, parse_seq, parse_sp, strip_delay, strip_synapse, extract_delay_number, list_to_sp
 from .trigger_fn import trigger_inverse_fn_map, trigger_fn_map, trigger_list_simm_threshold, trigger_list_min_simm_threshold
 from .pooling_fn import pooling_inverse_fn_map, pooling_fn_map, pooling_or
 from .synapse_fn import synapse_inverse_fn_map, synapse_fn_map, synapse_identity, synapse_delayed_identity
@@ -73,6 +73,7 @@ class NeuralModule:
         self.default_synapse_params = {}
         self.default_action_fn = None
         self.default_action_params = {}
+        self.global_sequences = defaultdict(lambda: defaultdict(list))
 
     def __setitem__(self, key, value):
         """Add a neuron or synapse to the module."""
@@ -935,6 +936,23 @@ class NeuralModule:
         """Load the map file into the neural module."""
         with open(filename, 'r') as f:
             self.from_map(f.read(), verbose)
+
+    def append_to_global_sequence(self, layer, time_step, s):
+        """Append the string 's' to the global sequence, with the given layer and time-step."""
+        self.global_sequences[layer][time_step].append(s)
+
+    def print_global_sequences(self, layers):
+        """Print the global sequence, for the specified layers."""
+        # ignore layers parameter for now
+        s = '\nGlobal sequences:\n'
+        for layer, seq in self.global_sequences.items():
+            seq_str = ' . '.join(list_to_sp(elt) for elt in seq.values())
+            s += f'    {layer}:    {seq_str}\n'
+        print(s)
+
+    def clear_global_sequences(self):
+        """Clear the global sequences dictionary."""
+        self.global_sequences.clear()
 
     def print_neuron(self, name):
         """Print the named neuron."""
