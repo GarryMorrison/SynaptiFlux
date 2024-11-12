@@ -29,7 +29,7 @@ update: 22
 -- we could have used an always on latch, but then the output would be a little messier
 |op: word> => |word mode on neuron>
 |word mode on neuron> |=> |> . |op: word>
-|word mode off neuron> |=> -10 |op: word>
+|word mode off neuron> |=> -1 |op: word>
 
 print:
 print: Switch on word mode:
