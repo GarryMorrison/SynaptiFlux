@@ -12,6 +12,7 @@ poke: |count to ten>
 update: 22
 
 -- define our mappings from digits to words:
+-- ToDo: I'm trying to get |0> to be layer 0, |op: word> layer 1, and |zero> layer 2, but I can't get it to work yet ....
 |op: word> + |0> => |zero>
 |op: word> + |1> => |one>
 |op: word> + |2> => |two>
