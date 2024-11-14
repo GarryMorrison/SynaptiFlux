@@ -7,12 +7,15 @@ print:
 -- NB: we have a 1 time-step pause between each digit
 |count to ten> |=> |0> . |> . |1> . |> . |2> . |> . |3> . |> . |4> . |> . |5> . |> . |6> . |> . |7> . |> . |8> . |> . |9> . |> . |10>
 
-print: Counting ...
-poke: |count to ten>
-update: 22
+-- implement an alternating latching mechanism, with period 2, for |op: word>:
+-- the period 2 is to line up with the 1 time-step pause between digits
+-- we could have used an always on latch, but then the output would be a little messier
+|op: word> => |word mode on neuron>
+|word mode on neuron> |=> |> . |op: word>
+|word mode off neuron> |=> -1 |op: word>
+
 
 -- define our mappings from digits to words:
--- ToDo: I'm trying to get |0> to be layer 0, |op: word> layer 1, and |zero> layer 2, but I can't get it to work yet ....
 |op: word> + |0> => |zero>
 |op: word> + |1> => |one>
 |op: word> + |2> => |two>
@@ -25,12 +28,10 @@ update: 22
 |op: word> + |9> => |nine>
 |op: word> + |10> => |ten>
 
--- implement an alternating latching mechanism, with period 2, for |op: word>:
--- the period 2 is to line up with the 1 time-step pause between digits
--- we could have used an always on latch, but then the output would be a little messier
-|op: word> => |word mode on neuron>
-|word mode on neuron> |=> |> . |op: word>
-|word mode off neuron> |=> -1 |op: word>
+
+print: Counting ...
+poke: |count to ten>
+update: 22
 
 print:
 print: Switch on word mode:
@@ -41,4 +42,6 @@ print:
 print: Counting again, this time with mapping to words enabled ...
 poke: |count to ten>
 update: 22
+
+print-global-sequences:
 

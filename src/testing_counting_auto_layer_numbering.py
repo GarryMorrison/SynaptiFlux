@@ -10,7 +10,7 @@ if __name__ == '__main__':
 
     NM = sf.NeuralModule('testing auto layer learning while counting')
     s = """
-|count to two> |=> |0> . |1> . |2>
+|count to two> |=> |0> . |> . |1> . |> . |2>
 |op: word> => |word mode on neuron>
 |word mode on neuron> |=> |op: word>
 |word mode off neuron> |=> -1 |op: word>
