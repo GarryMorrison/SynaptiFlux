@@ -1,7 +1,7 @@
 """Implement a neural module."""
 # Author: Garry Morrison
 # Created: 2024-9-18
-# Updated: 2024-11-10
+# Updated: 2024-11-14
 
 import json
 from collections import defaultdict, deque
@@ -876,7 +876,9 @@ class NeuralModule:
                 if verbose:
                     print(f'max_layer: {max_layer}')
                 for neuron_name in neuron_names:
-                    self.neurons[neuron_name].set_layer(max_layer + 1)
+                    # self.neurons[neuron_name].set_layer(max_layer + 1)
+                    neuron_layer = self.neurons[neuron_name].get_layer()
+                    self.neurons[neuron_name].set_layer(max(neuron_layer, max_layer + 1))
                 self.update_synapse_layers()
             if neuron_synapse:
                 if verbose:
@@ -930,6 +932,14 @@ class NeuralModule:
                         self.add_synapse(synapse_name, neuron_name, synapse_delayed_identity, {'sign': sign, 'delay': delay}, action_layer_time_step_coeff_println_global_sequence, {'s': alias, 'NM': self})
                         self.patch_in_new_synapses() # is this the best place for this?
                         self.add_synapse_alias(synapse_name, alias_synapse)
+                # now write the neuron layers to our neurons:
+                max_layer = max(self.neurons[neuron_name].get_layer() for neuron_name in neuron_names)
+                if verbose:
+                    print(f'max_layer: {max_layer}')
+                for neuron_name in clean_neuron_labels:
+                    neuron_layer = self.neurons[neuron_name].get_layer()
+                    self.neurons[neuron_name].set_layer(max(neuron_layer, max_layer + 1))
+                self.update_synapse_layers()
         # self.update_synapse_layers()
 
     def load_from_map(self, filename, verbose=False):
