@@ -1,7 +1,7 @@
 """Load and run map files given on the command line."""
 # Author: Garry Morrison
 # Created: 2024-11-6
-# Updated: 2024-11-7
+# Updated: 2024-11-14
 
 import sys
 import ast
@@ -52,6 +52,8 @@ def main():
                     NM.update_system(steps)
                 elif line == 'print-global-sequences:': # print our NM global sequences
                     NM.print_global_sequences(layers=None) # None param for now
+                elif line == 'print-neural-module:': # print out our full neural module
+                    print(NM)
                 elif line == 'exit:': # exit the current map file
                     print(f'Exiting {filename}')
                     break
