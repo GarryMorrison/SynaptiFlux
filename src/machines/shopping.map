@@ -1,0 +1,53 @@
+print:
+print: A shopping list example ...
+print: ---------------------------
+print:
+
+-- define our shopping list:
+|question: what is> + |noun: shopping list> => |our shopping list>
+|our shopping list> |=> 4|apples> + 5|oranges> + 2|milk> + |bread> + |coffee>
+
+poke: |question: what is> + |noun: shopping list>
+update: 5
+
+
+-- some brief knowledge about the items in our shopping list:
+|apples> => |word-type: plural> + |fruit: apple> + |food: apple>
+|oranges> => |word-type: plural> + |fruit: orange> + |food: orange> + |colour: orange>
+|milk> => |is liquid> + |drink: milk> + |colour: white>
+|bread> => |food: bread>
+|coffee> => |is liquid> + |drink: coffee>
+
+
+-- now invoke them individually:
+print:
+poke: |apples>
+update: 5
+
+print:
+poke: |oranges>
+update: 5
+
+print:
+poke: |milk>
+update: 5
+
+print:
+poke: |bread>
+update: 5
+
+print:
+poke: |coffee>
+update: 5
+
+
+-- now invoke the full shopping list:
+print:
+poke: |question: what is> + |noun: shopping list>
+update: 5
+
+
+-- see what we have:
+print:
+print-global-sequences:
+
