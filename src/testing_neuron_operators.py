@@ -1,14 +1,14 @@
 """This script will test some neuron operators."""
 # Author: Garry Morrison
 # Created: 2024-11-8
-# Updated: 2024-11-8
+# Updated: 2024-11-16
 
 import synaptiflux as sf
 
 if __name__ == '__main__':
     print("Testing neuron operators ...")
 
-    N1 = sf.Neuron('neuron example', 0, [1,1,1,1], ['alpha', 'beta', 'gamma', 'epsilon'], sf.trigger_list_min_simm_threshold, {'threshold': 0.98}, sf.pooling_or, {})
+    N1 = sf.Neuron('neuron example 1', 0, [1,1,1,1], ['alpha', 'beta', 'gamma', 'epsilon'], sf.trigger_list_min_simm_threshold, {'threshold': 0.98}, sf.pooling_or, {})
 
     # see what we have:
     print(N1)
@@ -39,3 +39,10 @@ if __name__ == '__main__':
     print("rescale(10):")
     N1.apply_operator(0, sf.operator_rescale, {'t': 10})
     print(N1)
+
+    # test or'ing patterns:
+    N2 = sf.Neuron('neuron example 2', 0, [2,3,5,7], ['alpha', 'beta', 'gamma', 'epsilon'], sf.trigger_list_min_simm_threshold, {'threshold': 0.98}, sf.pooling_or, {})
+    print("Or patterns:")
+    N2.apply_operator(0, sf.operator_or, {'coeffs1': [11,13,17,19], 'labels1': ['alpha', 'gamma', 'eta', 'theta']})
+    N2.apply_operator(0, sf.operator_or, {'coeffs1': [23,29,31], 'labels1': ['iota', 'lambda', 'kappa']})
+    print(N2)

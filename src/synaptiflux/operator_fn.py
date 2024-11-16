@@ -1,7 +1,7 @@
 """Simple SDB style operators."""
 # Author: Garry Morrison
 # Created: 2024-11-8
-# Updated: 2024-11-8
+# Updated: 2024-11-16
 
 from collections import defaultdict
 
@@ -39,5 +39,11 @@ def operator_add(coeffs0, labels0, coeffs1, labels1):
     for v,l in zip(coeffs1, labels1):
         sp_sum[l] += v
     return list(sp_sum.values()), list(sp_sum.keys()) # hopefully the ordering is correct?
+
+def operator_or(coeffs0, labels0, coeffs1, labels1):
+    """Or the two input patterns."""
+    new_labels = sorted(set(labels0) | set(labels1))
+    new_coeffs = [1] * len(new_labels)
+    return new_coeffs, new_labels
 
 
